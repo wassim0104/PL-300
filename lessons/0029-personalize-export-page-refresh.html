@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Personalise, export, page refresh</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0029">
+<main class="page">
+<p class="muted"><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0029</p>
+  <h1>Personalisation, export settings and automatic page refresh</h1>
+  <p class="meta"><span class="badge viz">Visualize and analyze</span><span>About 15 min</span><span>Skill: set personalise, export and refresh options</span></p>
+</header>
+
+<p><strong>After this lesson you can</strong> configure report settings that let consumers adapt visuals, control data export, and refresh a page automatically.</p>
+
+<h2>Why this matters for the exam</h2>
+<p>Three small settings, three favourite traps: page refresh on Import, a 1-minute interval in shared capacity, and blocking export with RLS. Each is one memorised fact worth a mark.</p>
+
+<h2>Recall first</h2>
+<p>Last lesson: where do you edit the phone view of a dashboard?</p><details><summary>Answer</summary><p>In the service: dashboard, Edit, Mobile layout. See <a href="0028-mobile-and-accessibility.html">Lesson 0028</a>.</p></details>
+
+<h2>Core idea</h2>
+<p><strong>Personalize visuals.</strong> Turn it on in report settings (Desktop: File &rsaquo; Options &rsaquo; Current file &rsaquo; Report settings, or in the service). Consumers can then change visual type, swap measures and dimensions, and change the legend for themselves, and save the result as a personal bookmark. Enable it per report or per visual.<span class="sidenote">Source: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/power-bi-personalize-visuals">Personalize visuals</a>.</span></p>
+<p><strong>Export data.</strong> The report setting offers three options, limited by the tenant setting.<span class="sidenote">Source: <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-export-data">Export data from visuals</a>.</span></p>
+<ul><li><strong>None</strong></li><li><strong>Summarized data only</strong></li><li><strong>Summarized and underlying data</strong> (underlying also needs Build permission on the model)</li></ul>
+<p>One report: that report&rsquo;s setting. Whole organisation: the tenant admin setting. RLS and model permissions do not stop export of what a user can already see.</p>
+<p><strong>Automatic page refresh</strong> (Format page &rsaquo; Page refresh) works with <strong>DirectQuery</strong> sources (and some push or Direct Lake cases), not Import.<span class="sidenote">Source: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-automatic-page-refresh">Automatic page refresh</a>.</span></p>
+<div class="table-wrap"><table><thead><tr><th>Type</th><th>Rule</th></tr></thead><tbody>
+<tr><td>Fixed interval</td><td>Minimum <strong>30 minutes</strong> in shared capacity; shorter in Premium or Fabric, as the admin allows</td></tr>
+<tr><td>Change detection</td><td>A measure is checked for changes; needs Premium or Fabric</td></tr></tbody></table></div>
+<p>Comments on reports, dashboards, tiles or visuals let consumers discuss content with @mentions.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>Ops needs a page updated every 5 minutes from Azure SQL.</p></div>
+<ol><li>Model on <strong>DirectQuery</strong>, workspace on Fabric or Premium capacity.</li><li>Format page &rsaquo; Page refresh <strong>On</strong>, type Fixed interval, <strong>5 minutes</strong>.</li><li>Confirm the capacity admin minimum is 5 minutes or lower.</li></ol>
+<p>Why it works: the refresh re-queries the source; Import data would just redraw the same cache.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> Automatic page refresh works on an Import model. <strong>Right:</strong> it needs DirectQuery.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> Shared capacity allows a 1-minute interval. <strong>Right:</strong> the minimum is 30 minutes.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> RLS or model permissions can block export. <strong>Right:</strong> use the report export setting, or the tenant setting for everything.</p></div>
+<p>More in the <a href="../reference/common-mistakes.html">common mistakes sheet</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0029" data-bank="lesson" data-lesson="0029"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0029');this.textContent='Marked done';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-automatic-page-refresh">Microsoft Learn: Automatic page refresh</a> (about 10 min).</p><p class="muted">Extra: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/power-bi-personalize-visuals">Personalize visuals</a> · <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-export-data">Export data from visuals</a></p></div>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up. For example: &ldquo;Why can&rsquo;t I get a 1-minute refresh?&rdquo; or &ldquo;Compare change detection with fixed interval.&rdquo;</div>
+
+<h2>Related</h2>
+<p><a href="../reference/storage-modes-connectivity.html">Storage modes and connectivity</a> · <a href="../reference/security-and-sharing.html">Security and sharing</a> · <a href="../reference/glossary.html">Glossary</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0028-mobile-and-accessibility.html"><small>Previous</small>Design for accessibility and mobile</a>
+  <a class="home" href="../index.html"><small>Home</small>Course</a>
+  <a class="next" href="0030-analytics-pane-anomalies-grouping.html"><small>Next</small>Analytics pane, anomalies, grouping and clustering</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

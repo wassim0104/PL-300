@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0004: Source settings and parameters</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0004">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0004</p>
+  <h1>Data source settings, privacy levels and parameters</h1>
+  <p class="meta"><span class="badge prep">Prepare</span><span>About 15 min</span><span>Skill: repoint sources with parameters</span></p>
+  <p><strong>After this lesson you can</strong> repoint a report to a new server or file and switch environments with a Power Query parameter instead of editing every query.</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Dev/Test/Prod switching, moved files and Formula.Firewall errors are classic Prepare scenarios, and the wrong answers are plausible (what-if parameters, DAX variables). Knowing which tool is for which job is the whole skill.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-query/power-query-query-parameters">Query parameters</a>.</span></p>
+
+<h2>Recall first</h2>
+<p>Which storage mode suits a dimension related to both a DirectQuery fact and an Import aggregate?</p>
+<details><summary>Show answer</summary><p>Dual.</p></details>
+
+<h2>Core idea</h2>
+<p><strong>File &rsaquo; Options and settings &rsaquo; Data source settings</strong> lists every source. <strong>Change Source</strong> repoints all queries that use it. <strong>Edit Permissions</strong> sets credentials and the privacy level.</p>
+<p><strong>Privacy levels</strong> are Private, Organizational and Public. They decide whether data from one source may be sent to another while combining. Wrong levels cause Formula.Firewall errors or block query folding.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-query/data-privacy-firewall">Privacy levels and the firewall</a>.</span></p>
+<p><strong>Power Query parameters</strong> (Manage Parameters) hold values such as server, database or file path. Reference them in the Source step and change one value to switch environments. They can also be edited in the service under semantic model settings. <strong>What-if parameters</strong> are a DAX/report feature for slicer-driven scenarios and never change a data source. Incremental refresh needs two DateTime parameters named exactly <code>RangeStart</code> and <code>RangeEnd</code> (lesson 0035).</p>
+<p>"Could not find file" after a move means the path is wrong or you lost permission. Fix it with Data source settings, the Source step in the formula bar, or the Advanced Editor.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>One report must run against Dev, Test and Prod SQL servers. Create parameters <code>ServerName</code> and <code>DbName</code>.</p></div>
+<pre data-lang="M"><code>// ServerName = "sql-dev.contoso.com", DbName = "Sales"
+let Source = Sql.Database(ServerName, DbName),
+    Orders = Source{[Schema="dbo", Item="Orders"]}[Data]
+in Orders</code></pre>
+<p>Switching to production means changing <code>ServerName</code> once; every query that uses the parameter follows.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief:</strong> A what-if parameter or DAX variable can switch servers. <strong>Correct rule:</strong> only a Power Query parameter feeds a Source step.</p></div>
+<div class="callout trap"><p><strong>Wrong belief:</strong> Edit every query by hand. <strong>Correct rule:</strong> Change Source or one parameter does it.</p></div>
+<div class="callout trap"><p><strong>Wrong belief:</strong> Service credentials change the file path. <strong>Correct rule:</strong> they change only authentication.</p></div>
+<p>More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0004" data-bank="lesson" data-lesson="0004"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0004');this.textContent='Marked done'}else{this.textContent='Progress unavailable'}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-query/power-query-query-parameters">Query parameters</a>. Read how to create and reference a parameter. About 7 minutes.</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-query/data-privacy-firewall">Privacy levels and the firewall</a></li></ul>
+
+<div class="ask"><p>Stuck or curious? Ask the teacher agent a follow-up. For example:</p><ul><li>How does a wrong privacy level block query folding?</li><li>How do I edit a parameter after publishing?</li></ul></div>
+
+<h2>Related</h2>
+<p><a href="../reference/power-query-m.html">Power Query M</a> · <a href="../reference/glossary.html">Glossary</a> · <a href="../reference/glossary.html">Glossary</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0003-storage-modes.html"><small>Previous</small>Choose a storage mode: Import, DirectQuery, Dual, Direct Lake</a>
+  <a href="../index.html"><small>Home</small>All lessons</a>
+  <a class="next" href="0005-data-profiling.html"><small>Next</small>Profile data before you transform it</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

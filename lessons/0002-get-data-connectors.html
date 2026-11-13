@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0002: Get data connectors</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0002">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0002</p>
+  <h1>Connect to the right data source</h1>
+  <p class="meta"><span class="badge prep">Prepare</span><span>About 18 min</span><span>Skill: pick a connector</span></p>
+  <p><strong>After this lesson you can</strong> pick the right connector for a source description, including files in OneDrive/SharePoint and existing published semantic models.</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>"Which connector should you use?" is a staple of the Prepare domain, and the answer is nearly always one of a handful of options below. Learn the pairs once and these are quick marks toward your pass.<span class="sidenote">Full list: <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/desktop-data-sources">Data sources for Power BI</a>.</span></p>
+
+<h2>Recall first</h2>
+<p>Which item exists only in the Power BI service?</p>
+<details><summary>Show answer</summary><p>The dashboard. Reports, models and calculated tables are authored in Desktop.</p></details>
+
+<h2>Core idea</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Source description</th><th>Connector</th></tr></thead>
+<tbody>
+<tr><td>Many files in a local or network folder</td><td><strong>Folder</strong>: lists files with Name, Extension, Date modified, Attributes, Folder Path and a binary <code>Content</code> column</td></tr>
+<tr><td>Files in a SharePoint or OneDrive for work site</td><td><strong>SharePoint folder</strong>: filter on Folder Path or Name, then combine</td></tr>
+<tr><td>Items of a SharePoint list</td><td><strong>SharePoint list</strong> (list items, not files in a library)</td></tr>
+<tr><td>Power Apps or Dataverse for Teams data</td><td><strong>Dataverse</strong></td></tr>
+<tr><td>A driver exists but no dedicated connector</td><td><strong>ODBC</strong> (DSN or connection string)</td></tr>
+<tr><td>A model already published with measures</td><td><strong>Power BI semantic models</strong> (live connection, no Power Query)</td></tr>
+<tr><td>Cloud Azure DevOps Boards / on-premises</td><td><strong>Azure DevOps</strong> / <strong>Azure DevOps Server</strong></td></tr>
+</tbody></table></div>
+<p>Remove the <code>Content</code> column to keep only file metadata; keep it and combine to load the data.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-query/connectors/folder">Folder connector</a>.</span> An Excel file on OneDrive for work or SharePoint, reached through <strong>Web</strong> (file URL) or <strong>SharePoint folder</strong>, refreshes in the service with <strong>no gateway</strong>. The same file via a local path (Excel Workbook or Folder) needs a gateway.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-query/connectors/sharepoint-folder">SharePoint folder connector</a>.</span></p>
+<p>Excel files support Import only. Relational sources such as SQL Server and Azure SQL support Import or DirectQuery (next lesson). A live connection to a published semantic model reuses its measures and relationships, which is the least effort when the model exists.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/connect-data/desktop-report-lifecycle-datasets">Connect to semantic models</a>.</span></p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>Manufacturing keeps 40 monthly Excel files in a SharePoint library next to unrelated HR files.</p></div>
+<ol><li>Get data, SharePoint folder, enter the site URL.</li><li>Transform. Filter <code>Folder Path</code> contains <code>/Manufacturing/</code>.</li><li>Combine files.</li></ol>
+<pre data-lang="M"><code>Table.SelectRows(Source, each Text.Contains([Folder Path], "/Manufacturing/"))</code></pre>
+<p>Only the 40 relevant files combine, and the report refreshes in the service without a gateway because SharePoint is reachable from the cloud.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief:</strong> SharePoint list reads Excel files in a library. <strong>Correct rule:</strong> it reads list items; use SharePoint folder for files.</p></div>
+<div class="callout trap"><p><strong>Wrong belief:</strong> Rebuild the model from raw files. <strong>Correct rule:</strong> if a published semantic model has the measures, connect to it.</p></div>
+<div class="callout trap"><p><strong>Wrong belief:</strong> Keeping Content is harmless. <strong>Correct rule:</strong> it loads every file's data when you only wanted metadata.</p></div>
+<p>More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0002" data-bank="lesson" data-lesson="0002"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0002');this.textContent='Marked done'}else{this.textContent='Progress unavailable'}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/connect-data/desktop-data-sources">Data sources for Power BI</a>. Skim the connector list and note the file, database and online groups. About 10 minutes.</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-query/connectors/folder">Folder connector</a></li><li><a href="https://learn.microsoft.com/en-us/power-query/connectors/sharepoint-folder">SharePoint folder</a></li><li><a href="https://learn.microsoft.com/en-us/power-bi/connect-data/desktop-report-lifecycle-datasets">Connect to semantic models</a></li></ul>
+
+<div class="ask"><p>Stuck or curious? Ask the teacher agent a follow-up. For example:</p><ul><li>Why does a local-path Excel file need a gateway but a SharePoint one does not?</li><li>When is ODBC better than OLE DB or a dedicated connector?</li></ul></div>
+
+<h2>Related</h2>
+<p><a href="../reference/storage-modes-connectivity.html">Storage modes and connectivity</a> · <a href="../reference/power-query-m.html">Power Query M</a> · <a href="../reference/glossary.html">Glossary</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0001-power-bi-landscape.html"><small>Previous</small>The Power BI landscape and the PL-300 exam</a>
+  <a href="../index.html"><small>Home</small>All lessons</a>
+  <a class="next" href="0003-storage-modes.html"><small>Next</small>Choose a storage mode: Import, DirectQuery, Dual, Direct Lake</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

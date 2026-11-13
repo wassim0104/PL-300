@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apps, endorsement, labels</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script src="../assets/progress.js" defer></script>
+<script src="../assets/bank.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+</head>
+<body data-page="lesson" data-lesson="0033">
+<main class="page">
+<p class="muted"><a href="../index.html">Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0033</p>
+  <h1>Distribute and govern content: apps, endorsement, sensitivity labels</h1>
+  <p class="meta"><span class="badge manage">Manage and secure</span><span>About 20 min</span></p>
+  <p><strong>After this lesson you can</strong> pick a distribution method, publish or update an app with the right audience, endorse content, and protect it with sensitivity labels.</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Distribution and governance questions are a staple of the Manage and secure domain. The exam rewards one habit: name the exact mechanism (update the app, certify, label) instead of a vague, heavier alternative such as a new app or RLS.</p>
+
+<h2>Recall first</h2>
+<p><strong>A user must publish the app and add colleagues with least privilege. Which role?</strong></p><details><summary>Show answer</summary><p>Member. Contributors cannot publish a new app or add users.</p></details>
+
+<h2>Core idea</h2>
+<p>Ways to distribute: workspace roles (collaborators), sharing single items, an <strong>app</strong> (curated, read-only, many consumers), embedding in Teams or SharePoint, subscriptions (email), and Build or Analyze in Excel for self-service.</p>
+<p>An <a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-create-distribute-apps">app</a> contains only the items you select. <strong>Audiences</strong> show different content to different groups in one app. After changing workspace content, choose <strong>Update app</strong>; do not create a second app. App users cannot edit layouts and RLS still applies. Share with users, security groups, mail-enabled security groups, distribution lists or Microsoft 365 groups, or the whole organisation. Terms: <a href="../reference/glossary.html#t-app">app</a>, <a href="../reference/glossary.html#t-audience-app">audience</a>.</p>
+<p><a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-endorsement-overview">Endorsement</a> is a quality signal, not access control. <strong>Promoted</strong>: any contributor can promote. <strong>Certified</strong>: only reviewers the admin authorises. Certified items rank first in search and discovery. See <a href="../reference/glossary.html#t-endorsement">endorsement</a>.</p>
+<p><a href="https://learn.microsoft.com/en-us/power-bi/enterprise/service-security-sensitivity-label-overview">Sensitivity labels</a> (Microsoft Purview Information Protection) are applied in Desktop or the service. They <strong>flow downstream</strong> (model, report, dashboard, and new content built from labelled items) and <strong>persist with encryption on export</strong> to Excel, PowerPoint and PDF. RLS and OLS do not protect exported files; labels do. See <a href="../reference/glossary.html#t-sensitivity-label">sensitivity label</a>.<span class="sidenote">The <a href="https://learn.microsoft.com/en-us/fabric/governance/lineage">lineage view</a> shows source, model, report and dashboard dependencies. <a href="https://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/intro-to-deployment-pipelines">Deployment pipelines</a> move content Development, Test, Production.</span></p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>Board members need one dashboard and three reports, read-only, on powerbi.com.</p></div>
+<ol><li>In the workspace, choose <strong>Create app</strong> and include exactly those four items.</li><li>Set the audience to the Board security group.</li><li>Label the content "Confidential".</li><li>Later, a new page is added: choose <strong>Update app</strong>.</li></ol>
+<p>Why it works: the app limits what consumers see, the label keeps exported PDFs encrypted, and updating avoids a duplicate app and a new URL.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> A new report page needs a new app or a changed audience. <strong>Right:</strong> Just Update app.</p></div><div class="callout trap"><p><strong>Wrong:</strong> RLS stops exported PDFs leaking. <strong>Right:</strong> Use sensitivity labels with encryption.</p></div><div class="callout trap"><p><strong>Wrong:</strong> Promoted and Certified are the same. <strong>Right:</strong> Certified is verified by authorised reviewers and listed first.</p></div>
+<p class="muted">More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0033" data-bank="lesson" data-lesson="0033"></div>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0033');this.textContent='Marked done'}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-create-distribute-apps">Microsoft Learn: Publish an app</a></p><p class="muted">Read the audiences and update sections. About 12 minutes. Extras: <a href="https://learn.microsoft.com/en-us/power-bi/enterprise/service-security-sensitivity-label-overview">Sensitivity labels</a>, <a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-endorsement-overview">Endorsement</a>, <a href="https://learn.microsoft.com/en-us/fabric/governance/lineage">Lineage</a>, <a href="https://learn.microsoft.com/en-us/fabric/cicd/deployment-pipelines/intro-to-deployment-pipelines">Deployment pipelines</a>.</p></div>
+
+<div class="ask">Ask your teacher agent a follow-up. For example: When would I use audiences instead of two apps? Do sensitivity labels block a user who has Viewer access?</div>
+
+<h2>Related</h2>
+<p><a href="../reference/security-and-sharing.html">Security and sharing</a>, <a href="../reference/glossary.html">Glossary</a> (<a href="../reference/glossary.html#t-app">app</a>, <a href="../reference/glossary.html#t-endorsement">endorsement</a>, <a href="../reference/glossary.html#t-sensitivity-label">sensitivity label</a>).</p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0032-workspace-roles-item-access.html"><small>Previous</small>Workspace roles, sharing and Build permission</a>
+  <a class="next" href="0034-dashboards-alerts-subscriptions.html"><small>Next</small>Dashboards, data alerts and subscriptions</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

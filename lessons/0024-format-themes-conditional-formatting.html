@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Themes and conditional formatting</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0024">
+<main class="page">
+<p class="muted"><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0024</p>
+  <h1>Themes, conditional formatting and number formats</h1>
+  <p class="meta"><span class="badge viz">Visualize</span><span>About 18 min</span><span>After this lesson you can apply a reusable theme and pick the right conditional-formatting style for a requirement.</span></p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Formatting questions reward knowing which option does what: Rules versus Gradient, report theme versus dashboard theme, data bars with or without numbers. They are short, repeatable scenario questions in the Visualize and analyze the data domain.</p>
+
+<h2>Recall first</h2>
+<details><summary>A KPI compares sales to target by quarter across several years. What should the trend axis use?</summary><p>A unique period such as Year-Quarter. Quarter alone sums across years.</p></details>
+
+<h2>Core idea</h2>
+<p><strong>Report theme.</strong> A JSON file with colours, fonts and visual defaults, imported in Desktop (View, Themes, Browse) and reusable across reports.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-report-themes">Report themes</a>.</span> Customising the current theme affects only that file unless you save and export it.</p>
+<p><strong>Dashboard theme</strong> (service only) recolours dashboard tiles.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboard-themes">Dashboard themes</a>.</span> A report theme does not change existing dashboard tiles. When pinning, choose keep current theme or use destination theme.</p>
+<p><strong>Conditional formatting</strong> applies to table and matrix cells (background, font colour, data bars, icons, web URL) and to many visual properties such as titles and card values through <strong>fx</strong>.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-conditional-table-formatting">Conditional table formatting</a>.</span></p>
+<div class="table-wrap"><table>
+<thead><tr><th>Style</th><th>Use when</th></tr></thead>
+<tbody>
+<tr><td><strong>Rules</strong></td><td>Discrete thresholds or ranges, for example red below 0, green at 100 or more. A rule can use another field and its aggregation.</td></tr>
+<tr><td><strong>Gradient</strong></td><td>A continuous colour scale from low to high.</td></tr>
+<tr><td><strong>Field value</strong></td><td>A column or measure returns a colour name or hex code.</td></tr>
+<tr><td><strong>Data bars</strong></td><td>Magnitude inside cells. Tick Show bar only to hide numbers.</td></tr>
+<tr><td><strong>Icons</strong></td><td>Shape cues, which also help accessibility.</td></tr>
+</tbody></table></div>
+<p><strong>Number formats</strong> use custom format strings: <code>0.00;(0.00)</code> shows two decimals with negatives in parentheses. The colour red comes from conditional formatting, not from the format string.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>Business context: revenue cells must turn red below 1 M, amber from 1 to 5 M and green above 5 M, with negatives shown in parentheses.</p></div>
+<ol>
+<li>Select the table, open Format, Cell elements, Background colour, then fx.</li>
+<li>Format style: <strong>Rules</strong>. Add three ranges: below 1,000,000 red; 1,000,000 to 5,000,000 amber; above 5,000,000 green.</li>
+<li>Set the measure's format string to <code>#,##0;(#,##0)</code>.</li>
+</ol>
+<pre data-lang="DAX"><code>Status Colour =
+SWITCH ( TRUE (), [Revenue] &lt; 1000000, "#C0392B", [Revenue] &lt;= 5000000, "#F39C12", "#27AE60" )</code></pre>
+<p>Why it works: Rules gives hard bands. The DAX version is the Field value alternative, handy when many visuals must share the same logic in one measure. A gradient would blur the three bands the requirement asks for.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief:</strong> A report theme recolours pinned dashboard tiles.<br><strong>Correct rule:</strong> Existing tiles keep their theme. Use a dashboard theme in the service, or choose the theme option when pinning.</p></div><div class="callout trap"><p><strong>Wrong belief:</strong> Gradient suits any colour requirement.<br><strong>Correct rule:</strong> When the requirement states discrete thresholds, use Rules.</p></div><div class="callout trap"><p><strong>Wrong belief:</strong> Data bars hide the numbers by default.<br><strong>Correct rule:</strong> Numbers stay visible until you tick Show bar only.</p></div>
+<p><a href="../reference/common-mistakes.html">See all common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0024" data-bank="lesson" data-lesson="0024"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" id="done-btn" onclick="if(window.Progress){Progress.markLesson('0024');this.textContent='Marked done';}else{this.textContent='Progress not available';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-conditional-table-formatting">Microsoft Learn: Conditional table formatting</a> (about 8 min). Extras: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-report-themes">Report themes</a>, <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboard-themes">Dashboard themes</a>.</p><p class="muted">Read it for the exact options under each format style.</p></div>
+
+<div class="ask"><p>Ask your teacher agent a follow-up. Try: &ldquo;How do I set a conditional colour from a measure on a card title?&rdquo; or &ldquo;What is the difference between saving a theme and customising it?&rdquo;</p></div>
+
+<h2>Related</h2>
+<p><a href="../reference/visuals-chooser.html">Visuals chooser</a> &middot; <a href="../reference/common-mistakes.html">Common mistakes</a> &middot; <a href="../reference/glossary.html">Glossary</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0023-choose-the-right-visual.html"><small>Previous</small>Choose the right visual</a>
+  <a href="../index.html"><small>Home</small>Course home</a>
+  <a class="next" href="0025-filters-slicers-sync.html"><small>Next</small>Filters, slicers and sync slicers</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

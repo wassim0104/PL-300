@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Merge vs append, and choosing the join kind</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0008">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0008</p>
+  <h1>Merge vs append, and choosing the join kind</h1>
+  <p class="meta"><span class="badge prep">Prepare the data</span><span>About 20 min</span><span>Skill: pick merge or append and the right join kind</span></p>
+  <p><strong>After this lesson you can</strong> decide between merge and append, pick the join kind from the requirement&rsquo;s wording, and keep helper queries out of the model.</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Combining queries is one of the most reliable PL-300 topics: nearly every practice set has a question that hinges on the join kind or on append versus merge. The wording of the requirement (&ldquo;customers without sales&rdquo;, &ldquo;keep all products&rdquo;) tells you the answer, so this is cheap points once you learn to read it.</p>
+
+<h2>Recall first</h2>
+<p><strong>In Power Query, which of Split by delimiter&rsquo;s options gives one value per row?</strong></p><details><summary>Show answer</summary><p>The Advanced option &ldquo;into rows&rdquo;; the default produces columns.</p></details>
+
+<h2>Core idea</h2>
+<p><strong>Append</strong> stacks rows from tables with the same or similar columns; columns missing on one side become null. Use <em>Append Queries as New</em> to keep the originals. <a href="https://learn.microsoft.com/en-us/power-query/append-queries">Append queries</a>. <strong>Merge</strong> adds columns from a related table by matching key columns, like a SQL join, and returns a nested table column that you expand. <a href="https://learn.microsoft.com/en-us/power-query/merge-queries-overview">Merge queries overview</a>.<span class="sidenote">The match keys must have the same data type, or nothing matches.</span></p>
+<div class="table-wrap"><table>
+<thead><tr><th>Join kind</th><th>Returns</th><th>Typical wording</th></tr></thead>
+<tbody>
+<tr><td>Left outer (default)</td><td>All left rows plus matches</td><td>&ldquo;keep all customers&rdquo;</td></tr>
+<tr><td>Right outer</td><td>All right rows plus matches</td><td>mirror of left</td></tr>
+<tr><td>Full outer</td><td>All rows from both</td><td>&ldquo;everything from both&rdquo;</td></tr>
+<tr><td>Inner</td><td>Matching rows only</td><td>&ldquo;only those in both&rdquo;</td></tr>
+<tr><td>Left anti</td><td>Left rows with <em>no</em> match</td><td>&ldquo;customers without sales&rdquo;</td></tr>
+<tr><td>Right anti</td><td>Right rows with no match</td><td>mirror of left anti</td></tr>
+</tbody></table></div>
+<p>Order matters in two places. Remove duplicates <em>after</em> appending, because duplicates across the two tables only appear once they share a table. And use <em>Merge as New</em> with Enable load turned off on the sources: that gives the smallest model, and the sources must <strong>not be deleted</strong> because the merge references them.<span class="sidenote">Fuzzy matching is optional for text keys.</span> Flattening a snowflake (Product, Subcategory, Category) with merges makes one Product dimension: use Inner when the link always exists and Left outer when the requirement says to keep all products. Glossary: <a href="../reference/glossary.html#t-merge">Merge</a>, <a href="../reference/glossary.html#t-append">Append</a>, <a href="../reference/glossary.html#t-left-anti-join">Left anti join</a>.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>Marketing wants a list of customers who never bought anything. You have <code>Customers</code> and <code>Sales</code>, both keyed on <code>CustomerID</code>.</p></div>
+<ol><li>Home, Merge Queries as New. Left table <code>Customers</code>, right table <code>Sales</code>, select <code>CustomerID</code> in both.</li><li>Join kind: <strong>Left anti (rows only in first)</strong>.</li><li>Remove the empty nested Sales column if it appears.</li><li>Right-click <code>Customers</code> and <code>Sales</code>, clear Enable load (if nothing else needs them).</li></ol>
+<pre data-lang="M"><code>Merged = Table.NestedJoin(Customers, {"CustomerID"}, Sales, {"CustomerID"},
+    "Sales", JoinKind.LeftAnti)</code></pre>
+<p>Left anti keeps exactly the left rows with no match, so the answer is the list itself. The sources stay as connection-only queries, so the model holds one table instead of three.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief: &ldquo;append can bring address columns onto customers.&rdquo;</strong> Correct rule: append adds rows; merge adds columns.</p></div><div class="callout trap"><p><strong>Wrong belief: &ldquo;inner join is the safe default.&rdquo;</strong> Correct rule: if the requirement says to include customers without addresses, use Left outer; Inner drops them.</p></div><div class="callout trap"><p><strong>Wrong belief: &ldquo;I can leave the intermediate queries loaded.&rdquo;</strong> Correct rule: loaded helper queries duplicate data in the model; disable load instead of deleting.</p></div>
+<p>More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0008" data-bank="lesson" data-lesson="0008"></div>
+<script src="../assets/progress.js" defer></script>
+<script src="../assets/bank.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+<p><button class="btn" type="button" onclick="if(window.Progress){Progress.markLesson('0008');this.textContent='Marked done';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-query/merge-queries-overview">Merge queries overview</a> (about 10 minutes).</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-query/append-queries">Append queries</a></li><li><a href="https://learn.microsoft.com/en-us/power-query/merge-queries-left-anti">Left anti join</a></li></ul>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up, for example: &ldquo;Walk me through left anti versus right anti with a tiny example.&rdquo; and &ldquo;Why does deleting a source query break my merge?&rdquo;</div>
+
+<h2>Related</h2>
+<p><a href="../reference/power-query-m.html">Power Query M cheat sheet</a> · <a href="../reference/glossary.html">Glossary</a> · <a href="0007-split-and-parse-columns.html">Lesson 0007</a> · <a href="0011-query-folding-load-reuse.html">Lesson 0011: load settings</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0007-split-and-parse-columns.html"><small>Previous</small>Split, extract and parse columns</a>
+  <a href="../index.html"><small>Home</small>Course home</a>
+  <a class="next" href="0009-reshape-unpivot-json.html"><small>Next</small>Reshape tables: unpivot, pivot, transpose, JSON</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

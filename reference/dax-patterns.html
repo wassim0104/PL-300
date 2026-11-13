@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PL-300 DAX patterns</title>
+<link rel="stylesheet" href="../assets/course.css">
+<style>
+main.sheet { max-width: 1100px; padding: 1.2rem 16px 3rem; }
+main.sheet h1 { font-size: 1.9rem; margin: .2em 0 .2em; }
+main.sheet h2 { font-size: 1.2rem; margin-top: 1.6em; }
+.sheet-top { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; justify-content: space-between; align-items: baseline; font: .85rem var(--sans); color: var(--muted); border-bottom: 1px solid var(--rule); padding-bottom: .5rem; }
+.sheet-top a { font-weight: 600; }
+.lede { font: 1rem/1.5 var(--serif); color: var(--muted); max-width: 75ch; margin: .6rem 0 1rem; }
+.tools { display: flex; flex-wrap: wrap; gap: .6rem 1rem; align-items: center; margin: .8rem 0 1rem; font-family: var(--sans); }
+.tools input[type=search] { font: 1rem var(--sans); padding: .5rem .7rem; min-width: min(22rem, 100%); border: 1px solid var(--fg); border-radius: 6px; background: var(--card-bg); color: var(--fg); }
+.tools .count { font-size: .85rem; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; font: .8rem var(--sans); }
+.chips .lbl { color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; font-size: .7rem; margin-right: .2rem; }
+.chip { font: 600 .82rem var(--sans); padding: .35rem .75rem; min-height: 2.2rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--card-bg); color: var(--fg); cursor: pointer; }
+.chip[aria-pressed=true] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.hidden-nojs { display: none; }
+.js .hidden-nojs { display: flex; }
+.hide { display: none !important; }
+.sources { font: .85rem/1.5 var(--sans); color: var(--muted); border-top: 1px solid var(--rule); margin-top: 2rem; padding-top: .8rem; }
+.sources a { margin-right: .6rem; }
+.dense, .dense td, .dense th { font-size: .88rem; }
+.dense td, .dense th { padding: .3em .6em; }
+.dense code { font-size: .86em; }
+.dense tr { break-inside: avoid; }
+@media print {
+  @page { margin: 12mm; }
+  body { font-size: 9.5pt; line-height: 1.35; }
+  main.sheet { padding: 0; }
+  main.sheet h1 { font-size: 16pt; }
+  main.sheet h2 { font-size: 11pt; margin-top: 1em; }
+  .tools, .hidden-nojs, .sheet-top a.noprint { display: none !important; }
+  .dense, .dense td, .dense th { font-size: 8.5pt; }
+  a[href^="http"]::after { content: ""; }
+  .sources a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 7pt; }
+  .sources a { display: block; }
+}
+
+.pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(24rem,100%), 1fr)); gap: .8rem; }
+.pat { border: 1px solid var(--rule); border-radius: 8px; padding: .6rem .8rem .5rem; background: var(--card-bg); font-family: var(--sans); position: relative; min-width: 0; margin: 0; max-width: none; }
+.pat header { display: flex; align-items: baseline; gap: .5rem; }
+.pat h3 { margin: 0; font: 700 .95rem var(--sans); font-style: normal; flex: 1; }
+.pid { font: 700 .75rem var(--mono); color: var(--accent); }
+.kind { font: 600 .65rem var(--sans); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border: 1px solid var(--rule); border-radius: 999px; padding: .15em .55em; white-space: nowrap; }
+.pat pre { margin: .5rem 0 .4rem; padding: .55rem .7rem; font-size: .8rem; line-height: 1.5; }
+.pat pre[data-lang]::before { display: none; }
+.pat .use { margin: 0; font-size: .82rem; line-height: 1.4; color: var(--muted); }
+.pat .use strong { color: var(--fg); }
+.pat .use a { white-space: nowrap; margin-left: .2rem; }
+.copy { position: absolute; right: .55rem; top: 2.75rem; font: 600 .7rem var(--sans); padding: .2rem .55rem; min-height: 1.7rem; border: 1px solid var(--rule); border-radius: 4px; background: var(--bg); color: var(--fg); cursor: pointer; opacity: .85; }
+.copy:hover, .copy:focus-visible { opacity: 1; border-color: var(--link); }
+.anti { list-style: none; padding: 0; margin: .3rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(20rem,100%),1fr)); gap: .4rem 1.5rem; font-family: var(--sans); font-size: .88rem; line-height: 1.45; }
+.anti li { margin: .2rem 0; } .anti span { color: var(--fg); }
+.notes { font: .88rem/1.5 var(--sans); }
+@media print { .copy { display: none; } .pgrid { display: block; column-count: 2; column-gap: 1rem; } .pat { break-inside: avoid; margin-bottom: .5rem; padding: .3rem .5rem; } .pat pre { font-size: 7.5pt; padding: .3rem .5rem; } .pat .use { font-size: 8pt; } }
+</style>
+<script>document.documentElement.className+=' js';</script>
+</head>
+<body data-page="reference" data-sheet="dax-patterns">
+<main class="sheet">
+<div class="sheet-top"><a class="noprint" href="../index.html">&larr; Back to home</a><span>PL-300 reference sheet &middot; 2026-11-11</span></div>
+<h1>DAX patterns</h1>
+<p class="lede">Thirty-five exam-level patterns you can copy: an ID, a name, the code, when to use it, and the lesson that explains it.</p>
+
+<p class="notes">Table and column names are examples: <code>Sales</code> (fact), <code>Product</code>, <code>Region</code>, <code>'Date'</code> (marked date table). Each block is a measure unless the tag says otherwise. Spaces inside parentheses follow the DAX formatting convention and are optional.</p>
+<aside class="callout trap" data-title="Anti-patterns"><ul class="anti"><li><strong><code>DATEADD ( 'Date'[Date], -30, DAY )</code> as a rolling window</strong><br><span>DATEADD shifts the current dates back; it returns a shifted copy, not a 30-day span. Use <code>DATESINPERIOD</code> (P23).</span></li><li><strong><code>LASTDATE ( ... ) - 365</code> for last year</strong><br><span>LASTDATE returns a one-row table, not a number. Use <code>SAMEPERIODLASTYEAR</code> or <code>DATEADD</code> (P19, P21).</span></li><li><strong>A bare column in a measure, such as <code>Sales[Amount]</code></strong><br><span>A measure has no row context, so a column needs an aggregator: <code>SUM</code>, <code>MAX</code>, <code>SELECTEDVALUE</code>, or an iterator (P01, P11).</span></li><li><strong><code>MAXX ( Dim, SUMX ( Fact, ... ) )</code> without CALCULATE</strong><br><span>The row context of Dim does not filter Fact, so every row returns the same total. Wrap in <code>CALCULATE</code> or call a measure (P12).</span></li><li><strong>A ratio as a calculated column</strong><br><span>It is stored per row and does not re-evaluate in a visual, so totals are wrong (average of ratios). Use a measure with <code>DIVIDE</code> (P02).</span></li></ul></aside>
+<h2>Basics, ratios and filters</h2><div class="pgrid"><article class="pat" id="P01">
+<header><span class="pid">P01</span><h3>Base sum</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Total Sales = SUM ( Sales[Amount] )</code></pre>
+<p class="use"><strong>Use when:</strong> The explicit measure every other measure builds on. <a href="../lessons/0016-calculated-columns-vs-measures.html" title="Calculated column, measure or calculated table?">Lesson 0016</a></p>
+</article><article class="pat" id="P02">
+<header><span class="pid">P02</span><h3>Ratio</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Margin % = DIVIDE ( [Profit], [Total Sales] )</code></pre>
+<p class="use"><strong>Use when:</strong> Any ratio. DIVIDE returns BLANK instead of an error on divide by zero. <a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">Lesson 0017</a></p>
+</article><article class="pat" id="P03">
+<header><span class="pid">P03</span><h3>Fixed filter</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Sales West =
+CALCULATE ( [Total Sales], Region[Name] = "West" )</code></pre>
+<p class="use"><strong>Use when:</strong> Pin one column to a value. It replaces any filter on Region[Name]. <a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">Lesson 0017</a></p>
+</article><article class="pat" id="P04">
+<header><span class="pid">P04</span><h3>Intersecting filter</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Sales West (slicer-aware) =
+CALCULATE ( [Total Sales], KEEPFILTERS ( Region[Name] = "West" ) )</code></pre>
+<p class="use"><strong>Use when:</strong> Same filter, but it intersects with the slicer instead of overriding it. <a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">Lesson 0017</a></p>
+</article><article class="pat" id="P05">
+<header><span class="pid">P05</span><h3>% of grand total</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>% of Total =
+DIVIDE (
+    [Total Sales],
+    CALCULATE ( [Total Sales], ALL ( Product[Category] ) )
+)</code></pre>
+<p class="use"><strong>Use when:</strong> Denominator ignores slicers on Category. Use ALL ( Product ) to ignore every Product column. <a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">Lesson 0017</a></p>
+</article><article class="pat" id="P06">
+<header><span class="pid">P06</span><h3>% of visible total</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>% of Visible =
+DIVIDE (
+    [Total Sales],
+    CALCULATE ( [Total Sales], ALLSELECTED ( Product[Category] ) )
+)</code></pre>
+<p class="use"><strong>Use when:</strong> Denominator keeps slicer, page and report filters; removes only the visual's own filter. <a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">Lesson 0017</a></p>
+</article><article class="pat" id="P07">
+<header><span class="pid">P07</span><h3>Column-vs-column filter</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Late Orders =
+CALCULATE (
+    COUNTROWS ( Orders ),
+    FILTER ( Orders, Orders[Shipped] &gt; Orders[Required] )
+)</code></pre>
+<p class="use"><strong>Use when:</strong> Comparing two columns in the same row needs FILTER; a simple Boolean filter can reference only one column. <a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">Lesson 0017</a></p>
+</article><article class="pat" id="P08">
+<header><span class="pid">P08</span><h3>Variables</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Sales YoY % =
+VAR PY = [Sales PY]
+RETURN
+    DIVIDE ( [Total Sales] - PY, PY )</code></pre>
+<p class="use"><strong>Use when:</strong> Evaluate once, reuse, and make the formula readable. VAR is evaluated where it is defined. <a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">Lesson 0017</a></p>
+</article></div><h2>Counting, iterators and ranking</h2><div class="pgrid"><article class="pat" id="P09">
+<header><span class="pid">P09</span><h3>Distinct count</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Orders = DISTINCTCOUNT ( Sales[OrderID] )</code></pre>
+<p class="use"><strong>Use when:</strong> Count unique values in a column (orders, customers). <a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">Lesson 0018</a></p>
+</article><article class="pat" id="P10">
+<header><span class="pid">P10</span><h3>Row count</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Transactions = COUNTROWS ( Sales )</code></pre>
+<p class="use"><strong>Use when:</strong> Count rows of a table, for example fact rows or filtered rows. <a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">Lesson 0018</a></p>
+</article><article class="pat" id="P11">
+<header><span class="pid">P11</span><h3>Row-level sum</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Revenue = SUMX ( Sales, Sales[Qty] * Sales[Price] )</code></pre>
+<p class="use"><strong>Use when:</strong> Multiply per row, then add. SUM cannot multiply two columns. <a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">Lesson 0018</a></p>
+</article><article class="pat" id="P12">
+<header><span class="pid">P12</span><h3>Max over members</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Best Product Sales =
+MAXX ( VALUES ( Product[Name] ), [Total Sales] )</code></pre>
+<p class="use"><strong>Use when:</strong> Best of a measure across members. The measure reference triggers context transition per row. <a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">Lesson 0018</a></p>
+</article><article class="pat" id="P13">
+<header><span class="pid">P13</span><h3>Average per day</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Avg Daily Sales =
+AVERAGEX ( VALUES ( 'Date'[Date] ), [Total Sales] )</code></pre>
+<p class="use"><strong>Use when:</strong> Average of a daily total; avoids averaging individual transactions. <a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">Lesson 0018</a></p>
+</article><article class="pat" id="P14">
+<header><span class="pid">P14</span><h3>Rank</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Product Rank =
+RANKX ( ALL ( Product[Name] ), [Total Sales], , DESC, DENSE )</code></pre>
+<p class="use"><strong>Use when:</strong> Rank among all products, ignoring the visual's own filter. DENSE leaves no gaps after ties. <a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">Lesson 0018</a></p>
+</article><article class="pat" id="P15">
+<header><span class="pid">P15</span><h3>Top N inside CALCULATE</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Top 3 Sales =
+CALCULATE (
+    [Total Sales],
+    TOPN ( 3, VALUES ( Product[Name] ), [Total Sales], DESC )
+)</code></pre>
+<p class="use"><strong>Use when:</strong> Total of the top N members; TOPN acts as a filter table. <a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">Lesson 0018</a></p>
+</article><article class="pat" id="P16">
+<header><span class="pid">P16</span><h3>Filter on positive values</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Positive Sales =
+SUMX ( FILTER ( Sales, Sales[Amount] &gt; 0 ), Sales[Amount] )</code></pre>
+<p class="use"><strong>Use when:</strong> Aggregate only the rows that meet a row-level condition. <a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">Lesson 0018</a></p>
+</article><article class="pat" id="P17">
+<header><span class="pid">P17</span><h3>Related lookup</h3><span class="kind">Calc. column</span></header>
+<pre data-lang="DAX"><code>Category = RELATED ( Product[Category] )</code></pre>
+<p class="use"><strong>Use when:</strong> Calculated column on the many side that pulls a value from the one side. <a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">Lesson 0018</a></p>
+</article></div><h2>Time intelligence</h2><div class="pgrid"><article class="pat" id="P18">
+<header><span class="pid">P18</span><h3>Year to date</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Sales YTD = TOTALYTD ( [Total Sales], 'Date'[Date] )</code></pre>
+<p class="use"><strong>Use when:</strong> Running total from 1 January. Needs a marked date table. <a href="../lessons/0019-time-intelligence.html" title="Time intelligence measures">Lesson 0019</a></p>
+</article><article class="pat" id="P19">
+<header><span class="pid">P19</span><h3>Prior year</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Sales PY =
+CALCULATE ( [Total Sales], SAMEPERIODLASTYEAR ( 'Date'[Date] ) )</code></pre>
+<p class="use"><strong>Use when:</strong> Same dates one year earlier. <a href="../lessons/0019-time-intelligence.html" title="Time intelligence measures">Lesson 0019</a></p>
+</article><article class="pat" id="P20">
+<header><span class="pid">P20</span><h3>Prior-year YTD</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Sales YTD PY =
+CALCULATE ( [Sales YTD], SAMEPERIODLASTYEAR ( 'Date'[Date] ) )</code></pre>
+<p class="use"><strong>Use when:</strong> Compare YTD with the same span last year. <a href="../lessons/0019-time-intelligence.html" title="Time intelligence measures">Lesson 0019</a></p>
+</article><article class="pat" id="P21">
+<header><span class="pid">P21</span><h3>Previous quarter (shift)</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Sales PQ =
+CALCULATE ( [Total Sales], DATEADD ( 'Date'[Date], -1, QUARTER ) )</code></pre>
+<p class="use"><strong>Use when:</strong> Shift the current dates by any interval. DATEADD shifts; it does not build a window. <a href="../lessons/0019-time-intelligence.html" title="Time intelligence measures">Lesson 0019</a></p>
+</article><article class="pat" id="P22">
+<header><span class="pid">P22</span><h3>YoY %</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Sales YoY % =
+DIVIDE ( [Total Sales] - [Sales PY], [Sales PY] )</code></pre>
+<p class="use"><strong>Use when:</strong> Growth against prior year. <a href="../lessons/0019-time-intelligence.html" title="Time intelligence measures">Lesson 0019</a></p>
+</article><article class="pat" id="P23">
+<header><span class="pid">P23</span><h3>Rolling 30 days</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Sales Last 30 Days =
+CALCULATE (
+    [Total Sales],
+    DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -30, DAY )
+)</code></pre>
+<p class="use"><strong>Use when:</strong> A moving window that ends on the last visible date. <a href="../lessons/0019-time-intelligence.html" title="Time intelligence measures">Lesson 0019</a></p>
+</article><article class="pat" id="P24">
+<header><span class="pid">P24</span><h3>Rolling 3-month average</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Sales 3M Avg =
+CALCULATE (
+    AVERAGEX ( VALUES ( 'Date'[Month] ), [Total Sales] ),
+    DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -3, MONTH )
+)</code></pre>
+<p class="use"><strong>Use when:</strong> Average of monthly totals across a 3-month window. 'Month' must identify a unique month (for example year-month). <a href="../lessons/0019-time-intelligence.html" title="Time intelligence measures">Lesson 0019</a></p>
+</article></div><h2>Balances and relationships</h2><div class="pgrid"><article class="pat" id="P25">
+<header><span class="pid">P25</span><h3>Closing balance</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Closing Balance =
+CALCULATE ( SUM ( Bal[Amount] ), LASTDATE ( 'Date'[Date] ) )</code></pre>
+<p class="use"><strong>Use when:</strong> Semi-additive: take the value on the last date in context, never sum over time. <a href="../lessons/0020-semi-additive-statistics-quick-measures.html" title="Semi-additive measures, statistics and quick measures">Lesson 0020</a></p>
+</article><article class="pat" id="P26">
+<header><span class="pid">P26</span><h3>Last non-blank balance</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Last Units =
+CALCULATE (
+    SUM ( Inv[Units] ),
+    LASTNONBLANK ( 'Date'[Date], CALCULATE ( SUM ( Inv[Units] ) ) )
+)</code></pre>
+<p class="use"><strong>Use when:</strong> Same, when the last date may have no row (inventory, headcount). <a href="../lessons/0020-semi-additive-statistics-quick-measures.html" title="Semi-additive measures, statistics and quick measures">Lesson 0020</a></p>
+</article><article class="pat" id="P27">
+<header><span class="pid">P27</span><h3>Inactive relationship</h3><span class="kind">Measure</span></header>
+<pre data-lang="DAX"><code>Sales by Ship Date =
+CALCULATE (
+    [Total Sales],
+    USERELATIONSHIP ( Sales[ShipDate], 'Date'[Date] )
+)</code></pre>
+<p class="use"><strong>Use when:</strong> Role-playing date: activate the inactive relationship for one measure. <a href="../lessons/0014-date-table-role-playing.html" title="Build a date table and handle role-playing dates">Lesson 0014</a></p>
+</article></div><h2>Tables, columns and other objects</h2><div class="pgrid"><article class="pat" id="P28">
+<header><span class="pid">P28</span><h3>Date table</h3><span class="kind">Calc. table</span></header>
+<pre data-lang="DAX"><code>Date =
+CALENDAR (
+    DATE ( YEAR ( TODAY () ) - 9, 1, 1 ),
+    DATE ( YEAR ( TODAY () ), 12, 31 )
+)</code></pre>
+<p class="use"><strong>Use when:</strong> Calculated table for a common date table. Mark it as the date table afterwards. <a href="../lessons/0014-date-table-role-playing.html" title="Build a date table and handle role-playing dates">Lesson 0014</a></p>
+</article><article class="pat" id="P29">
+<header><span class="pid">P29</span><h3>Band column</h3><span class="kind">Calc. column</span></header>
+<pre data-lang="DAX"><code>Size Band =
+SWITCH (
+    TRUE (),
+    Sales[Amount] &lt; 100, "Small",
+    Sales[Amount] &lt; 1000, "Medium",
+    "Large"
+)</code></pre>
+<p class="use"><strong>Use when:</strong> Bucket rows with ordered conditions; the first true branch wins. <a href="../lessons/0016-calculated-columns-vs-measures.html" title="Calculated column, measure or calculated table?">Lesson 0016</a></p>
+</article><article class="pat" id="P30">
+<header><span class="pid">P30</span><h3>Text label column</h3><span class="kind">Calc. column</span></header>
+<pre data-lang="DAX"><code>Month Label = FORMAT ( 'Date'[Date], "MMM YYYY" )</code></pre>
+<p class="use"><strong>Use when:</strong> A readable label. Pair it with Sort by column or it sorts alphabetically. <a href="../lessons/0014-date-table-role-playing.html" title="Build a date table and handle role-playing dates">Lesson 0014</a></p>
+</article><article class="pat" id="P31">
+<header><span class="pid">P31</span><h3>Number series table</h3><span class="kind">Calc. table</span></header>
+<pre data-lang="DAX"><code>Offsets = GENERATESERIES ( -100, 100, 1 )</code></pre>
+<p class="use"><strong>Use when:</strong> Calculated table of numbers for a what-if or disconnected slicer. <a href="../lessons/0016-calculated-columns-vs-measures.html" title="Calculated column, measure or calculated table?">Lesson 0016</a></p>
+</article><article class="pat" id="P32">
+<header><span class="pid">P32</span><h3>Grouped table</h3><span class="kind">Calc. table</span></header>
+<pre data-lang="DAX"><code>Year Quarter =
+SUMMARIZE ( 'Date', 'Date'[Year], 'Date'[Quarter] )</code></pre>
+<p class="use"><strong>Use when:</strong> Calculated table of distinct combinations. <a href="../lessons/0016-calculated-columns-vs-measures.html" title="Calculated column, measure or calculated table?">Lesson 0016</a></p>
+</article><article class="pat" id="P33">
+<header><span class="pid">P33</span><h3>Hierarchy depth</h3><span class="kind">Calc. column</span></header>
+<pre data-lang="DAX"><code>Depth =
+PATHLENGTH ( PATH ( Emp[EmployeeID], Emp[ManagerID] ) )</code></pre>
+<p class="use"><strong>Use when:</strong> Levels in a parent-child hierarchy (calculated column). <a href="../lessons/0016-calculated-columns-vs-measures.html" title="Calculated column, measure or calculated table?">Lesson 0016</a></p>
+</article><article class="pat" id="P34">
+<header><span class="pid">P34</span><h3>Calculation item</h3><span class="kind">Calc. item</span></header>
+<pre data-lang="DAX"><code>YTD =
+CALCULATE ( SELECTEDMEASURE (), DATESYTD ( 'Date'[Date] ) )</code></pre>
+<p class="use"><strong>Use when:</strong> One item that rewrites any measure in the group. <a href="../lessons/0021-calculation-groups-visual-calculations.html" title="Calculation groups and visual calculations">Lesson 0021</a></p>
+</article><article class="pat" id="P35">
+<header><span class="pid">P35</span><h3>Dynamic RLS rule</h3><span class="kind">RLS filter</span></header>
+<pre data-lang="DAX"><code>[Email] = USERPRINCIPALNAME ()</code></pre>
+<p class="use"><strong>Use when:</strong> Table filter expression on a role; each user sees only rows with their own sign-in name. <a href="../lessons/0036-rls-ols.html" title="Row-level and object-level security">Lesson 0036</a></p>
+</article></div>
+
+<p class="muted">Related sheets: <a href="glossary.html">Glossary</a> &middot; <a href="concept-map.html">Concept map</a> &middot; <a href="common-mistakes.html">Common mistakes</a></p>
+<footer class="sources"><strong>Sources.</strong> <a href="https://learn.microsoft.com/en-us/dax/dax-overview">DAX overview</a> <a href="https://learn.microsoft.com/en-us/dax/calculate-function-dax">CALCULATE</a> <a href="https://learn.microsoft.com/en-us/dax/keepfilters-function-dax">KEEPFILTERS</a> <a href="https://learn.microsoft.com/en-us/dax/allselected-function-dax">ALLSELECTED</a> <a href="https://learn.microsoft.com/en-us/dax/rankx-function-dax">RANKX</a> <a href="https://learn.microsoft.com/en-us/dax/topn-function-dax">TOPN</a> <a href="https://learn.microsoft.com/en-us/dax/time-intelligence-functions-dax">Time intelligence functions</a> <a href="https://learn.microsoft.com/en-us/dax/dateadd-function-dax">DATEADD</a> <a href="https://learn.microsoft.com/en-us/power-bi/transform-model/calculation-groups">Calculation groups</a> <a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security">Row-level security</a></footer>
+</main>
+<script>
+(function(){
+  function fallback(t){var a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity=0;document.body.appendChild(a);a.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}document.body.removeChild(a);return ok;}
+  [].forEach.call(document.querySelectorAll('.pat'),function(p){
+    var code=p.querySelector('pre code'); if(!code) return;
+    var b=document.createElement('button'); b.type='button'; b.className='copy'; b.textContent='Copy';
+    b.setAttribute('aria-label','Copy '+p.id+' code');
+    b.addEventListener('click',function(){
+      var t=code.textContent;
+      function done(ok){b.textContent=ok?'Copied':'Press Ctrl+C'; setTimeout(function(){b.textContent='Copy';},1500);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){done(true);},function(){done(fallback(t));});}
+      else done(fallback(t));
+    });
+    p.appendChild(b);
+  });
+})();
+</script>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

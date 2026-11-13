@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0006: Types, errors and nulls</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0006">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0006</p>
+  <h1>Fix data types, errors and nulls</h1>
+  <p class="meta"><span class="badge prep">Prepare</span><span>About 18 min</span><span>Skill: choose the cleaning action</span></p>
+  <p><strong>After this lesson you can</strong> choose the right cleaning action (change type, replace errors, replace values, remove rows) so you keep the rows the requirement needs.</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Cleaning questions hinge on one word in the requirement: "keep all rows", "average", "refresh fails". Read that word and the answer follows. They appear repeatedly in Prepare.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-query/dealing-with-errors">Dealing with errors</a>.</span></p>
+
+<h2>Recall first</h2>
+<p>A column holds A, A, B, C. What are its distinct and unique counts?</p>
+<details><summary>Show answer</summary><p>Distinct 3, unique 2.</p></details>
+
+<h2>Core idea</h2>
+<p>Set data types on purpose: Whole, Decimal or Fixed decimal number, Date, Date/Time, Text, True/False. Wrong types break relationships, sorting and time intelligence.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-query/data-types">Data types</a>.</span></p>
+<div class="table-wrap"><table>
+<thead><tr><th>Action</th><th>Effect on rows</th></tr></thead>
+<tbody>
+<tr><td>Replace Errors</td><td>Keeps the row, puts a value where the error was</td></tr>
+<tr><td>Remove Errors</td><td>Deletes the rows with errors</td></tr>
+<tr><td>Keep Errors</td><td>Keeps only error rows (diagnosis)</td></tr>
+<tr><td>Replace Values</td><td>Swaps one value for another, such as null for 0</td></tr>
+</tbody></table></div>
+<p>Think before turning nulls into 0: AVERAGE ignores blanks but counts zeros, so replacing nulls lowers averages. Replace only when null truly means zero.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-query/replace-values">Replace values</a>.</span> Custom-column arithmetic needs compatible types, so convert operands first.</p>
+<p>Refresh errors: "column 'X' not found" means the column was renamed or removed at source; "Could not find file" means the file moved or permission was lost. For case differences, Power Query is case-sensitive but the VertiPaq engine is not; normalise with Transform &rsaquo; Format &rsaquo; Uppercase, not with storage mode changes.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>Discount has a few "N/A" entries that become errors once typed as Decimal. The requirement says keep all rows and use 0.05 for bad values.</p></div>
+<ol><li>Change type to Decimal Number.</li><li>Select Discount, Transform &rsaquo; Replace Errors, enter 0.05.</li></ol>
+<pre data-lang="M"><code>Table.ReplaceErrorValues(Typed, {"Discount", 0.05})
+// nulls to 0 (only when null means zero):
+Table.ReplaceValue(Orders, null, 0, Replacer.ReplaceValue, {"Order Value"})</code></pre>
+<p>Replace Errors keeps every row; Remove Errors would silently drop them.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief:</strong> Remove Errors satisfies "keep all rows". <strong>Correct rule:</strong> it deletes rows; use Replace Errors.</p></div>
+<div class="callout trap"><p><strong>Wrong belief:</strong> Nulls to 0 is always safe. <strong>Correct rule:</strong> it biases averages downward.</p></div>
+<div class="callout trap"><p><strong>Wrong belief:</strong> Formatting a column changes its type. <strong>Correct rule:</strong> formatting is display; type is storage.</p></div>
+<p>More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0006" data-bank="lesson" data-lesson="0006"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0006');this.textContent='Marked done'}else{this.textContent='Progress unavailable'}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-query/dealing-with-errors">Dealing with errors</a>. Read the replace and remove sections. About 8 minutes.</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-query/data-types">Data types</a></li><li><a href="https://learn.microsoft.com/en-us/power-query/replace-values">Replace values</a></li></ul>
+
+<div class="ask"><p>Stuck or curious? Ask the teacher agent a follow-up. For example:</p><ul><li>When is it right to replace nulls with 0?</li><li>Why does case matter in Power Query but not in the model?</li></ul></div>
+
+<h2>Related</h2>
+<p><a href="../reference/power-query-m.html">Power Query M</a> · <a href="../reference/common-mistakes.html">Common mistakes</a> · <a href="../reference/glossary.html">Glossary</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0005-data-profiling.html"><small>Previous</small>Profile data before you transform it</a>
+  <a href="../index.html"><small>Home</small>All lessons</a>
+  <a class="next" href="0007-split-and-parse-columns.html"><small>Next</small>Split, extract and parse columns</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

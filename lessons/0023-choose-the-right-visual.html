@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Choose the right visual</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0023">
+<main class="page">
+<p class="muted"><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0023</p>
+  <h1>Choose the right visual (and when to go paginated)</h1>
+  <p class="meta"><span class="badge viz">Visualize</span><span>About 18 min</span><span>After this lesson you can match an analysis need to a visual type, configure KPI and gauge wells, and spot when a paginated report is required.</span></p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Visual selection is a large share of the Visualize and analyze the data domain, and it appears as short scenario questions: "which visual shows...". The answers follow a handful of rules, plus two favourite traps: the KPI trend axis and printable reports.</p>
+
+<h2>Recall first</h2>
+<details><summary>Name two ways to shrink an Import model.</summary><p>Remove unused columns and unneeded rows in Power Query; split or reduce high-cardinality columns such as DateTime. Hiding does not shrink it.</p></details>
+
+<h2>Core idea</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Need</th><th>Visual</th></tr></thead>
+<tbody>
+<tr><td>Compare categories</td><td>Clustered bar or column</td></tr>
+<tr><td>Trend over time</td><td>Line chart</td></tr>
+<tr><td>Part-to-whole, few slices</td><td>Pie or donut; treemap for more</td></tr>
+<tr><td>Part-to-whole over time as %</td><td>100% stacked area or column</td></tr>
+<tr><td>Running result of positive and negative steps</td><td><strong>Waterfall</strong></td></tr>
+<tr><td>Two measures, correlation, outliers</td><td><strong>Scatter</strong> (play axis for time)</td></tr>
+<tr><td>One value / many values</td><td>Card / table or matrix</td></tr>
+<tr><td>Geography; stage drop-off</td><td>Map or filled map; funnel</td></tr>
+<tr><td>Same chart split by a category</td><td><strong>Small multiples</strong></td></tr>
+</tbody></table></div>
+<p><span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-types-for-reports-and-q-and-a">Visualization types</a>; <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-waterfall-charts">waterfall</a>; <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-scatter">scatter</a>; <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-small-multiples">small multiples</a>.</span>Prefer bar charts over pie charts when comparing many categories accurately.</p>
+<p><strong>KPI visual</strong>: <em>Value</em> is the actual, <em>Trend axis</em> is time, <em>Target</em> is the goal.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-kpi">KPI</a>.</span> The trend axis needs a <strong>unique period</strong> such as Year-Quarter. Set direction (High is good or Low is good). The goal shows blank when its grain does not match the trend axis. A <strong>gauge</strong> shows one value against min, max and target, with no trend.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-radial-gauge-charts">Radial gauge</a>.</span> Forecast and anomaly detection on a line chart need a continuous date axis (lesson 0030).</p>
+<p><strong>Paginated reports</strong> (Power BI Report Builder, .rdl) are pixel-perfect and printable, print <em>all rows</em> across pages, export to PDF, Word, Excel and PowerPoint, and contain a <strong>tablix</strong>. Interactive Power BI reports suit exploration.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/guidance/report-paginated-or-power-bi">Paginated or Power BI report?</a>.</span></p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>Business context: the board pack needs a monthly invoice PDF for every customer with all line items, and executives also want to explore sales by region.</p></div>
+<ul>
+<li>Invoices, all rows, print and PDF: a <strong>paginated report</strong> with a tablix, built in Report Builder.</li>
+<li>Executive exploration: an interactive <strong>Power BI report</strong> with a bar chart by region and a line chart by month.</li>
+<li>Quarterly sales against target: a <strong>KPI</strong> with Value = Sales, Trend axis = Year-Quarter, Target = Sales Target.</li>
+</ul>
+<p>Why it works: each choice follows the requirement's verb (print every row, explore, track against a goal) instead of the visual that looks nicest.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief:</strong> A pie chart suits ten categories or comparing margins across regions.<br><strong>Correct rule:</strong> Pies work for a few slices. Bars compare many categories accurately.</p></div><div class="callout trap"><p><strong>Wrong belief:</strong> Quarter alone is a fine KPI trend axis.<br><strong>Correct rule:</strong> It groups every year's Q1 together and sums across years. Use a unique Year-Quarter.</p></div><div class="callout trap"><p><strong>Wrong belief:</strong> An interactive table can serve a printable 40-page list.<br><strong>Correct rule:</strong> It truncates. Go paginated.</p></div>
+<p><a href="../reference/common-mistakes.html">See all common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0023" data-bank="lesson" data-lesson="0023"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" id="done-btn" onclick="if(window.Progress){Progress.markLesson('0023');this.textContent='Marked done';}else{this.textContent='Progress not available';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-types-for-reports-and-q-and-a">Microsoft Learn: Visualization types</a> (about 8 min). Extras: <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-kpi">KPI visual</a>, <a href="https://learn.microsoft.com/en-us/power-bi/guidance/report-paginated-or-power-bi">Paginated or Power BI report?</a>.</p><p class="muted">Read it as a catalogue so each visual's name triggers its use case.</p></div>
+
+<div class="ask"><p>Ask your teacher agent a follow-up. Try: &ldquo;Waterfall or stacked column for variance analysis?&rdquo; or &ldquo;How do I add a target line to a bar chart?&rdquo;</p></div>
+
+<h2>Related</h2>
+<p><a href="../reference/visuals-chooser.html">Visuals chooser</a> &middot; <a href="../reference/common-mistakes.html">Common mistakes</a> &middot; <a href="../reference/glossary.html">Glossary</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0022-model-performance.html"><small>Previous</small>Optimise model performance</a>
+  <a href="../index.html"><small>Home</small>Course home</a>
+  <a class="next" href="0024-format-themes-conditional-formatting.html"><small>Next</small>Themes and conditional formatting</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

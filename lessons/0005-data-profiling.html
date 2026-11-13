@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0005: Data profiling</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0005">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0005</p>
+  <h1>Profile data before you transform it</h1>
+  <p class="meta"><span class="badge prep">Prepare</span><span>About 15 min</span><span>Skill: pick the profiling tool</span></p>
+  <p><strong>After this lesson you can</strong> pick the profiling tool that answers a question (empty %, distinct vs unique, statistics) and know its row scope.</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Profiling questions are short and precise: which tool, what does the number mean, over how many rows. They are among the cheapest marks in Prepare once distinct vs unique and the 1,000-row default are fixed in your head.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-query/data-profiling-tools">Data profiling tools</a>.</span></p>
+
+<h2>Recall first</h2>
+<p>Which Power Query feature changes the server for every query at once?</p>
+<details><summary>Show answer</summary><p>A Power Query parameter in the Source step, or Data source settings, Change Source.</p></details>
+
+<h2>Core idea</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Tool</th><th>Answers</th></tr></thead>
+<tbody>
+<tr><td>Column quality</td><td>% Valid, % Error, % Empty</td></tr>
+<tr><td>Column distribution</td><td>Histogram, <strong>distinct</strong> count (different values) and <strong>unique</strong> count (values that occur exactly once)</td></tr>
+<tr><td>Column profile</td><td>Count, error, empty, distinct, unique, min, max, average, standard deviation, zeros, NaN, plus a value distribution you can group, for example by text length</td></tr>
+</tbody></table></div>
+<p>For [A, A, B, C]: distinct = 3, unique = 2.</p>
+<p>By default profiling uses the <strong>top 1,000 rows</strong>. Switch the status bar to "Column profiling based on entire data set" for full accuracy. <code>Table.Profile(table)</code> returns the statistics as a table you can load into the model for end users.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/powerquery-m/">Power Query M reference</a>.</span> Profiling in the editor adds nothing to the model; a DAX calculated column that counts lengths does.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>A 2-million-row Customer table shows Email as 0% empty.</p></div>
+<ol><li>The status bar says "based on top 1,000 rows".</li><li>Switch to the entire data set.</li><li>Column quality now shows 3% empty.</li></ol>
+<pre data-lang="M"><code>Table.Profile(Customer)</code></pre>
+<p>The early rows were simply complete. The fix for the empties comes in lesson 0006.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief:</strong> Distinct and unique mean the same. <strong>Correct rule:</strong> distinct counts different values; unique counts values appearing once.</p></div>
+<div class="callout trap"><p><strong>Wrong belief:</strong> Profile stats cover the whole table. <strong>Correct rule:</strong> the default scope is the top 1,000 rows.</p></div>
+<div class="callout trap"><p><strong>Wrong belief:</strong> A calculated column is a fine one-off profile. <strong>Correct rule:</strong> it grows the model; use the editor tools.</p></div>
+<p>More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0005" data-bank="lesson" data-lesson="0005"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0005');this.textContent='Marked done'}else{this.textContent='Progress unavailable'}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-query/data-profiling-tools">Data profiling tools</a>. Read it once and open the three panes in Desktop. About 8 minutes.</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/powerquery-m/">Power Query M reference</a></li></ul>
+
+<div class="ask"><p>Stuck or curious? Ask the teacher agent a follow-up. For example:</p><ul><li>Why can the empty % change when I profile the entire data set?</li><li>How would I visualise Table.Profile output in the report?</li></ul></div>
+
+<h2>Related</h2>
+<p><a href="../reference/power-query-m.html">Power Query M</a> · <a href="../reference/glossary.html">Glossary</a> · <a href="../reference/glossary.html">Glossary</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0004-data-source-settings-parameters.html"><small>Previous</small>Data source settings, privacy levels and parameters</a>
+  <a href="../index.html"><small>Home</small>All lessons</a>
+  <a class="next" href="0006-clean-errors-and-types.html"><small>Next</small>Fix data types, errors and nulls</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

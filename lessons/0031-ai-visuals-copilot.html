@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI visuals and Copilot</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script src="../assets/progress.js" defer></script>
+<script src="../assets/bank.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+</head>
+<body data-page="lesson" data-lesson="0031">
+<main class="page">
+<p class="muted"><a href="../index.html">Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0031</p>
+  <h1>AI visuals and Copilot: key influencers, decomposition tree, Q&amp;A, narratives</h1>
+  <p class="meta"><span class="badge viz">Visualize and analyze</span><span>About 20 min</span></p>
+  <p><strong>After this lesson you can</strong> pick the AI feature that answers a question (what drives a metric, ad hoc root cause, natural-language question, text summary), fill the key influencers wells correctly, and read its output.</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Questions about AI visuals are a small but dependable slice of the Visualize and analyze domain. They are easy marks once you can match a business question to the right feature, and easy to lose when you swap key influencers and the decomposition tree. Practice questions kept returning to the three wells of key influencers.</p>
+
+<h2>Recall first</h2>
+<p><strong>Which Analytics pane line would you add to show the average of a measure on a chart?</strong></p><details><summary>Show answer</summary><p>The average line (one of the constant, min, max, average, median and percentile lines).</p></details>
+
+<h2>Core idea</h2>
+<p>Match the question to the feature:</p>
+<div class="table-wrap"><table>
+<tr><th>Question</th><th>Feature</th></tr>
+<tr><td>What drives this metric, ranked?</td><td>Key influencers</td></tr>
+<tr><td>Why is this number high? Let me dig in, my own way.</td><td>Decomposition tree</td></tr>
+<tr><td>Let me just ask in plain English.</td><td>Q&amp;A</td></tr>
+<tr><td>Give me a text summary that follows my filters.</td><td>Smart narrative / Copilot narrative</td></tr>
+</table></div>
+<p><strong>Key influencers</strong> has three wells. <span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-influencers">Key influencers</a></span> <strong>Analyze</strong> is the metric. <strong>Explain by</strong> holds the candidate factors. <strong>Expand by</strong> holds the grain fields (for example Customer Key) and is used only when Analyze is a measure or summarised field. Output is ranked: categorical metrics read "x times more likely", continuous ones read "+N on average". A <em>Top segments</em> tab groups combinations. See <a href="../reference/glossary.html#t-key-influencers">glossary</a>.</p>
+<p>For a numeric metric with many distinct values set the analysis type to <strong>Continuous</strong>. A category appears only if it has enough data points, so a high-average country with few rows may be missing. The dotted line is the average of all other values.</p>
+<p>The <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-decomposition-tree">decomposition tree</a> is <strong>ad hoc</strong>: you choose the next dimension, in any order, or let an AI split jump to the highest or lowest value. Use it for root-cause exploration such as bounce rate by channel, then device, then country. It does not rank drivers.</p>
+<p><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-q-and-a">Q&amp;A</a> answers natural-language questions, in a visual or in a dashboard box. Improve it with synonyms and linguistic setup, and pin good answers to a dashboard. The <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-smart-narrative">smart narrative</a> writes text that updates with filters.</p>
+<p><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/copilot-introduction">Copilot</a> can also create a report page, suggest content and summarise the semantic model. It needs a paid Fabric capacity (F2 or higher) or Premium (P1+), and the tenant must enable it. Finally, a data point's right-click <strong>Analyze</strong> offers "Explain the increase/decrease" and "Find where the distribution is different".</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>HR asks which employee attributes make <code>Leaver = Yes</code> more likely.</p></div>
+<ol><li>Add a key influencers visual.</li><li>Analyze: <code>Leaver</code>. Explain by: <code>Department</code>, <code>Tenure band</code>, <code>Manager</code>, <code>Overtime</code>.</li><li>Read the top bar: for example "Overtime = Yes: 2.1x more likely to leave".</li></ol>
+<p>It works because the question is "what increases the likelihood of an outcome", which is exactly what key influencers ranks. If instead Analyze were a measure such as average salary, you would add <code>Employee Key</code> to <strong>Expand by</strong> so the visual knows the grain, and leave it out of Explain by.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> Use the decomposition tree to rank drivers. <strong>Right:</strong> Ranking is key influencers. The tree is manual exploration.</p></div><div class="callout trap"><p><strong>Wrong:</strong> Put the factors in Expand by. <strong>Right:</strong> Factors go in Explain by. Expand by is only the grain for a measure.</p></div><div class="callout trap"><p><strong>Wrong:</strong> A numeric influencer is a ratio. <strong>Right:</strong> It is an average difference, not a multiple.</p></div>
+<p class="muted">More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0031" data-bank="lesson" data-lesson="0031"></div>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0031');this.textContent='Marked done'}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-influencers">Microsoft Learn: Key influencers visual</a></p><p class="muted">Read it for the well definitions and the worked examples. About 15 minutes. Extras: <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-decomposition-tree">Decomposition tree</a>, <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-smart-narrative">Smart narrative</a>, <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/copilot-introduction">Copilot introduction</a>.</p></div>
+
+<div class="ask">Ask your teacher agent a follow-up. For example: Why does a country with a high average not appear in key influencers? When do I use Expand by?</div>
+
+<h2>Related</h2>
+<p><a href="../reference/visuals-chooser.html">Visuals chooser</a>, <a href="../reference/glossary.html">Glossary</a> (<a href="../reference/glossary.html#t-key-influencers">key influencers</a>).</p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0030-analytics-pane-anomalies-grouping.html"><small>Previous</small>Analytics pane, anomalies, grouping and clustering</a>
+  <a class="next" href="0032-workspace-roles-item-access.html"><small>Next</small>Workspace roles, sharing and Build permission</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

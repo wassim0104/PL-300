@@ -1,0 +1,12 @@
+# Source PDFs (third-party exam dumps, 73 MB): never commit
+pl300/
+
+# Secrets and local tooling
+.env
+.env.*
+.vercel/
+node_modules/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db

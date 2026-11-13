@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entraînement mixte</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script src="../assets/progress.js" defer></script>
+<script src="../assets/bank.js"></script>
+<script src="../assets/quiz.js" defer></script>
+<style>
+.pr-wrap{max-width:860px;margin:0 auto;padding:1.5rem 16px 3rem}
+.pr-head h1{margin:0 0 .4rem}
+.pr-head p{margin:0;color:var(--muted);max-width:62ch}
+.pr-toolbar{display:flex;flex-wrap:wrap;gap:1rem 1.5rem;align-items:flex-end;margin:1.5rem 0 .75rem;padding:1rem 1.1rem;background:var(--surface);border:1px solid var(--rule);border-radius:8px}
+.pr-toolbar fieldset{border:0;margin:0;padding:0;min-width:0}
+.pr-toolbar legend,.pr-toolbar .lbl{font-size:.8rem;font-weight:600;color:var(--muted);padding:0;margin-bottom:.35rem;display:block}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--surface-2)}
+.seg label{position:relative;margin:0}
+.seg input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0}
+.seg span{display:block;padding:.45rem .95rem;font-weight:600;font-size:.92rem;cursor:pointer;border-right:1px solid var(--rule)}
+.seg label:last-child span{border-right:0}
+.seg input:checked+span{background:var(--ink);color:var(--surface)}
+.seg input:focus-visible+span{outline:2px solid var(--focus);outline-offset:-2px}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{position:relative;margin:0}
+.chip input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0}
+.chip span{display:inline-flex;align-items:center;gap:.4rem;padding:.38rem .75rem;border:1px solid var(--rule);border-radius:999px;font-size:.88rem;font-weight:600;background:var(--surface);color:var(--muted);cursor:pointer}
+.chip input:checked+span{color:var(--ink);border-color:var(--c);background:color-mix(in srgb,var(--c) 14%,var(--surface))}
+.chip input:focus-visible+span{outline:2px solid var(--focus);outline-offset:2px}
+.chip.prep{--c:var(--prep)}.chip.model{--c:var(--model)}.chip.viz{--c:var(--viz)}.chip.manage{--c:var(--manage)}
+.chip i{width:.6rem;height:.6rem;border-radius:50%;background:var(--c);display:inline-block}
+.pr-toolbar select{font:inherit;padding:.42rem .6rem;border:1px solid var(--rule);border-radius:4px;background:var(--surface);color:var(--ink);max-width:100%}
+.pr-toolbar select:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+.pr-go{margin-left:auto}
+.pr-note{min-height:1.4em;margin:.25rem 0 1.25rem;color:var(--muted);font-size:.9rem}
+.pr-sec{margin-top:2.5rem}
+.pr-sec h2{font-size:1.15rem;margin:0 0 .75rem}
+@media(max-width:640px){.pr-go{margin-left:0;width:100%}.pr-go .btn{width:100%}}
+</style>
+</head>
+<body data-page="practice">
+<main class="pr-wrap">
+<header class="pr-head">
+  <h1>Entraînement mixte</h1>
+  <p>Mélanger les domaines t'entraîne à reconnaître le sujet toi-même, comme à l'examen. Choisis une taille et des domaines, ou charge le mix de la semaine du <a href="../reference/study-plan.html">plan d'étude</a>. Les questions restent en anglais, comme l'examen.</p>
+</header>
+
+<form class="pr-toolbar" id="mix-form" onsubmit="return false" aria-label="Réglages de la série">
+  <fieldset><legend>Questions</legend>
+    <div class="seg" role="radiogroup">
+      <label><input type="radio" name="cnt" value="10"><span>10</span></label>
+      <label><input type="radio" name="cnt" value="20" checked><span>20</span></label>
+      <label><input type="radio" name="cnt" value="40"><span>40</span></label>
+    </div>
+  </fieldset>
+  <fieldset><legend>Domaines</legend>
+    <div class="chips">
+      <label class="chip prep"><input type="checkbox" name="dom" value="PREP" checked><span><i></i>Préparer</span></label>
+      <label class="chip model"><input type="checkbox" name="dom" value="MODEL" checked><span><i></i>Modéliser</span></label>
+      <label class="chip viz"><input type="checkbox" name="dom" value="VIZ" checked><span><i></i>Visualiser</span></label>
+      <label class="chip manage"><input type="checkbox" name="dom" value="MANAGE" checked><span><i></i>Gérer</span></label>
+    </div>
+  </fieldset>
+  <div>
+    <label class="lbl" for="mix-week">Mix de la semaine</label>
+    <select id="mix-week">
+      <option value="">Libre (utiliser les domaines)</option>
+      <option value="1">Semaine 1 : Prep 20, Manage 5</option>
+      <option value="2">Semaine 2 : Prep 20, Model 15, Manage 5</option>
+      <option value="3">Semaine 3 : Prep 10, Model 25, Manage 5</option>
+      <option value="4">Semaine 4 : Prep 10, Model 10, Viz 20, Manage 5</option>
+      <option value="5">Semaine 5 : Prep 10, Model 10, Viz 10, Manage 15</option>
+      <option value="6">Semaine 6 : domaines faibles, puis 40 mélangées</option>
+    </select>
+  </div>
+  <div class="pr-go"><button type="button" class="btn primary" id="mix-go">Lancer une série</button></div>
+</form>
+<p class="pr-note" id="mix-note" role="status"></p>
+
+<div class="quiz" id="mix-quiz" data-quiz-id="mixed" data-mode="practice" data-bank="mixed" data-count="20"></div>
+
+<section class="pr-sec" aria-labelledby="due-h">
+  <h2 id="due-h">À réviser</h2>
+  <div class="review-due"></div>
+</section>
+</main>
+<script>
+(function(){
+  var W={1:{PREP:20,MANAGE:5},2:{PREP:20,MODEL:15,MANAGE:5},3:{PREP:10,MODEL:25,MANAGE:5},4:{PREP:10,MODEL:10,VIZ:20,MANAGE:5},5:{PREP:10,MODEL:10,VIZ:10,MANAGE:15},6:{}};
+  var $=function(i){return document.getElementById(i)};
+  var boxes=document.querySelectorAll('input[name=dom]');
+  var cnts=document.querySelectorAll('input[name=cnt]');
+  function getCount(){var v='20';cnts.forEach(function(r){if(r.checked)v=r.value;});return v;}
+  function setCount(v){cnts.forEach(function(r){r.checked=(r.value===v);});}
+  function setBoxes(list){boxes.forEach(function(b){b.checked=list.indexOf(b.value)>-1;});}
+  function weekly(){
+    var w=$('mix-week').value;
+    if(!w) return;
+    var t=W[w], keys=Object.keys(t);
+    if(w==='6'){setBoxes(['PREP','MODEL','VIZ','MANAGE']);setCount('40');$('mix-note').textContent='Semaine 6 : vise d’abord tes domaines faibles (décoche les forts), puis lance une série complète de 40.';return;}
+    var sum=0;keys.forEach(function(k){sum+=t[k];});
+    setBoxes(keys);
+    setCount(sum<=10?'10':sum<=20?'20':'40');
+    $('mix-note').textContent='Objectif de la semaine '+w+' : '+keys.map(function(k){return t[k]+' '+k;}).join(' / ')+' ('+sum+' questions). Les domaines sont pondérés en conséquence ; le nombre est arrondi à l’option la plus proche.';
+  }
+  function go(){
+    var d=[];boxes.forEach(function(b){if(b.checked)d.push(b.value);});
+    var q=$('mix-quiz');
+    if(!d.length){$('mix-note').textContent='Coche au moins un domaine.';return;}
+    $('mix-note').textContent='';
+    q.setAttribute('data-weighted','true');
+    q.setAttribute('data-count',getCount());
+    q.setAttribute('data-domains',d.join(','));
+    q.__quiz=false;q.textContent='';
+    window.PL300Quiz.init();
+  }
+  $('mix-week').addEventListener('change',weekly);
+  $('mix-go').addEventListener('click',go);
+})();
+</script>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Component demo</title>
+<link rel="stylesheet" href="course.css">
+<script src="progress.js" defer></script>
+<script src="quiz.js" defer></script>
+</head>
+<body data-page="lesson" data-lesson="0000" data-domain="MODEL">
+<main class="page">
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0000</p>
+  <h1>Component demo page</h1>
+  <p class="meta"><span class="badge prep">Prep</span><span class="badge model">Model</span><span class="badge viz">Viz</span><span class="badge manage">Manage</span><span>About 5 min</span></p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Body text in a serif face with a comfortable measure.<span class="sidenote">A sidenote sits in the margin on wide screens and collapses inline on narrow ones.</span> Resize the window to check. Inline code looks like <code>SUM ( Sales[Amount] )</code> and external links like <a href="https://learn.microsoft.com/power-bi/">Microsoft Learn</a> print their URL.</p>
+
+<h2>Core idea</h2>
+<pre data-lang="DAX"><code>Total Sales = SUM ( Sales[Amount] )
+Sales LY = CALCULATE ( [Total Sales], SAMEPERIODLASTYEAR ( 'Date'[Date] ) )</code></pre>
+<pre data-lang="M"><code>let
+    Source = Csv.Document(File.Contents("C:\data\sales.csv"), [Delimiter=","]),
+    Promoted = Table.PromoteHeaders(Source)
+in
+    Promoted</code></pre>
+<div class="table-wrap"><table>
+<caption>Storage modes at a glance</caption>
+<thead><tr><th>Mode</th><th>Data lives in</th><th>Refresh</th></tr></thead>
+<tbody><tr><td>Import</td><td>Model (VertiPaq)</td><td>Scheduled</td></tr><tr><td>DirectQuery</td><td>Source</td><td>Per query</td></tr><tr><td>Dual</td><td>Either</td><td>Depends</td></tr></tbody>
+</table></div>
+<figure>
+<svg viewBox="0 0 300 60" role="img" aria-label="Placeholder figure"><rect x="2" y="2" width="296" height="56" rx="6" fill="none" stroke="currentColor"/><text x="150" y="36" text-anchor="middle" fill="currentColor" font-family="sans-serif">Figure placeholder</text></svg>
+<figcaption>Figure 1. A figure with a caption.</figcaption>
+</figure>
+
+<div class="callout tip"><p>A tip callout.</p></div>
+<div class="callout warn"><p>A warning callout.</p></div>
+<div class="callout trap"><p>An exam trap callout.</p></div>
+<div class="callout example"><p>An example callout.</p></div>
+<div class="callout source"><p><a href="https://learn.microsoft.com/power-bi/">Microsoft Learn</a> as primary source.</p></div>
+
+<h2>Practice quiz (2 questions)</h2>
+<div class="quiz" data-quiz-id="demo-practice" data-topic="demo-topic"></div>
+<script type="application/json" class="quiz-data">
+[
+ {"id":"q1","domain":"MODEL","topic":"storage-modes","q":"Which storage mode keeps a copy of the data inside the model?","options":["DirectQuery mode","Import mode","Live connection","Composite only"],"answer":1,"multi":false,"explain":"Import loads data into the in-memory model.","cite":"https://learn.microsoft.com/power-bi/connect-data/desktop-directquery-about","disputed":true},
+ {"id":"q2","domain":"PREP","topic":"power-query","q":"Which two are Power Query transformations? (choose two)","options":["Unpivot columns","Create a measure","Merge queries","Add a relationship"],"answer":[0,2],"multi":true,"explain":"Unpivot and merge happen in Power Query; measures and relationships are modeling.","cite":"https://learn.microsoft.com/power-query/","disputed":false}
+]
+</script>
+
+<h2>Exam-mode quiz (1-minute timer)</h2>
+<div class="quiz" data-quiz-id="demo-exam" data-mode="exam" data-timer-minutes="1" data-topic="demo-exam"></div>
+<script type="application/json" class="quiz-data">
+[
+ {"id":"e1","domain":"VIZ","topic":"visual-choice","q":"Which visual best shows a part-to-whole trend over time?","options":["Stacked area chart","Scatter chart","Card visual","Gauge visual"],"answer":0,"explain":"Stacked area shows composition over time.","cite":"https://learn.microsoft.com/power-bi/visuals/power-bi-visualization-types-for-reports-and-q-and-a"},
+ {"id":"e2","domain":"MANAGE","topic":"rls","q":"Where do you define row-level security roles?","options":["Power BI Desktop","Power Query only","Dataflow gen1","Gateway config"],"answer":0,"explain":"Roles are defined in Desktop (or the service) with DAX filters.","cite":"https://learn.microsoft.com/power-bi/enterprise/service-admin-rls"},
+ {"id":"e3","domain":"MODEL","topic":"storage-modes","q":"Which are valid storage modes? (choose two)","options":["Dual","Hybrid-only","Import","Offline"],"answer":[0,2],"multi":true,"explain":"Import, DirectQuery and Dual are the table storage modes.","cite":"https://learn.microsoft.com/power-bi/transform-model/desktop-storage-mode"}
+]
+</script>
+
+<h2>Bank quiz (weighted, 8 questions)</h2>
+<p class="muted">Uses a generated in-page <code>window.PL300_BANK</code>.</p>
+<div class="quiz" data-quiz-id="demo-bank" data-bank="mixed" data-count="8"></div>
+<script>
+window.PL300_BANK = [];
+['PREP','MODEL','VIZ','MANAGE'].forEach(function (d) {
+  for (var i = 1; i <= 8; i++) PL300_BANK.push({id: d + i, domain: d, topic: d.toLowerCase() + '-topic-' + (i % 3), q: d + ' question ' + i + ': pick the right one.',
+    options: ['Option one', 'Option two', 'Option three', 'Option four'], answer: i % 4, explain: 'Generated demo explanation.', cite: 'https://learn.microsoft.com/'});
+});
+</script>
+
+<h2>Review queue</h2>
+<div class="review-due" data-topic-links='{"storage-modes":"#","power-query":"#"}'></div>
+<p><button class="btn" id="seed" type="button">Seed demo progress</button> <button class="btn" id="clear" type="button">Reset progress</button></p>
+<script>
+document.getElementById('seed').onclick = function () {
+  Progress.record('storage-modes', false); Progress.record('power-query', true, new Date(Date.now() - 5 * 864e5));
+  Progress.renderReviewDue();
+};
+document.getElementById('clear').onclick = function () { Progress.reset(); Progress.renderReviewDue(); };
+</script>
+
+<div class="ask">Stuck or curious? Ask me a follow-up question about any part of this lesson.</div>
+
+<h2>Shared components</h2>
+<p><a class="btn" href="#">Primary</a> <a class="btn secondary" href="#">Secondary</a> <a class="btn small" href="#">Small</a> <span class="pill"><span class="domain-dot prep"></span>Pill with dot</span> <span class="pill"><span class="domain-dot viz"></span>Viz</span></p>
+<div class="grid-3">
+  <div class="panel"><div class="panel-title"><span>Panel title</span><span class="pill">36</span></div><div class="stat"><b>24</b><span>Leçons terminées</span></div></div>
+  <div class="panel"><div class="panel-title"><span>Progress bar</span></div><div class="progress-bar"><span style="width:62%"></span></div><p class="muted small">62 %</p></div>
+  <div class="panel"><div class="panel-title"><span>Domain dots</span></div><p><span class="domain-dot prep"></span> Prep <span class="domain-dot model"></span> Model <span class="domain-dot viz"></span> Viz <span class="domain-dot manage"></span> Manage</p></div>
+</div>
+<div class="panel"><div class="panel-title"><span>Exam matrix</span><span class="muted">levels 0 to 4, done dot</span></div>
+<div class="matrix" style="--cols:12" id="demo-matrix"></div></div>
+<script>
+(function () { var m = document.getElementById('demo-matrix'), d = ['prep','model','viz','manage'];
+  for (var i = 0; i < 36; i++) { var c = document.createElement('a'); c.href = '#'; c.className = 'cell ' + d[i < 11 ? 0 : i < 22 ? 1 : i < 29 ? 2 : 3] + (i % 5 === 0 ? ' done' : '');
+    c.setAttribute('data-level', i % 5); c.textContent = i + 1; c.title = 'Lesson ' + (i + 1); m.appendChild(c); } })();
+</script>
+
+<h2>Cards</h2>
+<ul class="cards">
+  <li class="card"><h3><a href="#">0001 Power Query basics</a></h3><p>Shape data before it loads.</p><p class="meta"><span class="badge prep">Prep</span><span>10 min</span></p></li>
+  <li class="card"><h3><a href="#">0002 Star schema</a></h3><p>Facts, dimensions, relationships.</p><p class="meta"><span class="badge model">Model</span><span>12 min</span></p></li>
+  <li class="card"><h3><a href="#">0003 Report design</a></h3><p>Choose the right visual.</p><p class="meta"><span class="badge viz">Viz</span><span>8 min</span></p></li>
+  <li class="card"><h3><a href="#">0004 Row-level security</a></h3><p>Restrict rows by role.</p><p class="meta"><span class="badge manage">Manage</span><span>9 min</span></p></li>
+</ul>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="#"><small>Previous</small>Previous lesson title</a>
+  <a class="next" href="#"><small>Next</small>Next lesson title</a>
+</nav>
+</main>
+<script src="manifest.js"></script><script src="site.js"></script>
+</body>
+</html>

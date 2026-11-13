@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.specify/scripts/bash/resolve-template.sh spec-template *)",
+      "Bash(python3 -c \"import sys,json;d=json.load\\(sys.stdin\\);print\\(d['TEMPLATE_CONTENT']\\)\")"
+    ]
+  }
+}

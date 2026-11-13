@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accessibility and mobile</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0028">
+<main class="page">
+<p class="muted"><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0028</p>
+  <h1>Design for accessibility and mobile</h1>
+  <p class="meta"><span class="badge viz">Visualize and analyze</span><span>About 18 min</span><span>Skill: design accessible and mobile reports</span></p>
+</header>
+
+<p><strong>After this lesson you can</strong> make a report usable by screen-reader, keyboard and colour-vision-deficient users, and build report and dashboard mobile layouts.</p>
+
+<h2>Why this matters for the exam</h2>
+<p>Expect scenario questions: a status table in red and green, a card a screen reader must read, a phone view. Know which layout lives where, because report and dashboard mobile views are separate.</p>
+
+<h2>Recall first</h2>
+<p>Last lesson: you must keep a user&rsquo;s slicer choice when toggling two bookmarks. Which property do you untick?</p><details><summary>Answer</summary><p><strong>Data.</strong> See <a href="0027-bookmarks-navigation-selection.html">Lesson 0027</a>.</p></details>
+
+<h2>Core idea</h2>
+<h3>Accessibility</h3>
+<ul>
+<li><strong>Alt text</strong> on every meaningful visual. Static text never changes, so for a live value drive alt text from a DAX measure through conditional formatting (fx).<span class="sidenote">Source: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-accessibility-creating-reports">Creating accessible reports</a>.</span></li>
+<li><strong>Tab order</strong> (Selection pane) gives a logical reading order. Hide decorative shapes from it.</li>
+<li><strong>Never colour alone.</strong> Add icons with different shapes, data labels or markers; use accessible theme colours and enough contrast. Swapping red for orange does not help.<span class="sidenote">Source: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-accessibility-overview">Accessibility overview</a>.</span></li>
+<li>Clear titles, sensible font sizes, and Show as table (Alt+Shift+F11).</li></ul>
+<h3>Mobile</h3>
+<div class="table-wrap"><table><thead><tr><th></th><th>Report mobile layout</th><th>Dashboard mobile layout</th></tr></thead><tbody>
+<tr><td>Where</td><td>Desktop: View &rsaquo; Mobile layout, or service edit mode</td><td>Service: dashboard &rsaquo; Edit &rsaquo; Mobile layout</td></tr>
+<tr><td>You arrange</td><td>Visuals on a portrait canvas</td><td>Tiles: unpin, resize, reorder</td></tr>
+<tr><td>Tip</td><td>Optimised for the mobile app</td><td>Keep single-value cards to cut scrolling</td></tr></tbody></table></div>
+<p>The two layouts are independent.<span class="sidenote">Sources: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/power-bi-create-mobile-optimized-report-about">Mobile-optimised reports</a>, <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-create-dashboard-mobile-phone-view">Dashboard phone view</a>.</span> For vertical displays use a custom page size in Canvas settings, for example portrait 1080&times;1920.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>A status table uses red and green fills only.</p></div>
+<ol><li>Add icon conditional formatting with different shapes (a circle for good, a diamond for bad).</li><li>Add a status text column.</li><li>Set alt text for the visual.</li></ol>
+<p>Why it works: shape and text carry the meaning, so colour is optional. For the screen-reader card, use a measure such as:</p>
+<pre data-lang="DAX"><code>Alt Sales = "Total sales is " &amp; FORMAT ( [Total Sales], "#,0" )</code></pre>
+<p>Bind it through the alt text <em>fx</em> button so it updates after every refresh.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> Static alt text suits a live KPI. <strong>Right:</strong> it goes stale; bind alt text to a measure.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> Layer order sets reading order. <strong>Right:</strong> tab order does.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> Edit the report mobile view when the phone view of a <em>dashboard</em> is required. <strong>Right:</strong> use the dashboard&rsquo;s own Mobile layout in the service.</p></div>
+<p>More in the <a href="../reference/common-mistakes.html">common mistakes sheet</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0028" data-bank="lesson" data-lesson="0028"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0028');this.textContent='Marked done';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-accessibility-overview">Microsoft Learn: Accessibility overview</a> (about 10 min).</p><p class="muted">Extra: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-accessibility-creating-reports">Creating accessible reports</a> · <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/power-bi-create-mobile-optimized-report-about">Mobile-optimised reports</a> · <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-create-dashboard-mobile-phone-view">Dashboard phone view</a></p></div>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up. For example: &ldquo;How do I write a good alt text measure?&rdquo; or &ldquo;Report versus dashboard mobile layout: quiz me.&rdquo;</div>
+
+<h2>Related</h2>
+<p><a href="../reference/visuals-chooser.html">Visuals chooser</a> · <a href="../reference/glossary.html">Glossary</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0027-bookmarks-navigation-selection.html"><small>Previous</small>Bookmarks, buttons, navigation and the Selection pane</a>
+  <a class="home" href="../index.html"><small>Home</small>Course</a>
+  <a class="next" href="0029-personalize-export-page-refresh.html"><small>Next</small>Personalisation, export settings and automatic page refresh</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

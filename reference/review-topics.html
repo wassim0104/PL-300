@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review topics: final 7 days</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script src="../assets/progress.js" defer></script>
+
+<style>
+/* sheet-specific additions (small, shared by the 6 reference sheets) */
+.sheet-nav{font:.85rem/1.6 var(--sans);color:var(--muted);margin:0 0 1.2em}
+.sheet-nav a{margin-right:.7em;white-space:nowrap}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+td.y{color:var(--tip-fg);font-weight:700;text-align:center}
+td.n{color:var(--trap-fg);text-align:center}
+th.c{text-align:center}
+.filters{display:flex;flex-wrap:wrap;gap:.4em;margin:0 0 1em}
+.filters button{font:.85rem var(--sans);padding:.25em .8em;border:1px solid var(--rule);border-radius:999px;background:var(--card-bg);color:var(--fg);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.hide{display:none}
+.tag{font:.78rem var(--sans);padding:.05em .5em;border-radius:3px;border:1px solid var(--rule);white-space:nowrap}
+.tag.right{color:var(--tip-fg);background:var(--tip-bg)}
+.tag.wrong{color:var(--trap-fg);background:var(--trap-bg)}
+.tag.mixed{color:var(--warn-fg);background:var(--warn-bg)}
+.tag.skip{color:var(--muted)}
+table.dense td,table.dense th{padding:.35em .5em;vertical-align:top}
+.small{font:.85rem/1.45 var(--sans)}
+.wk{break-inside:avoid;margin:0 0 1.6em}
+.wk h3{margin-bottom:.3em}
+input.chk{width:1.15em;height:1.15em;vertical-align:middle;cursor:pointer}
+tr.done td{color:var(--muted)}
+.bar{height:.6em;background:var(--rule);border-radius:3px;overflow:hidden;margin:.4em 0 1em}
+.bar>i{display:block;height:100%;width:0;background:var(--tip-bd)}
+.flow text{font:13px var(--sans);fill:var(--fg)}
+.flow .box{fill:var(--card-bg);stroke:var(--fg);stroke-width:1.3}
+.flow .res{fill:var(--tip-bg);stroke:var(--tip-bd);stroke-width:1.6}
+.flow .res text{font-weight:700;fill:var(--tip-fg)}
+.flow .lbl{font-size:12px;fill:var(--muted)}
+.flow path{fill:none;stroke:var(--muted);stroke-width:1.4}
+.flow marker path{fill:var(--muted);stroke:none}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:0 1.5em}
+@media(max-width:640px){.cols2{grid-template-columns:1fr}}
+@media print{.filters,.sheet-nav a.nonprint{display:none}.hide{display:table-row-group!important}tr.hide{display:table-row!important}.wk{break-inside:avoid}}
+</style>
+</head>
+<body data-page="reference" data-sheet="review-topics">
+<main class="page">
+<p class="sheet-nav"><a href="../index.html">&larr; Home</a> &middot; Reference: <a href="glossary.html">Glossary</a> <a href="concept-map.html">Concept map</a> <a href="dax-patterns.html">DAX patterns</a> <a href="storage-modes-connectivity.html">Storage modes</a> <a href="security-and-sharing.html">Security and sharing</a> <a href="common-mistakes.html">Common mistakes</a> <a href="study-plan.html">Study plan</a> <a href="review-topics.html" aria-current="page">Review topics</a> <a href="power-query-m.html">Power Query M</a> <a href="visuals-chooser.html">Visuals chooser</a> <a href="exam-overview.html">Exam overview</a></p>
+<header class="lesson-header">
+  <p class="lesson-no">Reference sheet</p>
+  <h1>Review topics: final 7 days and final 24 hours</h1>
+  <p class="meta"><span>7-day plan</span><span>45-minute cram</span><span>Print on one or two pages</span></p>
+</header>
+<p>Use this in the last 7 days and the last 24 hours. It is read-only revision: no new topics. Full detail lives in the lessons.</p>
+<h2>Due for review now</h2>
+<div class="review-due" data-topic-links='{"storage-modes":"../lessons/0003-storage-modes.html","data-sources":"../lessons/0002-get-data-connectors.html","rls":"../lessons/0036-rls-ols.html","gateway":"../lessons/0035-gateways-and-refresh.html","time-intelligence":"../lessons/0019-time-intelligence.html","query-folding":"../lessons/0011-query-folding-load-reuse.html","merge-append":"../lessons/0008-merge-and-append.html","key-influencers":"../lessons/0031-ai-visuals-copilot.html","workspace-roles":"../lessons/0032-workspace-roles-item-access.html"}'></div>
+<p class="small muted">Topics appear here once you answer quiz questions on them. Due topics come from your progress in this browser.</p>
+<h2>Final 7 days: one block a day</h2>
+<ol>
+<li><strong>Day 1: Storage modes and gateways.</strong> Import, DirectQuery, Dual, Direct Lake; when a gateway is needed; scheduled vs incremental refresh; automatic page refresh. <span class="small">Lessons: <a href="../lessons/0003-storage-modes.html" title="Choose a storage mode: Import, DirectQuery, Dual, Direct Lake">0003</a>, <a href="../lessons/0035-gateways-and-refresh.html" title="Gateways, scheduled refresh and incremental refresh">0035</a>, <a href="../lessons/0029-personalize-export-page-refresh.html" title="Personalisation, export settings and automatic page refresh">0029</a>. Sheet: <a href="storage-modes-connectivity.html">storage-modes-connectivity</a>.</span></li>
+<li><strong>Day 2: RLS and roles.</strong> Additive roles; AND within a role; USERPRINCIPALNAME; Viewer-only; groups; test as person; Admin/Member/Contributor/Viewer matrix; Build vs Reshare. <span class="small">Lessons: <a href="../lessons/0036-rls-ols.html" title="Row-level and object-level security">0036</a>, <a href="../lessons/0032-workspace-roles-item-access.html" title="Workspace roles, sharing and Build permission">0032</a>. Sheet: <a href="security-and-sharing.html">security-and-sharing</a>.</span></li>
+<li><strong>Day 3: DAX core.</strong> CALCULATE replace vs KEEPFILTERS; ALL vs ALLSELECTED; context transition; DISTINCTCOUNT vs COUNTROWS. <span class="small">Lessons: <a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">0017</a>, <a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">0018</a>. Sheet: <a href="dax-patterns.html">dax-patterns</a>.</span></li>
+<li><strong>Day 4: Time intelligence.</strong> SAMEPERIODLASTYEAR vs PREVIOUSYEAR vs PARALLELPERIOD; DATESINPERIOD windows; closing balances; marking the date table; USERELATIONSHIP. <span class="small">Lessons: <a href="../lessons/0019-time-intelligence.html" title="Time intelligence measures">0019</a>, <a href="../lessons/0020-semi-additive-statistics-quick-measures.html" title="Semi-additive measures, statistics and quick measures">0020</a>, <a href="../lessons/0014-date-table-role-playing.html" title="Build a date table and handle role-playing dates">0014</a>. Sheet: <a href="dax-patterns.html">dax-patterns</a>.</span></li>
+<li><strong>Day 5: Power Query shaping.</strong> Merge kinds (left anti); append plus dedupe; Unpivot Other Columns; split &ldquo;at&rdquo;; replace vs remove errors; Enable load vs Include in refresh; folding. <span class="small">Lessons: <a href="../lessons/0006-clean-errors-and-types.html" title="Fix data types, errors and nulls">0006</a>, <a href="../lessons/0007-split-and-parse-columns.html" title="Split, extract and parse columns">0007</a>, <a href="../lessons/0008-merge-and-append.html" title="Merge vs append, and choosing the join kind">0008</a>, <a href="../lessons/0009-reshape-unpivot-json.html" title="Reshape tables: unpivot, pivot, transpose, JSON">0009</a>, <a href="../lessons/0010-group-and-aggregate-rows.html" title="Group and aggregate rows">0010</a>, <a href="../lessons/0011-query-folding-load-reuse.html" title="Query folding, load settings and query reuse">0011</a>. Sheet: <a href="power-query-m.html">power-query-m</a>.</span></li>
+<li><strong>Day 6: Model size and performance.</strong> Remove columns and rows; cardinality (split DateTime); Performance Analyzer &ldquo;Other&rdquo;; DAX query view. <span class="small">Lessons: <a href="../lessons/0022-model-performance.html" title="Optimise model performance">0022</a>.</span></li>
+<li><strong>Day 7: Visuals and analysis.</strong> Key influencers wells; decomposition tree; median line; anomaly detection; sync slicers; Edit interactions; bookmark Data property; alerts vs subscriptions; dashboard vs report theme. <span class="small">Lessons: <a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023</a>, <a href="../lessons/0024-format-themes-conditional-formatting.html" title="Themes, conditional formatting and number formats">0024</a>, <a href="../lessons/0025-filters-slicers-sync.html" title="Filters, slicers and sync slicers">0025</a>, <a href="../lessons/0026-interactions-drill-tooltips.html" title="Interactions, drill down vs drillthrough, tooltips">0026</a>, <a href="../lessons/0027-bookmarks-navigation-selection.html" title="Bookmarks, buttons, navigation and the Selection pane">0027</a>, <a href="../lessons/0030-analytics-pane-anomalies-grouping.html" title="Analytics pane, anomalies, grouping and clustering">0030</a>, <a href="../lessons/0031-ai-visuals-copilot.html" title="AI visuals and Copilot: key influencers, decomposition tree, Q&amp;A, narratives">0031</a>, <a href="../lessons/0034-dashboards-alerts-subscriptions.html" title="Dashboards, data alerts and subscriptions">0034</a>. Sheet: <a href="visuals-chooser.html">visuals-chooser</a>.</span></li>
+</ol>
+<h2>Final 24 hours (read-only, about 45 minutes)</h2>
+<p>Read the six panels below once, in order. <strong>No new questions in the last 12 hours.</strong> Sleep.</p>
+<h3>1. Roles matrix (mini)</h3>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th></th><th>Admin</th><th>Member</th><th>Contributor</th><th>Viewer</th></tr></thead><tbody>
+<tr><td>Add users</td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td></tr>
+<tr><td>Publish app, change app permissions</td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td></tr>
+<tr><td>Edit content, publish from Desktop</td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td></tr>
+<tr><td>Schedule refresh</td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td></tr>
+<tr><td>RLS applies</td><td class="n">&#10008;<span class="sr-only"> no</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td></tr>
+</tbody></table></div>
+<p class="small">Build permission (not Reshare) enables Analyze in Excel. Full matrix: <a href="security-and-sharing.html">security and sharing</a>.</p>
+<h3>2. Gateway: yes or no</h3>
+<div class="cols2"><p class="small"><strong>Needed:</strong> on-premises SQL, on-premises files, SSAS live, private network (VNet gateway).</p><p class="small"><strong>Not needed:</strong> Azure SQL (public), SharePoint Online, OneDrive for work, web sources.</p></div>
+<h3>3. Storage-mode chooser</h3>
+<ul class="small">
+<li>Minutes-fresh: <strong>DirectQuery</strong>; if the data is in a Fabric lakehouse, <strong>Direct Lake</strong>.</li>
+<li>Existing published model: <strong>live connection</strong>.</li>
+<li>Real-time fact plus fast history: <strong>composite</strong>, shared dimensions <strong>Dual</strong>.</li>
+<li>Files (Excel, CSV) and everything else: <strong>Import</strong>. Refresh: 8/day Pro, 48/day Premium or Fabric; automatic page refresh needs DirectQuery, min. 30 min in shared capacity.</li>
+</ul>
+<p class="small">Flow chart: <a href="storage-modes-connectivity.html">storage modes and connectivity</a>.</p>
+<h3>4. The 10 DAX patterns</h3>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th>ID</th><th>Pattern</th><th>Code</th><th>Lesson</th></tr></thead><tbody>
+<tr><td>P01</td><td>Base sum</td><td><code>Total Sales = SUM(Sales[Amount])</code></td><td><a href="../lessons/0016-calculated-columns-vs-measures.html" title="Calculated column, measure or calculated table?">0016</a></td></tr>
+<tr><td>P03</td><td>Fixed filter</td><td><code>Sales West = CALCULATE([Total Sales], Region[Name] = &quot;West&quot;)</code></td><td><a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">0017</a></td></tr>
+<tr><td>P05</td><td>% of grand total</td><td><code>DIVIDE([Total Sales], CALCULATE([Total Sales], ALL(Product[Category])))</code></td><td><a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">0017</a></td></tr>
+<tr><td>P07</td><td>Column-vs-column filter</td><td><code>CALCULATE(COUNTROWS(Orders), FILTER(Orders, Orders[Shipped] &gt; Orders[Required]))</code></td><td><a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">0017</a></td></tr>
+<tr><td>P09</td><td>Distinct count</td><td><code>Orders = DISTINCTCOUNT(Sales[OrderID])</code></td><td><a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">0018</a></td></tr>
+<tr><td>P12</td><td>Max over members (context transition)</td><td><code>MAXX(VALUES(Product[Name]), [Total Sales])</code></td><td><a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">0018</a></td></tr>
+<tr><td>P14</td><td>Rank</td><td><code>RANKX(ALL(Product[Name]), [Total Sales], , DESC, Dense)</code></td><td><a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">0018</a></td></tr>
+<tr><td>P16</td><td>Filter on positive values</td><td><code>SUMX(FILTER(Sales, Sales[Amount] &gt; 0), Sales[Amount])</code></td><td><a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">0018</a></td></tr>
+<tr><td>P18</td><td>YTD</td><td><code>TOTALYTD([Total Sales], &#x27;Date&#x27;[Date])</code></td><td><a href="../lessons/0019-time-intelligence.html" title="Time intelligence measures">0019</a></td></tr>
+<tr><td>P22</td><td>YoY %</td><td><code>DIVIDE([Total Sales] - [Sales PY], [Sales PY])</code></td><td><a href="../lessons/0019-time-intelligence.html" title="Time intelligence measures">0019</a></td></tr>
+</tbody></table></div>
+<p class="small">All 35 patterns: <a href="dax-patterns.html">DAX patterns</a>.</p>
+<h3>5. The 15 top traps</h3>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th>#</th><th>Wrong belief</th><th>Right rule</th></tr></thead><tbody>
+<tr><td><a href="common-mistakes.html#t01">T01</a></td><td>Two RLS roles give an intersection</td><td>Roles are additive (union). Put both filters in one role for AND</td></tr>
+<tr><td><a href="common-mistakes.html#t07">T07</a></td><td>Contributor can publish the app and add users</td><td>That needs Member. Contributor edits content only</td></tr>
+<tr><td><a href="common-mistakes.html#t12">T12</a></td><td>Cloud sources need a gateway</td><td>Only on-prem or private-network sources need one</td></tr>
+<tr><td><a href="common-mistakes.html#t15">T15</a></td><td>Subscriptions fire on thresholds</td><td>Alerts fire on thresholds (card/KPI/gauge tiles). Subscriptions run on a schedule</td></tr>
+<tr><td><a href="common-mistakes.html#t17">T17</a></td><td>Import can show data within minutes</td><td>Use DirectQuery for near-real-time</td></tr>
+<tr><td><a href="common-mistakes.html#t21">T21</a></td><td>Report or DAX filters reduce imported rows</td><td>Filter in Power Query (folding) or a SQL WHERE</td></tr>
+<tr><td><a href="common-mistakes.html#t23">T23</a></td><td>Append adds columns</td><td>Append stacks rows. Merge adds columns</td></tr>
+<tr><td><a href="common-mistakes.html#t26">T26</a></td><td>A text timestamp converts straight to Date</td><td>Split, extract or use Column From Examples first</td></tr>
+<tr><td><a href="common-mistakes.html#t31">T31</a></td><td>Hiding a column shrinks the model</td><td>Remove it in Power Query</td></tr>
+<tr><td><a href="common-mistakes.html#t34">T34</a></td><td>Row context filters related tables</td><td>It doesn&#x27;t. You need context transition (CALCULATE / a measure ref) or RELATEDTABLE</td></tr>
+<tr><td><a href="common-mistakes.html#t35">T35</a></td><td>CALCULATE(…, Year=2023) blanks other years</td><td>It replaces the filter, so 2023 repeats on every row. KEEPFILTERS intersects</td></tr>
+<tr><td><a href="common-mistakes.html#t37">T37</a></td><td>PREVIOUSYEAR = same month last year</td><td>Use SAMEPERIODLASTYEAR / DATEADD(-1, YEAR)</td></tr>
+<tr><td><a href="common-mistakes.html#t41">T41</a></td><td>Average or constant line = median</td><td>Use a median line or a 50% percentile line</td></tr>
+<tr><td><a href="common-mistakes.html#t42">T42</a></td><td>Decomposition tree ranks drivers</td><td>Key influencers ranks drivers. Decomposition tree is for ad hoc drill</td></tr>
+<tr><td><a href="common-mistakes.html#t44">T44</a></td><td>Report theme recolours dashboard tiles</td><td>Use a dashboard theme</td></tr>
+</tbody></table></div>
+<p class="small">All 48: <a href="common-mistakes.html">common mistakes</a>, including the disputed dump answers.</p>
+<h3>6. Exam-day basics</h3>
+<ul class="small">
+<li>Pass mark 700/1000. Yes/No series: judge each solution alone.</li>
+<li>Look for the constraint word: least privilege, least effort, without a gateway, near real time.</li>
+<li>Docs win over old forum answers. Say semantic model and Microsoft Entra ID. See <a href="exam-overview.html">exam overview</a>.</li>
+</ul>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/pl-300">PL-300 study guide</a>. Plan: <a href="study-plan.html">study plan</a>.</p></div>
+
+<div class="ask">Stuck or curious? Ask me a follow-up question about anything on this sheet.</div>
+</main>
+
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

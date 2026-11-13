@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CALCULATE and filter modifiers</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0017">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0017</p>
+  <h1>CALCULATE and filter modifiers</h1>
+  <p class="meta"><span class="badge model">Model the data</span><span>About 20 min</span><span>Skill: predict CALCULATE results; choose ALL, ALLSELECTED or KEEPFILTERS</span></p>
+  <p><strong>After this lesson you can</strong> predict what a CALCULATE measure returns in each cell of a visual, and pick ALL, REMOVEFILTERS, ALLSELECTED or KEEPFILTERS for % of total and fixed filters.</p>
+</header>
+
+
+<h2>Why this matters for the exam</h2>
+<p>CALCULATE and its filter modifiers are the heart of the DAX questions: "what does each row show?", "which function gives % of total?", "why is the same number repeated?". Practice tests returned to them again and again. If you can trace one cell at a time (below), you can answer all of them.</p>
+
+<h2>Recall first</h2>
+<p>From lesson 0016: when is a measure evaluated, and in which context? And a calculated column?</p>
+<details><summary>Show answer</summary><p>A measure: at query time, in filter context, once per cell. A calculated column: at refresh, in row context, then stored.</p></details>
+
+<h2>Core idea</h2>
+<p><strong>Filter context</strong> is the set of column filters in force for one cell of a visual. It is built from the row and column fields of the visual, then slicers, the filter pane (visual, page, report) and anything CALCULATE adds. Every aggregation in the cell sees only rows that survive those filters, including rows reached through relationships.</p>
+<figure>
+<svg viewBox="0 0 640 190" role="img" aria-label="Filter context is built from report, page, slicer and visual fields, then CALCULATE modifies it before the expression is evaluated" style="max-width:100%;height:auto">
+<defs><marker id="a17" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+<g font-family="system-ui,sans-serif" font-size="12.5" fill="currentColor" stroke="currentColor">
+<rect x="4" y="8" width="190" height="34" rx="5" fill="var(--card-bg)"/><text x="99" y="30" text-anchor="middle" stroke="none">Report / page / visual filters</text>
+<rect x="4" y="52" width="190" height="34" rx="5" fill="var(--card-bg)"/><text x="99" y="74" text-anchor="middle" stroke="none">Slicers</text>
+<rect x="4" y="96" width="190" height="34" rx="5" fill="var(--card-bg)"/><text x="99" y="118" text-anchor="middle" stroke="none">Visual row and column fields</text>
+<line x1="194" y1="25" x2="244" y2="75" marker-end="url(#a17)"/><line x1="194" y1="69" x2="244" y2="80" marker-end="url(#a17)"/><line x1="194" y1="113" x2="244" y2="88" marker-end="url(#a17)"/>
+<rect x="246" y="55" width="140" height="50" rx="5" fill="var(--model-bg)"/><text x="316" y="76" text-anchor="middle" stroke="none" font-weight="600">Filter context</text><text x="316" y="93" text-anchor="middle" stroke="none" font-size="11">one per cell</text>
+<line x1="386" y1="80" x2="436" y2="80" marker-end="url(#a17)"/>
+<rect x="438" y="55" width="198" height="50" rx="5" fill="var(--card-bg)"/><text x="537" y="76" text-anchor="middle" stroke="none" font-weight="600">Expression runs here</text><text x="537" y="93" text-anchor="middle" stroke="none" font-size="11">SUM, COUNTROWS, [Measure]</text>
+<rect x="246" y="140" width="390" height="40" rx="5" fill="var(--warn-bg)"/><text x="441" y="157" text-anchor="middle" stroke="none">CALCULATE changes the filter context first:</text><text x="441" y="172" text-anchor="middle" stroke="none" font-size="11">replace (Boolean, ALL) / intersect (KEEPFILTERS) / keep outer (ALLSELECTED)</text>
+<line x1="316" y1="140" x2="316" y2="107" marker-end="url(#a17)"/>
+</g></svg>
+<figcaption>Filter context at one cell. CALCULATE edits the context, then evaluates its first argument inside the edited context.</figcaption></figure>
+
+<p><a href="https://learn.microsoft.com/en-us/dax/calculate-function-dax">CALCULATE</a><code>(expression, filter1, ...)</code> evaluates the expression in a <strong>modified filter context</strong>; it is the function that changes filter context (<code>CALCULATETABLE</code> is the table-returning twin). The order of work matters:</p>
+<ol>
+<li>Filter arguments are evaluated in the <em>original</em> context.</li>
+<li>If a row context exists, it is converted to filters (context transition, lesson 0018).</li>
+<li>Each filter argument is then applied to the copied context. For a given column, a plain filter <strong>replaces</strong> the existing filter on that column (other columns' filters stay); <code>KEEPFILTERS</code> <strong>intersects</strong> instead.</li>
+<li>The expression is evaluated.</li>
+</ol>
+
+<div class="table-wrap"><table>
+<tr><th>Modifier</th><th>Effect on existing filters</th><th>Typical use</th></tr>
+<tr><td><code>Year = 2023</code> (Boolean)</td><td>Replaces filters on that column</td><td>Fixed year; shorthand for <code>FILTER ( ALL ( col ), ... )</code></td></tr>
+<tr><td><code>KEEPFILTERS ( ... )</code></td><td>Intersects with existing</td><td>Fixed value only where it is already in context</td></tr>
+<tr><td><code>FILTER ( Table, ... )</code> (no ALL)</td><td>Iterates rows visible in the current context, so intersects</td><td>Conditions across columns</td></tr>
+<tr><td><code>ALL</code> / <code>REMOVEFILTERS</code></td><td>Removes filters, including slicers</td><td>Grand-total denominator</td></tr>
+<tr><td><code>ALLSELECTED</code></td><td>Removes the visual's own filters, keeps slicer, page and report filters</td><td>% of visible total</td></tr>
+</table></div>
+<p>Details: <a href="https://learn.microsoft.com/en-us/dax/keepfilters-function-dax">KEEPFILTERS</a>, <a href="https://learn.microsoft.com/en-us/dax/allselected-function-dax">ALLSELECTED</a>. Variables (<code>VAR ... RETURN</code>) name an intermediate value, make measures readable, and evaluate the expression once.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p><strong>Context.</strong> A table lists Category and Revenue (Bikes 600, Clothing 300, Accessories 100). A slicer selects Bikes and Clothing. You need % of total and % late orders.</p></div>
+<pre data-lang="DAX"><code>% of Grand Total   = DIVIDE ( [Revenue], CALCULATE ( [Revenue], ALL ( Product[Category] ) ) )
+% of Visible Total = DIVIDE ( [Revenue], CALCULATE ( [Revenue], ALLSELECTED ( Product[Category] ) ) )
+
+% Late Orders =
+VAR Late =
+    CALCULATE ( COUNTROWS ( Orders ), FILTER ( Orders, Orders[ShippedDate] &gt; Orders[RequiredDate] ) )
+RETURN
+    DIVIDE ( Late, COUNTROWS ( Orders ) )</code></pre>
+<div class="table-wrap"><table>
+<tr><th>Row (slicer: Bikes, Clothing)</th><th>[Revenue]</th><th>Denominator ALL</th><th>% of Grand Total</th><th>Denominator ALLSELECTED</th><th>% of Visible Total</th></tr>
+<tr><td>Bikes</td><td>600</td><td>1000</td><td>60%</td><td>900</td><td>66.7%</td></tr>
+<tr><td>Clothing</td><td>300</td><td>1000</td><td>30%</td><td>900</td><td>33.3%</td></tr>
+</table></div>
+<p><strong>Why.</strong> Per row the filter context is <code>Category = row</code> plus the slicer. <code>ALL</code> strips both, so it sums all three categories (1000) and the visible rows no longer add to 100%. <code>ALLSELECTED</code> strips only the row's own filter and keeps the slicer, so the denominator is the two selected categories (900). <code>DIVIDE</code> returns BLANK, or an alternate result, when the denominator is zero (<a href="https://learn.microsoft.com/en-us/power-bi/guidance/dax-divide-function-operator">DIVIDE vs /</a>). In <code>% Late Orders</code>, <code>FILTER</code> is needed because comparing two columns needs a row iterator; a Boolean filter can reference only one column.</p>
+<p><strong>The repeated-year puzzle.</strong> <code>Rev 2023 = CALCULATE ( [Revenue], 'Date'[Year] = 2023 )</code> in a table by Year shows the 2023 figure on <em>every</em> row, because the Boolean replaces the row's Year filter. Wrap it as <code>KEEPFILTERS ( 'Date'[Year] = 2023 )</code> and only the 2023 row has a value; other rows intersect to nothing and show blank.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> "<code>CALCULATE ( [X], Year = 2023 )</code> is blank for other years." <strong>Right:</strong> It repeats 2023 on every year row. Use KEEPFILTERS to intersect.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> "ALL keeps my slicer." <strong>Right:</strong> ALL removes slicer filters too. For % of what the user selected use ALLSELECTED.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> "Plain AVERAGE gives the Sales department average." <strong>Right:</strong> Wrap it: <code>CALCULATE ( AVERAGE ( Emp[Salary] ), Emp[Dept] = "Sales" )</code>.</p></div>
+<p>More: <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0017" data-bank="lesson" data-lesson="0017"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0017');this.textContent='Marked done';}else{this.textContent='Progress not available';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/dax/calculate-function-dax">Microsoft Learn: CALCULATE</a> (about 10 minutes). Read the remarks on how filter arguments are applied, and the examples.</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/dax/allselected-function-dax">ALLSELECTED</a></li><li><a href="https://learn.microsoft.com/en-us/dax/keepfilters-function-dax">KEEPFILTERS</a></li><li><a href="https://dax.guide/">SQLBI DAX Guide</a> for every function in one place</li></ul>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up. Try: "Trace this measure cell by cell with a slicer on Year" or "When would FILTER over ALL differ from a Boolean filter?"</div>
+
+<h2>Related</h2>
+<p><a href="../reference/glossary.html#t-calculate">CALCULATE</a>, <a href="../reference/glossary.html#t-filter-context">Filter context</a>, <a href="../reference/dax-patterns.html">DAX patterns</a>, <a href="../reference/concept-map.html">concept map</a>.</p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0016-calculated-columns-vs-measures.html"><small>Previous</small>Columns vs measures</a>
+  <a href="../index.html">Home</a>
+  <a class="next" href="0018-iterators-context-transition.html"><small>Next</small>Iterators and context transition</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

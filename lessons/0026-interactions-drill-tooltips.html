@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interactions, drill, tooltips</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0026">
+<main class="page">
+<p class="muted"><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0026</p>
+  <h1>Interactions, drill down vs drillthrough, tooltips</h1>
+  <p class="meta"><span class="badge viz">Visualize and analyze</span><span>About 20 min</span><span>Skill: configure interactions and drilling</span></p>
+</header>
+
+<p><strong>After this lesson you can</strong> configure how a selection affects other visuals, choose between drill down and drillthrough, and build a report-page tooltip.</p>
+
+<h2>Why this matters for the exam</h2>
+<p>Drill down versus drillthrough is a classic word swap, and the tooltip-page setup is a favourite step-order question. Together they are a dependable source of Visualize marks in the practice material.</p>
+
+<h2>Recall first</h2>
+<p>Last lesson: a Country slicer must filter pages 1 to 3 but hide on pages 2 and 3. Sync and Visible settings?</p><details><summary>Answer</summary><p>Sync on for 1&ndash;3; Visible on for page 1 only. See <a href="0025-filters-slicers-sync.html">Lesson 0025</a>.</p></details>
+
+<h2>Core idea</h2>
+<h3>Edit interactions</h3>
+<p>Select the source visual, then <em>Format &rsaquo; Edit interactions</em>. For each target choose <strong>Filter</strong> (removes unrelated data), <strong>Highlight</strong> (dims unrelated data, keeps context, shows the share of the total) or <strong>None</strong>.<span class="sidenote">Source: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-reports-visual-interactions">Change how visuals interact</a>. Maps support cross-filter only.</span> Some visuals cannot highlight.</p>
+<h3>Drill down or drillthrough</h3>
+<div class="table-wrap"><table><thead><tr><th></th><th>Drill down</th><th>Drillthrough</th></tr></thead><tbody>
+<tr><td>Moves</td><td>Down a hierarchy in the <strong>same visual</strong></td><td>To a <strong>target page</strong></td></tr>
+<tr><td>Needs</td><td>A hierarchy (Year &rarr; Quarter &rarr; Month)</td><td>The field in the target page&rsquo;s Drillthrough well</td></tr>
+<tr><td>Context</td><td>Visual-only unless drilling filters others</td><td>Clicked item; <em>Keep all filters</em> adds slicers</td></tr>
+</tbody></table></div>
+<p>A button with action <strong>Drill through</strong> passes both the slicer and the selected data point. Page navigation and bookmarks do not.<span class="sidenote">Source: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-drillthrough">Drillthrough</a>.</span> In a matrix, drill filters reach other visuals only if &ldquo;Drilling filters other visuals&rdquo; is on, and visual options set <em>Entire page</em> or <em>Selected visual</em>.</p>
+<h3>Tooltips</h3>
+<p>Fields in the <em>Tooltips</em> well add values on hover. For a mini-chart, build a <strong>report page tooltip</strong>.<span class="sidenote">Source: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-tooltips">Tooltips</a>.</span></p>
+<ol><li>New page &rarr; Page information &rarr; <strong>Allow use as tooltip</strong>; canvas type Tooltip.</li><li>Add the visuals.</li><li>On the <em>source</em> visual set Tooltip type = Report page and choose that page.</li></ol>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>Clicking a product in the bar chart should filter the line chart, dim the column chart and leave the KPI card alone.</p></div>
+<p>Select the bar chart, open Edit interactions, then set: line chart <strong>Filter</strong>, column chart <strong>Highlight</strong>, card <strong>None</strong>. Each target has its own icon row, so one source can behave three ways. The column chart keeps all its bars and dims the unrelated part, so the reader sees the product&rsquo;s share.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> Drill down works without a hierarchy, or the same visual can drillthrough. <strong>Right:</strong> drill down needs a hierarchy; drillthrough goes to another page.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> Switch on Allow use as tooltip on the source page. <strong>Right:</strong> it is set on the tooltip page; the source visual only picks the page.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> A page-navigation button carries the clicked data point. <strong>Right:</strong> only a Drill through action does.</p></div>
+<p>More in the <a href="../reference/common-mistakes.html">common mistakes sheet</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0026" data-bank="lesson" data-lesson="0026"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0026');this.textContent='Marked done';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-reports-visual-interactions">Microsoft Learn: Change how visuals interact</a> (about 10 min).</p><p class="muted">Extra: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-drillthrough">Drillthrough</a> · <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-tooltips">Tooltips</a></p></div>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up. For example: &ldquo;Why does my drillthrough page show everything?&rdquo; or &ldquo;Give me three drill down versus drillthrough scenarios.&rdquo;</div>
+
+<h2>Related</h2>
+<p><a href="../reference/visuals-chooser.html">Visuals chooser</a> · <a href="../reference/glossary.html">Glossary</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0025-filters-slicers-sync.html"><small>Previous</small>Filters, slicers and sync slicers</a>
+  <a class="home" href="../index.html"><small>Home</small>Course</a>
+  <a class="next" href="0027-bookmarks-navigation-selection.html"><small>Next</small>Bookmarks, buttons, navigation and the Selection pane</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

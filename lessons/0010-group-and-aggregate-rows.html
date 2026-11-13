@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Group and aggregate rows</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0010">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0010</p>
+  <h1>Group and aggregate rows</h1>
+  <p class="meta"><span class="badge prep">Prepare the data</span><span>About 15 min</span><span>Skill: use Group By with the right operation</span></p>
+  <p><strong>After this lesson you can</strong> use Group By (basic or advanced) with the right operation to reduce granularity or find a top item per group.</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Group By questions test whether you know basic versus advanced, which operation returns what, and how to get the top row per group. They show up in the Prepare the data domain and again as a model-size technique, so learning it once pays twice.</p>
+
+<h2>Recall first</h2>
+<p><strong>Which unpivot variant keeps working when new month columns appear?</strong></p><details><summary>Show answer</summary><p>Unpivot Other Columns, with the key columns selected.</p></details>
+
+<h2>Core idea</h2>
+<p><strong>Basic</strong> Group By allows one grouping column and one aggregation. <strong>Advanced</strong> allows several of each. <a href="https://learn.microsoft.com/en-us/power-query/group-by">Group by</a>.<span class="sidenote">Glossary: <a href="../reference/glossary.html#t-group-by">Group By</a>.</span> The operations are Sum, Average, Median, Min, Max, <strong>Count Rows</strong>, <strong>Count Distinct Rows</strong> and <strong>All Rows</strong>, which keeps a nested table per group.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Need</th><th>Do</th></tr></thead>
+<tbody>
+<tr><td>Two grouping columns</td><td>Advanced mode</td></tr>
+<tr><td>Count each distinct combination once</td><td>Count Distinct Rows</td></tr>
+<tr><td>Biggest order <em>with its product name</em></td><td>All Rows, then <code>Table.Max</code></td></tr>
+<tr><td>Fewer rows before load</td><td>Group in Power Query (see lesson 0022)</td></tr>
+</tbody></table></div>
+<p>Max returns only the number, but <code>Table.Max([AllRows], "Units")</code> returns the whole <strong>record</strong>, which you then expand to get Product and Units. Grouping before load reduces granularity and model size, for example daily impressions instead of event rows. <a href="https://learn.microsoft.com/en-us/power-bi/guidance/import-modeling-data-reduction">Data reduction techniques</a>.<span class="sidenote">Binning numbers and grouping visual categories are report features (Data pane, New group), not Power Query. See lesson 0030.</span></p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>For each product category, show the product with the most units sold in one order.</p></div>
+<ol><li>Group By Category, operation All Rows (name it AllRows).</li><li>Add a custom column with <code>Table.Max</code>.</li><li>Expand the record column and keep Product and Units.</li></ol>
+<pre data-lang="M"><code>Grouped = Table.Group(Sales, {"Category"}, {{"AllRows", each _, type table}}),
+Top = Table.AddColumn(Grouped, "TopRow", each Table.Max([AllRows], "Units")),
+Expanded = Table.ExpandRecordColumn(Top, "TopRow", {"Product", "Units"})</code></pre>
+<p>All Rows preserves every column of each group, so Table.Max can hand back the full winning row. A plain Max aggregation would have lost the product name.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief: &ldquo;basic Group By handles City and Channel together.&rdquo;</strong> Correct rule: more than one grouping column needs Advanced.</p></div><div class="callout trap"><p><strong>Wrong belief: &ldquo;Max gives me the top product.&rdquo;</strong> Correct rule: Max returns only the number; use All Rows and Table.Max for the record.</p></div><div class="callout trap"><p><strong>Wrong belief: &ldquo;Count Rows counts each day once.&rdquo;</strong> Correct rule: duplicates are counted; use Count Distinct Rows.</p></div>
+<p>More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0010" data-bank="lesson" data-lesson="0010"></div>
+<script src="../assets/progress.js" defer></script>
+<script src="../assets/bank.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+<p><button class="btn" type="button" onclick="if(window.Progress){Progress.markLesson('0010');this.textContent='Marked done';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-query/group-by">Group by</a> (about 7 minutes).</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-bi/guidance/import-modeling-data-reduction">Data reduction techniques</a></li></ul>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up, for example: &ldquo;How do I count distinct order days per City and Channel step by step?&rdquo; and &ldquo;What is the difference between a record and a table in M?&rdquo;</div>
+
+<h2>Related</h2>
+<p><a href="../reference/power-query-m.html">Power Query M cheat sheet</a> · <a href="../reference/glossary.html">Glossary</a> · <a href="0008-merge-and-append.html">Lesson 0008</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0009-reshape-unpivot-json.html"><small>Previous</small>Reshape tables: unpivot, pivot, transpose, JSON</a>
+  <a href="../index.html"><small>Home</small>Course home</a>
+  <a class="next" href="0011-query-folding-load-reuse.html"><small>Next</small>Query folding, load settings and query reuse</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+# Only the static site is deployed: index.html, lessons/, reference/, practice/, assets/
+# Source PDFs (third-party exam dumps) and working files must never be published.
+pl300/
+analysis/
+specs/
+.specify/
+.claude/
+learning-records/
+assets/_demo.html
+*.md
+skills-lock.json

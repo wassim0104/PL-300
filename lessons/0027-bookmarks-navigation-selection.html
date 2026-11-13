@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bookmarks and navigation</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0027">
+<main class="page">
+<p class="muted"><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0027</p>
+  <h1>Bookmarks, buttons, navigation and the Selection pane</h1>
+  <p class="meta"><span class="badge viz">Visualize and analyze</span><span>About 18 min</span><span>Skill: build navigation with bookmarks</span></p>
+</header>
+
+<p><strong>After this lesson you can</strong> build view switching and page navigation with the fewest bookmarks and objects, and control layering with the Selection pane.</p>
+
+<h2>Why this matters for the exam</h2>
+<p>Bookmark questions test one checkbox (Data) and one design choice (page navigator versus a pile of buttons). The Selection pane also reappears for tab order in accessibility questions.</p>
+
+<h2>Recall first</h2>
+<p>Last lesson: which interaction dims unrelated data and keeps the whole chart visible?</p><details><summary>Answer</summary><p><strong>Highlight.</strong> Filter removes it; None ignores the selection. See <a href="0026-interactions-drill-tooltips.html">Lesson 0026</a>.</p></details>
+
+<h2>Core idea</h2>
+<p>A <strong>bookmark</strong> saves page state in three parts.<span class="sidenote">Source: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-bookmarks">Bookmarks</a>.</span></p>
+<div class="table-wrap"><table><thead><tr><th>Property</th><th>Stores</th></tr></thead><tbody>
+<tr><td><strong>Data</strong></td><td>Filters, slicers, sort state</td></tr>
+<tr><td><strong>Display</strong></td><td>Visibility, spotlight</td></tr>
+<tr><td><strong>Current page</strong></td><td>Which page is active</td></tr></tbody></table></div>
+<p>A bookmark applies to all visuals or only the selected ones.</p>
+<p><strong>Buttons</strong> run actions: Back, Bookmark, Drill through, Page navigation, Q&amp;A, Web URL, Apply or Clear all slicers.<span class="sidenote">Source: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-buttons">Buttons and navigators</a>.</span> Two navigators save work. The <strong>page navigator</strong> (Insert &rsaquo; Buttons &rsaquo; Navigator) makes one button per visible page and updates itself. The <strong>bookmark navigator</strong> shows the bookmarks in a bookmark <strong>group</strong>.</p>
+<p>The <strong>Selection pane</strong> has two orders that are easy to confuse. <em>Layer order</em> is stacking (what sits on top). <em>Tab order</em> is reading and keyboard order (<a href="0028-mobile-and-accessibility.html">Lesson 0028</a>). It also shows or hides objects and groups visuals. <em>Format &rsaquo; General &rsaquo; Properties &rsaquo; Position</em> sets exact x/y and size.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>A Chart/Table toggle that keeps the user&rsquo;s slicer choice.</p></div>
+<ol><li>Place both visuals in the same spot.</li><li>Selection pane: hide the table, add bookmark <strong>Chart</strong>. Hide the chart, show the table, add bookmark <strong>Table</strong>.</li><li>On both bookmarks untick <strong>Data</strong>, keep Display ticked.</li><li>Group the bookmarks and insert a <strong>bookmark navigator</strong>.</li></ol>
+<p>Why it works: Display flips visibility, and with Data unticked the bookmark never touches the slicers.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> Leave Data ticked on view-toggle bookmarks. <strong>Right:</strong> the user&rsquo;s slicers reset on every switch; untick Data.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> One bookmark button per page is the best navigation. <strong>Right:</strong> a page navigator updates itself as pages are added or hidden.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> Layer order sets the reading order. <strong>Right:</strong> tab order does; layer order is only stacking.</p></div>
+<p>More in the <a href="../reference/common-mistakes.html">common mistakes sheet</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0027" data-bank="lesson" data-lesson="0027"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0027');this.textContent='Marked done';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-bookmarks">Microsoft Learn: Bookmarks</a> (about 12 min).</p><p class="muted">Extra: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-buttons">Buttons and navigators</a></p></div>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up. For example: &ldquo;Walk me through a bookmark that hides a visual.&rdquo; or &ldquo;When would I leave Data ticked?&rdquo;</div>
+
+<h2>Related</h2>
+<p><a href="../reference/visuals-chooser.html">Visuals chooser</a> · <a href="../reference/glossary.html">Glossary</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0026-interactions-drill-tooltips.html"><small>Previous</small>Interactions, drill down vs drillthrough, tooltips</a>
+  <a class="home" href="../index.html"><small>Home</small>Course</a>
+  <a class="next" href="0028-mobile-and-accessibility.html"><small>Next</small>Design for accessibility and mobile</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

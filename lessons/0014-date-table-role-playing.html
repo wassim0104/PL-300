@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Date tables and role-playing dates</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0014">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0014</p>
+  <h1>Date tables and role-playing dates</h1>
+  <p class="meta"><span class="badge model">Model the data</span><span>About 20 min</span><span>Skill: build and mark a date table</span></p>
+  <p><strong>After this lesson you can</strong> create and mark a common date table, then analyse a fact by two dates (order and ship) correctly.</p>
+</header>
+
+
+<h2>Why this matters for the exam</h2>
+<p>Almost every time-based question assumes a proper date table, and "analyse by order date and ship date" is a favourite scenario. Knowing the date-table rules and the two role-playing patterns lets you pick the right answer quickly, and it is the foundation for time intelligence in lesson 0019.</p>
+
+<h2>Recall first</h2>
+<p>From lesson 0013: how many relationships between two tables can be active, and what does an inactive one need before it filters?</p>
+<details><summary>Show answer</summary><p>One active; the rest are inactive (dashed). An inactive relationship filters only inside a measure that calls <code>USERELATIONSHIP</code> (<a href="https://learn.microsoft.com/en-us/power-bi/guidance/relationships-active-inactive">guidance</a>).</p></details>
+
+<h2>Core idea</h2>
+<p>A <strong>date table</strong> has one row per day, no gaps, covering full years, with a unique Date column. Build it with <code>CALENDAR(start, end)</code> or <code>CALENDARAUTO()</code>, or in Power Query.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-date-tables">Date tables</a> and <a href="https://learn.microsoft.com/en-us/dax/calendar-function-dax">CALENDAR</a>.</span> Then:</p>
+<ul>
+<li><strong>Mark as date table</strong> (Table tools) and choose the Date column. This matters when the relationship uses an integer key such as 20240131, and it makes time intelligence reliable. If the relationship is on a Date-type column, time intelligence works even without marking.</li>
+<li><strong>Auto date/time</strong> quietly adds a hidden date table for every date column. That bloats the model and cannot be shared across facts. Turn it off once you have a common date table.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-auto-date-time">Auto date/time</a>; design advice in <a href="https://learn.microsoft.com/en-us/power-bi/guidance/model-date-tables">Date table guidance</a>.</span></li>
+<li>Never build the calendar from the fact's distinct dates; days with no sales would be missing, leaving gaps.</li>
+</ul>
+<p><strong>Role-playing dimension.</strong> One fact, several dates (OrderDate, ShipDate, DueDate), one calendar playing each role. Two designs:</p>
+<div class="table-wrap"><table>
+<tr><th></th><th>A. One Date table</th><th>B. A copy per role</th></tr>
+<tr><td>Relationships</td><td>OrderDate active, others inactive</td><td>Each copy has its own active relationship</td></tr>
+<tr><td>How you use ShipDate</td><td>A measure with <code>USERELATIONSHIP</code></td><td>Slice by the Ship Date table directly</td></tr>
+<tr><td>Both dates on one visual</td><td>No</td><td>Yes</td></tr>
+<tr><td>Model size</td><td>Smaller</td><td>Larger</td></tr>
+</table></div>
+<p><code>USERELATIONSHIP</code> only switches on an existing inactive relationship; it cannot create one, and the active one needs no help.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/dax/userelationship-function-dax">USERELATIONSHIP</a>.</span></p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p><strong>Context.</strong> Sales has OrderDate and ShipDate. Management wants a calendar from 2020 to 2026, a Year slicer, and a "sales by ship date" card.</p></div>
+<pre data-lang="DAX"><code>Date =
+ADDCOLUMNS (
+    CALENDAR ( DATE ( 2020, 1, 1 ), DATE ( 2026, 12, 31 ) ),
+    "Year", YEAR ( [Date] ),
+    "Month", FORMAT ( [Date], "MMM YYYY" ),
+    "MonthNo", MONTH ( [Date] )
+)
+
+Sales by Ship Date =
+CALCULATE ( [Total Sales], USERELATIONSHIP ( Sales[ShipDate], 'Date'[Date] ) )</code></pre>
+<p>A rolling ten-year window that always includes this year: <code>CALENDAR ( DATE ( YEAR ( TODAY () ) - 9, 1, 1 ), DATE ( YEAR ( TODAY () ), 12, 31 ) )</code>.</p>
+<ol>
+<li>Create the calculated table above and mark it as a date table on <code>'Date'[Date]</code>.</li>
+<li>Relate <code>'Date'[Date]</code> to <code>Sales[OrderDate]</code> (active) and to <code>Sales[ShipDate]</code> (inactive).</li>
+<li>Sort <code>Month</code> by <code>MonthNo</code> (lesson 0015) and turn off auto date/time.</li>
+<li>Add the ship-date measure.</li>
+</ol>
+<p><strong>Result.</strong> The Year slicer filters by order date; the new card shows the same slicer applied to ship dates. If a visual must show both dates side by side, switch to design B: <code>Ship Date = 'Date'</code> as a calculated table with its own active relationship.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> "Make all three date relationships inactive and it will sort itself out." <strong>Right:</strong> Inactive relationships filter nothing without <code>USERELATIONSHIP</code> measures. Keep one active.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> "Auto date/time handles two date columns with one slicer." <strong>Right:</strong> It builds a separate hidden table per column, so you cannot share one slicer. Use a common date table.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> "Distinct dates from the fact make a fine calendar." <strong>Right:</strong> Gaps break time intelligence. Generate every day of full years.</p></div>
+<p>More: <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0014" data-bank="lesson" data-lesson="0014"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0014');this.textContent='Marked done';}else{this.textContent='Progress not available';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-date-tables">Microsoft Learn: Date tables in Power BI Desktop</a> (about 10 minutes). It states the requirements for a valid date table and the marking options.</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-bi/guidance/model-date-tables">Date table guidance</a></li><li><a href="https://learn.microsoft.com/en-us/dax/userelationship-function-dax">USERELATIONSHIP</a></li><li><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-auto-date-time">Auto date/time</a></li></ul>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up. Try: "When is marking the date table required and when does it change nothing?" or "Walk me through design A vs B for three date roles."</div>
+
+<h2>Related</h2>
+<p><a href="../reference/glossary.html#t-mark-as-date-table">Mark as date table</a>, <a href="../reference/glossary.html#t-role-playing-dimension">Role-playing dimension</a>, <a href="../reference/glossary.html#t-userelationship">USERELATIONSHIP</a>, <a href="../reference/dax-patterns.html">DAX patterns</a>.</p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0013-relationships-cardinality-direction.html"><small>Previous</small>Relationships</a>
+  <a href="../index.html">Home</a>
+  <a class="next" href="0015-table-column-properties.html"><small>Next</small>Table and column properties</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

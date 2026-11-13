@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Demande d’accès · PL-300 Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap">
+<link rel="stylesheet" href="/assets/course.css">
+<link rel="stylesheet" href="/auth/auth.css">
+</head>
+<body data-page="auth">
+<div class="au-shell">
+  <aside class="au-panel" aria-label="Présentation">
+    <a class="au-brand" href="/login.html"><span class="au-logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>PL-300 Studio</a>
+    <div class="au-panel-body">
+      <h2>Prépare la certification Power BI Data Analyst, leçon après leçon.</h2>
+      <p>36 leçons, 180 questions et 2 examens blancs, organisés selon les quatre domaines de l’examen. L’accès est accordé par l’administrateur.</p>
+      <div class="au-matrix" aria-hidden="true"><i class="c prep" data-l="3"></i><i class="c prep" data-l="1"></i><i class="c prep" data-l="3"></i><i class="c prep" data-l="0"></i><i class="c prep" data-l="1"></i><i class="c prep" data-l="1"></i><i class="c prep" data-l="3"></i><i class="c prep" data-l="0"></i><i class="c prep" data-l="2"></i><i class="c model" data-l="0"></i><i class="c model" data-l="1"></i><i class="c model" data-l="3"></i><i class="c model" data-l="3"></i><i class="c model" data-l="1"></i><i class="c model" data-l="2"></i><i class="c model" data-l="1"></i><i class="c model" data-l="3"></i><i class="c model" data-l="0"></i><i class="c viz" data-l="1"></i><i class="c viz" data-l="2"></i><i class="c viz" data-l="0"></i><i class="c viz" data-l="3"></i><i class="c viz" data-l="0"></i><i class="c viz" data-l="2"></i><i class="c viz" data-l="0"></i><i class="c viz" data-l="1"></i><i class="c viz" data-l="2"></i><i class="c manage" data-l="3"></i><i class="c manage" data-l="1"></i><i class="c manage" data-l="1"></i><i class="c manage" data-l="2"></i><i class="c manage" data-l="1"></i><i class="c manage" data-l="1"></i><i class="c manage" data-l="2"></i><i class="c manage" data-l="3"></i><i class="c manage" data-l="1"></i></div>
+      <ul class="au-legend">
+        <li><span class="domain-dot prep"></span>Préparer</li><li><span class="domain-dot model"></span>Modéliser</li><li><span class="domain-dot viz"></span>Visualiser</li><li><span class="domain-dot manage"></span>Gérer</li>
+      </ul>
+    </div>
+  </aside>
+  <main class="au-main" id="main">
+    <div class="au-card">
+      <h1>Demander un accès</h1>
+      <p class="au-sub">Crée ton compte. L’administrateur le valide avant ta première connexion.</p>
+      <form data-auth="signup" novalidate>
+        <div class="au-field"><label for="name">Nom <span class="au-opt">(facultatif)</span></label>
+          <input id="name" name="name" type="text" autocomplete="name" maxlength="80"></div>
+        <div class="au-field"><label for="email">E-mail</label>
+          <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="email-err">
+          <p class="au-error" id="email-err"></p></div>
+        <div class="au-field"><label for="password">Mot de passe</label>
+          <div class="au-pw"><input id="password" name="password" type="password" autocomplete="new-password" minlength="10" required aria-describedby="password-hint password-err"><button type="button" class="au-eye" aria-controls="password" aria-pressed="false" aria-label="Afficher le mot de passe"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path class="slash" d="M3 3l18 18"/></svg></button></div>
+          <p class="au-hint" id="password-hint">Au moins 10 caractères.</p>
+          <p class="au-error" id="password-err"></p></div>
+        <div class="au-field"><label for="password2">Confirmer le mot de passe</label>
+          <div class="au-pw"><input id="password2" name="password2" type="password" autocomplete="new-password" required aria-describedby="password2-err"><button type="button" class="au-eye" aria-controls="password2" aria-pressed="false" aria-label="Afficher le mot de passe"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path class="slash" d="M3 3l18 18"/></svg></button></div>
+          <p class="au-error" id="password2-err"></p></div>
+        <button class="au-btn" type="submit"><span class="au-btn-label">Envoyer ma demande</span><span class="au-spin" aria-hidden="true"></span></button>
+        <p class="auth-msg" role="status" aria-live="polite"></p>
+      </form>
+      <div class="au-done" tabindex="-1" hidden role="status">
+        <span class="au-check" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+        <h2>Demande envoyée</h2>
+        <p>Ton compte est créé et attend la validation de l’administrateur. Tu pourras te connecter dès qu’il aura autorisé l’accès.</p>
+        <ol class="au-steps"><li class="is-done">Demande envoyée</li><li>Validation par l’administrateur</li><li>Première connexion</li></ol>
+        <a class="au-btn au-btn-link" href="/login.html">Aller à la connexion</a>
+      </div>
+      <p class="au-alt">Déjà un compte ? <a href="/login.html">Se connecter</a></p>
+    </div>
+  </main>
+</div>
+<script src="/auth/auth.js"></script>
+</body>
+</html>

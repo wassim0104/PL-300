@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design a star schema: facts, dimensions and keys</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0012">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0012</p>
+  <h1>Design a star schema: facts, dimensions and keys</h1>
+  <p class="meta"><span class="badge model">Model the data</span><span>About 18 min</span><span>Skill: sort columns into facts and dimensions and pick keys</span></p>
+  <p><strong>After this lesson you can</strong> sort source columns into fact and dimension tables and choose a relationship key for each dimension.</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Model the data is a major exam domain, and star schema is its foundation: relationships, DAX and performance all assume it. Practice questions ask you to sort columns, flatten chains and pick keys. Get this right and later modelling lessons become easy.</p>
+
+<h2>Recall first</h2>
+<p><strong>What does Enable load off do, and what does it not do?</strong></p><details><summary>Show answer</summary><p>It makes the query connection-only, so it is not in the model. Clearing Include in report refresh does not remove the table.</p></details>
+
+<h2>Core idea</h2>
+<p><strong>Fact tables</strong> store events (sales lines, attendance): numeric columns to aggregate plus foreign keys, many rows, growing over time. <strong>Dimension tables</strong> describe things (Customer, Product, Date, Teacher): a unique key plus descriptive attributes used to filter and group. Facts in the middle with dimensions around them is a star schema, Microsoft&rsquo;s recommended design for performance and simple DAX. <a href="https://learn.microsoft.com/en-us/power-bi/guidance/star-schema">Understand star schema</a>.<span class="sidenote">Glossary: <a href="../reference/glossary.html#t-star-schema">Star schema</a>, <a href="../reference/glossary.html#t-fact-table">Fact table</a>, <a href="../reference/glossary.html#t-dimension-table">Dimension table</a>.</span></p>
+<figure><svg viewBox="0 0 420 200" role="img" aria-label="Fact table in the centre joined to four dimension tables" style="max-width:100%;height:auto">
+<g font-family="sans-serif" font-size="12" fill="currentColor" stroke="currentColor" text-anchor="middle">
+<path d="M150 100 H90 M270 100 H330 M210 78 V45 M210 122 V155" fill="none"/>
+<rect x="150" y="78" width="120" height="44" fill="none" stroke-width="2"/><text x="210" y="105" stroke="none">Fact (keys + numbers)</text>
+<rect x="10" y="82" width="80" height="36" fill="none"/><text x="50" y="105" stroke="none">DimStudent</text>
+<rect x="330" y="82" width="80" height="36" fill="none"/><text x="370" y="105" stroke="none">DimClass</text>
+<rect x="170" y="8" width="80" height="37" fill="none"/><text x="210" y="31" stroke="none">DimDate</text>
+<rect x="170" y="155" width="80" height="37" fill="none"/><text x="210" y="178" stroke="none">DimTeacher</text></g></svg><figcaption>One fact table, dimensions around it, filters flow outward in.</figcaption></figure>
+<p>Snowflake chains (Product, Subcategory, Category) are usually <strong>flattened</strong> into one dimension with merges (lesson 0008). For header/detail facts, merge the header attributes into the line-level fact so visuals do not cross two fact tables. Attributes fixed for a dimension member, such as teacher name or class period, belong on the dimension, not repeated on the fact.</p>
+<p><strong>Keys</strong> must be unique and non-blank in the dimension. Prefer a compact integer <a href="../reference/glossary.html#t-surrogate-key">surrogate key</a>; do not concatenate text keys, which raises cardinality and size. To build a unique dimension, keep Country, drop City, then Remove Duplicates on Country. Sometimes separate semantic models are needed for scope or security: analysts who must not see the balance sheet need their own model, or RLS/OLS. <a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-relationships-understand">Model relationships</a>.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>A school exports one flat table: StudentID, StudentName, ClassID, Period, TeacherName, Date, Present.</p></div>
+<ol><li>Fact: events are attendance rows, so <code>FactAttendance(StudentKey, ClassKey, DateKey, Present)</code>.</li><li>Dimensions: <code>DimStudent</code>, <code>DimClass(ClassKey, Period, TeacherName)</code>, <code>DimDate</code>.</li><li>In Power Query, Reference the flat query for each dimension, keep its columns, Remove Duplicates on its key.</li></ol>
+<pre data-lang="M"><code>DimClass = Table.Distinct(
+    Table.SelectColumns(Flat, {"ClassID", "Period", "TeacherName"}), {"ClassID"})</code></pre>
+<p>Teacher and period are constant per class, so they live once on the dimension instead of on every attendance row. Filters on any dimension reach the fact through one-to-many relationships (next lesson).</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief: &ldquo;descriptive columns can stay on the fact.&rdquo;</strong> Correct rule: they repeat per row; move them to the dimension.</p></div><div class="callout trap"><p><strong>Wrong belief: &ldquo;remove duplicates on City to get countries.&rdquo;</strong> Correct rule: drop City, then de-duplicate on Country.</p></div><div class="callout trap"><p><strong>Wrong belief: &ldquo;relate two fact tables directly.&rdquo;</strong> Correct rule: connect them through shared dimensions.</p></div>
+<p>More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0012" data-bank="lesson" data-lesson="0012"></div>
+<script src="../assets/progress.js" defer></script>
+<script src="../assets/bank.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+<p><button class="btn" type="button" onclick="if(window.Progress){Progress.markLesson('0012');this.textContent='Marked done';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/guidance/star-schema">Understand star schema</a> (about 12 minutes).</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-relationships-understand">Model relationships</a></li></ul>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up, for example: &ldquo;Is a bridge table ever part of a star schema?&rdquo; and &ldquo;How do I choose between one wide table and a star?&rdquo;</div>
+
+<h2>Related</h2>
+<p><a href="../reference/glossary.html">Glossary</a> · <a href="../reference/concept-map.html">Concept map</a> · <a href="../reference/dax-patterns.html">DAX patterns</a> · <a href="../reference/common-mistakes.html">Common mistakes</a> · <a href="0013-relationships-cardinality-direction.html">Lesson 0013</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0011-query-folding-load-reuse.html"><small>Previous</small>Query folding, load settings and query reuse</a>
+  <a href="../index.html"><small>Home</small>Course home</a>
+  <a class="next" href="0013-relationships-cardinality-direction.html"><small>Next</small>Relationships: cardinality, cross-filter direction, active paths</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

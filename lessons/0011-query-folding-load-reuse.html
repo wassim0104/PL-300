@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Query folding, load settings and query reuse</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0011">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0011</p>
+  <h1>Query folding, load settings and query reuse</h1>
+  <p class="meta"><span class="badge prep">Prepare the data</span><span>About 20 min</span><span>Skill: keep refreshes fast and the model lean</span></p>
+  <p><strong>After this lesson you can</strong> keep refreshes fast and the model lean by folding filters to the source, configuring load, and reusing queries the right way.</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Questions on folding, Enable load and Reference versus Duplicate are subtle: two options sound alike and only one is correct. They recur across the practice sets and connect to performance and model size, so a clear mental model wins several marks.</p>
+
+<h2>Recall first</h2>
+<p><strong>Which Group By operation returns the whole row with the largest value?</strong></p><details><summary>Show answer</summary><p>All Rows, followed by Table.Max, which returns a record.</p></details>
+
+<h2>Core idea</h2>
+<p><strong>Query folding</strong> means Power Query translates your steps into one native query (for example SQL) that runs at the source, so less data moves. <a href="https://learn.microsoft.com/en-us/power-query/query-folding-basics">Query folding basics</a>.<span class="sidenote">Glossary: <a href="../reference/glossary.html#t-query-folding">Query folding</a>.</span> Check it with right-click on a step, <em>View Native Query</em> (greyed out does not prove there is no folding), the folding indicators, or Query Diagnostics. Performance Analyzer does <strong>not</strong> show folding. Once a step cannot fold, later steps cannot either, so put foldable filters first.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Setting or action</th><th>Effect</th><th>Smaller model?</th></tr></thead>
+<tbody>
+<tr><td>Enable load off</td><td>Connection-only; not in the model</td><td>Yes</td></tr>
+<tr><td>Include in report refresh off</td><td>Still in the model, skipped at refresh</td><td>No</td></tr>
+<tr><td>Reference</td><td>New query built on another&rsquo;s output</td><td>n/a</td></tr>
+<tr><td>Duplicate</td><td>Independent copy of all steps</td><td>n/a</td></tr>
+</tbody></table></div>
+<p>To cut a huge table, a WHERE in a native statement or a folding filter reduces rows <em>at the source</em>; a DAX FILTER or report filter still imports everything. <a href="https://learn.microsoft.com/en-us/power-bi/guidance/import-modeling-data-reduction">Data reduction techniques</a>. Use <strong>Reference</strong> to branch a staging query into a fact and dimensions; Duplicate means maintaining two copies and reading the source twice. <a href="https://learn.microsoft.com/en-us/powerquery-m/table-buffer">Table.Buffer</a> can stop repeated evaluation but blocks folding. <strong>Dataflows</strong> centralise cleaned tables, such as a standard Product dimension, for many semantic models; endorse them so others find them. <a href="https://learn.microsoft.com/en-us/power-bi/transform-model/dataflows/dataflows-introduction-self-service">Dataflows introduction</a>.<span class="sidenote">Glossary: <a href="../reference/glossary.html#t-enable-load">Enable load</a>, <a href="../reference/glossary.html#t-reference-query">Reference query</a>, <a href="../reference/glossary.html#t-dataflow">Dataflow</a>.</span></p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>A 100-million-row SQL table feeds a fact table and a store dimension. Only 2024 matters.</p></div>
+<ol><li>Create <code>All Sales</code> with the date filter as the <em>first</em> step so it folds to a SQL WHERE. Clear Enable load.</li><li>Reference it to make <code>Fact Sales</code> (keys and measures only).</li><li>Reference it again for <code>Dim Store</code> and Remove Duplicates on the store columns.</li></ol>
+<pre data-lang="M"><code>Source = Sql.Database("srv", "dw"),
+Sales = Source{[Schema="dbo", Item="Sales"]}[Data],
+Y2024 = Table.SelectRows(Sales, each [OrderDate] &gt;= #date(2024,1,1) and [OrderDate] &lt; #date(2025,1,1))</code></pre>
+<p>The filter runs in SQL, one staging definition feeds both tables, and the staging table never enters the model.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief: &ldquo;clearing Include in report refresh removes the data.&rdquo;</strong> Correct rule: it stays in the model; only Enable load off removes it.</p></div><div class="callout trap"><p><strong>Wrong belief: &ldquo;greyed-out View Native Query means no folding.&rdquo;</strong> Correct rule: it is not proof; use the indicators or Query Diagnostics too.</p></div><div class="callout trap"><p><strong>Wrong belief: &ldquo;Duplicate is the way to reuse a query.&rdquo;</strong> Correct rule: Duplicate doubles maintenance and source reads; Reference shares one definition.</p></div>
+<p>More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0011" data-bank="lesson" data-lesson="0011"></div>
+<script src="../assets/progress.js" defer></script>
+<script src="../assets/bank.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+<p><button class="btn" type="button" onclick="if(window.Progress){Progress.markLesson('0011');this.textContent='Marked done';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-query/query-folding-basics">Query folding basics</a> (about 12 minutes).</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-bi/guidance/import-modeling-data-reduction">Data reduction techniques</a></li><li><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/dataflows/dataflows-introduction-self-service">Dataflows introduction</a></li><li><a href="https://learn.microsoft.com/en-us/powerquery-m/table-buffer">Table.Buffer</a></li></ul>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up, for example: &ldquo;Which common steps break query folding?&rdquo; and &ldquo;When should I use a dataflow instead of Reference?&rdquo;</div>
+
+<h2>Related</h2>
+<p><a href="../reference/power-query-m.html">Power Query M cheat sheet</a> · <a href="../reference/glossary.html">Glossary</a> · <a href="../reference/storage-modes-connectivity.html">Storage modes and connectivity</a> · <a href="0010-group-and-aggregate-rows.html">Lesson 0010</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0010-group-and-aggregate-rows.html"><small>Previous</small>Group and aggregate rows</a>
+  <a href="../index.html"><small>Home</small>Course home</a>
+  <a class="next" href="0012-star-schema-design.html"><small>Next</small>Design a star schema: facts, dimensions and keys</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Optimise model performance</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0022">
+<main class="page">
+<p class="muted"><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0022</p>
+  <h1>Optimise model performance</h1>
+  <p class="meta"><span class="badge model">Model</span><span>About 20 min</span><span>After this lesson you can diagnose a slow report with Performance Analyzer and DAX query view, and shrink a model without breaking the required visuals.</span></p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Performance questions are scenario-based: a big PBIX, a slow page, a requirement you must not break. The right answer almost always removes data <em>before load</em> or reads Performance Analyzer correctly. It is a steady source of marks in the Model the data domain.</p>
+
+<h2>Recall first</h2>
+<details><summary>Where is a calculation-group item written, and what does it use to refer to the measure in the visual?</summary><p>In the semantic model's calculation group; it uses SELECTEDMEASURE().</p></details>
+
+<h2>Core idea</h2>
+<p><strong>Shrink the model</strong> (Import mode).<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/guidance/import-modeling-data-reduction">Data reduction techniques</a>.</span></p>
+<ul>
+<li><strong>Remove unused columns</strong>, the biggest win, and <strong>unneeded rows</strong> (old history, cancelled orders) in Power Query. <em>Hiding</em> a column does not shrink the model. Keep columns that visuals, relationships or distinct counts need.</li>
+<li><strong>Reduce cardinality.</strong> GUIDs, DateTime to the second, free text and concatenated keys compress badly. Split DateTime into Date and Time. Keep one integer key and drop a redundant GUID. Round only when the requirement loses nothing. Changing DateTime to Date loses the hours, and a format change alters display, not storage.</li>
+<li><strong>Lower granularity</strong>: group to the grain the report needs (daily, not transaction) or add an <strong>aggregation</strong> table.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/aggregations-advanced">Aggregations</a>.</span> Disable auto date/time. Do calculated columns in Power Query or the source.</li>
+</ul>
+<p><strong>Find the slow part.</strong> Performance Analyzer (Optimize ribbon) records, per visual, <strong>DAX query</strong>, <strong>Visual display</strong> and <strong>Other</strong> time.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-performance-analyzer">Performance Analyzer</a>.</span> High <em>Other</em> means the visual waited on other visuals, so reduce visuals per page (25 or more is slow) or fix the slow neighbours. <strong>Copy query</strong> sends the DAX to <strong>DAX query view</strong>, where you test and tune with <code>EVALUATE</code>.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/dax-query-view">DAX query view</a>.</span> Bidirectional relationships and heavy iterators over large facts also hurt.</p>
+<figure><svg viewBox="0 0 520 70" role="img" aria-label="Performance Analyzer bar split into DAX query, Visual display, Other" style="max-width:100%"><rect x="10" y="12" width="80" height="26" fill="currentColor" opacity=".75"/><rect x="90" y="12" width="60" height="26" fill="currentColor" opacity=".45"/><rect x="150" y="12" width="330" height="26" fill="currentColor" opacity=".18" stroke="currentColor"/><text x="12" y="58" font-size="11" fill="currentColor">DAX query</text><text x="92" y="58" font-size="11" fill="currentColor">Display</text><text x="260" y="58" font-size="11" fill="currentColor">Other: waiting on other visuals</text></svg><figcaption>Mostly Other: tuning this visual's DAX will not help.</figcaption></figure>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>Business context: a 550 MB PBIX with a 12-million-row fact table is slow to open and refresh. The visuals cover the last three years and count distinct customers.</p></div>
+<ol>
+<li>Remove <code>Description</code>, <code>RowGUID</code> and the unused <code>TaxAmt</code> in Power Query.</li>
+<li>Split <code>OrderDateTime</code> into Date and Time columns.</li>
+<li>Filter rows to the last three years.</li>
+<li>Keep <code>CustomerKey</code>: the distinct-customer count needs it.</li>
+<li>Run Performance Analyzer before and after to confirm the gain.</li>
+</ol>
+<pre data-lang="M"><code>= Table.SelectRows(Source, each [OrderDate] &gt;= Date.AddYears(Date.From(DateTime.LocalNow()), -3))</code></pre>
+<p>Why it works: every step removes data before it is loaded, so the engine stores fewer rows and fewer distinct values, while everything the visuals use remains.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief:</strong> Hiding a column or applying OLS reduces model size.<br><strong>Correct rule:</strong> Both keep the data loaded. Only removing it before load shrinks the model.</p></div><div class="callout trap"><p><strong>Wrong belief:</strong> Remove CustomerKey too, it is just a key.<br><strong>Correct rule:</strong> If a visual counts distinct customers or a relationship uses it, removing it breaks the report.</p></div><div class="callout trap"><p><strong>Wrong belief:</strong> Tune the slow visual's DAX when its time is mostly Other.<br><strong>Correct rule:</strong> Other is waiting on other visuals. Reduce visuals or fix the slow neighbours.</p></div>
+<p><a href="../reference/common-mistakes.html">See all common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0022" data-bank="lesson" data-lesson="0022"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" id="done-btn" onclick="if(window.Progress){Progress.markLesson('0022');this.textContent='Marked done';}else{this.textContent='Progress not available';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/guidance/import-modeling-data-reduction">Microsoft Learn: Data reduction techniques for Import modeling</a> (about 12 min). Extras: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-performance-analyzer">Performance Analyzer</a>, <a href="https://learn.microsoft.com/en-us/power-bi/transform-model/dax-query-view">DAX query view</a>, <a href="https://learn.microsoft.com/en-us/power-bi/transform-model/aggregations-advanced">Aggregations</a>.</p><p class="muted">Read it for the data-reduction checklist the exam scenarios are built on.</p></div>
+
+<div class="ask"><p>Ask your teacher agent a follow-up. Try: &ldquo;When is an aggregation table better than removing rows?&rdquo; or &ldquo;How do I read the Other column when two visuals load together?&rdquo;</p></div>
+
+<h2>Related</h2>
+<p><a href="../reference/storage-modes-connectivity.html">Storage modes</a> &middot; <a href="../reference/power-query-m.html">Power Query M</a> &middot; <a href="../reference/common-mistakes.html">Common mistakes</a> &middot; <a href="../reference/glossary.html">Glossary</a>. Builds on <a href="0012-star-schema-design.html">0012 star schema</a> and <a href="0011-query-folding-load-reuse.html">0011 load settings</a>.</p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0021-calculation-groups-visual-calculations.html"><small>Previous</small>Calculation groups and visual calculations</a>
+  <a href="../index.html"><small>Home</small>Course home</a>
+  <a class="next" href="0023-choose-the-right-visual.html"><small>Next</small>Choose the right visual</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

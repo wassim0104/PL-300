@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analytics, grouping, clusters</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0030">
+<main class="page">
+<p class="muted"><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0030</p>
+  <h1>Analytics pane, anomalies, grouping and clustering</h1>
+  <p class="meta"><span class="badge viz">Visualize and analyze</span><span>About 20 min</span><span>Skill: add analytics, groups and clusters</span></p>
+</header>
+
+<p><strong>After this lesson you can</strong> add the right reference line, forecast, error bars or anomaly detection, and group, bin or cluster data to reveal patterns.</p>
+
+<h2>Why this matters for the exam</h2>
+<p>These questions ask &ldquo;which feature, which chart type&rdquo;. A median line, anomaly detection on a date axis, 7-day bins and automatic clusters each came up in practice questions, and each has one right answer.</p>
+
+<h2>Recall first</h2>
+<p>Last lesson: what is the minimum fixed page-refresh interval in shared capacity?</p><details><summary>Answer</summary><p><strong>30 minutes</strong>, and only for DirectQuery sources. See <a href="0029-personalize-export-page-refresh.html">Lesson 0029</a>.</p></details>
+
+<h2>Core idea</h2>
+<h3>Analytics pane</h3>
+<p>Reference lines: <strong>Constant</strong>, Min, Max, Average, <strong>Median</strong>, <strong>Percentile</strong> (Median is the 50th percentile), Trend, and X/Y constant lines on scatter.<span class="sidenote">Source: <a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-analytics-pane">Analytics pane</a>.</span> An average or constant line is not a median.</p>
+<ul><li><strong>Forecast</strong>: line chart with a continuous date axis; set length, confidence interval, seasonality.</li>
+<li><strong>Error bars</strong>: line, bar and column charts, from upper and lower bound fields or measures.</li>
+<li><strong>Anomaly detection</strong>: line chart with a date/time axis and no legend. It marks unexpected points with an expected range and explanations; a higher <strong>Sensitivity</strong> flags more.<span class="sidenote">Source: <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-anomaly-detection">Anomaly detection</a>.</span></li></ul>
+<h3>Grouping and clustering</h3>
+<div class="table-wrap"><table><thead><tr><th>Tool</th><th>Use for</th></tr></thead><tbody>
+<tr><td><strong>List group</strong></td><td>Categories into groups (states &rarr; regions)</td></tr>
+<tr><td><strong>Bin</strong></td><td>Numbers or dates, by <em>size of bins</em> (7-day) or <em>number of bins</em></td></tr>
+<tr><td><strong>Clusters</strong></td><td>Scatter &rsaquo; &hellip; &rsaquo; Automatically find clusters; adds a cluster field</td></tr></tbody></table></div>
+<p>Grouping starts in the Data pane or via a visual&rsquo;s New group.<span class="sidenote">Sources: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-grouping-and-binning">Grouping and binning</a>, <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-scatter">Scatter charts</a>.</span> On scatter, <em>Play axis</em> animates over time and <em>High-density sampling</em> keeps many points readable. For outliers use a scatter (or a box-plot custom visual); for time-series anomalies use anomaly detection.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>A bar chart of salaries needs a line that splits employees into above and below the middle.</p></div>
+<p>Select the visual, open the Analytics pane, add a <strong>Median line</strong> (or a Percentile line at 50%). The line sits where half the values are higher and half lower. An Average line is pulled by large salaries, and a Constant line is just a number you typed, so neither splits the group in half.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> An average or constant line shows the median. <strong>Right:</strong> use the Median line or a 50% percentile.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> Anomaly detection runs on a column chart or a category axis. <strong>Right:</strong> it needs a line chart with a date/time axis.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> Bins work for text categories. <strong>Right:</strong> bins are for numbers and dates; use list groups for text.</p></div>
+<p>More in the <a href="../reference/common-mistakes.html">common mistakes sheet</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0030" data-bank="lesson" data-lesson="0030"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0030');this.textContent='Marked done';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-analytics-pane">Microsoft Learn: Analytics pane</a> (about 10 min).</p><p class="muted">Extra: <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-anomaly-detection">Anomaly detection</a> · <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-grouping-and-binning">Grouping and binning</a> · <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-scatter">Scatter charts</a></p></div>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up. For example: &ldquo;When would I use a percentile line other than 50%?&rdquo; or &ldquo;Bin by size versus number of bins: quiz me.&rdquo;</div>
+
+<h2>Related</h2>
+<p><a href="../reference/visuals-chooser.html">Visuals chooser</a> · <a href="../reference/glossary.html">Glossary</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0029-personalize-export-page-refresh.html"><small>Previous</small>Personalisation, export settings and automatic page refresh</a>
+  <a class="home" href="../index.html"><small>Home</small>Course</a>
+  <a class="next" href="0031-ai-visuals-copilot.html"><small>Next</small>AI visuals and Copilot: key influencers, decomposition tree, Q&amp;A, narratives</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

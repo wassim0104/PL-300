@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reshape tables: unpivot, pivot, transpose, JSON</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0009">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0009</p>
+  <h1>Reshape tables: unpivot, pivot, transpose, JSON</h1>
+  <p class="meta"><span class="badge prep">Prepare the data</span><span>About 20 min</span><span>Skill: unpivot crosstabs and expand JSON</span></p>
+  <p><strong>After this lesson you can</strong> turn crosstab or nested data into a tidy long table that a star schema can use.</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Excel-style crosstabs (one column per month or year) and JSON text are classic PL-300 inputs, and they appear in several practice questions. Reports and relationships need one value per row, so unpivoting is often the first step before any modelling.</p>
+
+<h2>Recall first</h2>
+<p><strong>A merge needs the key columns to share what?</strong></p><details><summary>Show answer</summary><p>The same data type. Left anti returns left rows with no match in the right table.</p></details>
+
+<h2>Core idea</h2>
+<p><strong>Unpivot</strong> turns columns into rows (wide to long) and creates <em>Attribute</em> and <em>Value</em> columns; rename them, for example Month and Sales. <a href="https://learn.microsoft.com/en-us/power-query/unpivot-column">Unpivot columns</a>. The safest form is <strong>Unpivot Other Columns</strong>: select the key columns you keep (Product, Region) and unpivot everything else, so new month columns that arrive later are picked up. <em>Unpivot Only Selected Columns</em> fixes the list instead.<span class="sidenote">Glossary: <a href="../reference/glossary.html#t-unpivot">Unpivot</a>.</span></p>
+<p><strong>Pivot</strong> is the reverse (long to wide). <a href="https://learn.microsoft.com/en-us/power-query/pivot-columns">Pivot columns</a>. <strong>Transpose</strong> swaps all rows and columns and loses headers, so demote headers first (Use Headers as First Row) and promote them again afterwards.</p>
+<figure><svg viewBox="0 0 520 120" role="img" aria-label="Wide table with Jan and Feb columns becomes a long table with Month and Sales columns" style="max-width:100%;height:auto">
+<g font-family="sans-serif" font-size="12" fill="currentColor" stroke="currentColor">
+<rect x="10" y="20" width="190" height="80" fill="none"/><text x="20" y="40" stroke="none">Product | Jan | Feb</text><text x="20" y="62" stroke="none">Pen | 5 | 7</text><text x="20" y="82" stroke="none">Ink | 3 | 4</text>
+<text x="215" y="55" stroke="none" font-size="11">Unpivot</text><path d="M210 62 H290 M282 56 L290 62 L282 68" fill="none"/>
+<rect x="300" y="8" width="200" height="104" fill="none"/><text x="310" y="26" stroke="none">Product | Month | Sales</text><text x="310" y="46" stroke="none">Pen | Jan | 5</text><text x="310" y="64" stroke="none">Pen | Feb | 7</text><text x="310" y="82" stroke="none">Ink | Jan | 3</text><text x="310" y="100" stroke="none">Ink | Feb | 4</text></g></svg><figcaption>Unpivot Other Columns on Product: months become rows.</figcaption></figure>
+<p>JSON: parse a text column first with Transform, Parse, JSON, then expand. For a list of records, use To Table, expand the column, then <em>Expand to New Rows</em> for lists and <em>Expand to New Columns</em> for records. <a href="https://learn.microsoft.com/en-us/power-query/connectors/json">JSON connector</a>.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>An Excel sheet &ldquo;Budget&rdquo; has a title row, then headers Department, 2023, 2024, 2025. You need Department, Year, Revenue rows that survive a 2026 column.</p></div>
+<p>Typical order: remove top rows, Use First Row as Headers, select the key column, Unpivot Other Columns, rename, set types.</p>
+<pre data-lang="M"><code>let Source = Excel.Workbook(File.Contents(Path), null, true){[Item="Budget"]}[Data],
+    Promoted = Table.PromoteHeaders(Source),
+    Unpivoted = Table.UnpivotOtherColumns(Promoted, {"Department"}, "Year", "Revenue"),
+    Typed = Table.TransformColumnTypes(Unpivoted, {{"Year", Int64.Type}, {"Revenue", Currency.Type}})
+in Typed</code></pre>
+<p>Because Department is the only column named, every year column, including future ones, becomes a row. The result is a tidy fact-style table you can relate to a date dimension.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief: &ldquo;I select the value columns to unpivot others.&rdquo;</strong> Correct rule: select the key columns you keep (Department); Unpivot Other Columns handles the rest.</p></div><div class="callout trap"><p><strong>Wrong belief: &ldquo;pivot flattens a crosstab.&rdquo;</strong> Correct rule: pivot goes long to wide; for wide to long use unpivot.</p></div><div class="callout trap"><p><strong>Wrong belief: &ldquo;I can expand a JSON text column directly.&rdquo;</strong> Correct rule: parse it as JSON first, then expand.</p></div>
+<p>More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0009" data-bank="lesson" data-lesson="0009"></div>
+<script src="../assets/progress.js" defer></script>
+<script src="../assets/bank.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+<p><button class="btn" type="button" onclick="if(window.Progress){Progress.markLesson('0009');this.textContent='Marked done';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-query/unpivot-column">Unpivot columns</a> (about 8 minutes).</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-query/pivot-columns">Pivot columns</a></li><li><a href="https://learn.microsoft.com/en-us/power-query/connectors/json">JSON connector</a></li></ul>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up, for example: &ldquo;When is Transpose the right tool instead of Unpivot?&rdquo; and &ldquo;How do I flatten JSON with nested lists inside records?&rdquo;</div>
+
+<h2>Related</h2>
+<p><a href="../reference/power-query-m.html">Power Query M cheat sheet</a> · <a href="../reference/glossary.html">Glossary</a> · <a href="../reference/concept-map.html">Concept map</a> · <a href="0012-star-schema-design.html">Lesson 0012: star schema</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0008-merge-and-append.html"><small>Previous</small>Merge vs append, and choosing the join kind</a>
+  <a href="../index.html"><small>Home</small>Course home</a>
+  <a class="next" href="0010-group-and-aggregate-rows.html"><small>Next</small>Group and aggregate rows</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Semi-additive measures and quick measures</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0020">
+<main class="page">
+<p class="muted"><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0020</p>
+  <h1>Semi-additive measures, statistics and quick measures</h1>
+  <p class="meta"><span class="badge model">Model</span><span>About 15 min</span><span>After this lesson you can write a closing-balance measure and use basic statistics and quick measures correctly.</span></p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Balances and stock levels show up in practice questions as a "why is my monthly total too big" puzzle, and quick measures appear as settings questions (how many periods before and after). Both are short facts that are easy to lock in, and they sit in the Model the data domain.</p>
+
+<h2>Recall first</h2>
+<details><summary>Which function returns the same selected dates one year earlier?</summary><p>SAMEPERIODLASTYEAR (or DATEADD with -1 YEAR). PREVIOUSYEAR returns the whole prior year.</p></details>
+
+<h2>Core idea</h2>
+<p>A <strong>semi-additive</strong> value (account balance, inventory on hand, headcount) can be summed across accounts or products but <strong>not across time</strong>. Adding Monday's and Tuesday's stock double counts the same boxes. Pick one date instead: the last one in the period.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Need</th><th>Pattern</th></tr></thead>
+<tbody>
+<tr><td>Closing value</td><td><code>CALCULATE(SUM(Inv[Qty]), LASTDATE('Date'[Date]))</code></td></tr>
+<tr><td>Closing value when the last calendar day may have no snapshot</td><td><code>LASTNONBLANK('Date'[Date], [Qty])</code> inside CALCULATE</td></tr>
+<tr><td>Opening value</td><td><code>FIRSTDATE</code> or <code>FIRSTNONBLANK</code></td></tr>
+<tr><td>Accounts on the last day only</td><td><code>CALCULATE(DISTINCTCOUNT(Bal[AccountID]), LASTDATE('Date'[Date]))</code></td></tr>
+</tbody></table></div>
+<p><span class="sidenote"><a href="https://learn.microsoft.com/en-us/dax/lastdate-function-dax">LASTDATE</a>; more patterns at <a href="https://dax.guide/">DAX Guide</a>.</span>Basic statistics you should recognise: <code>SUM, AVERAGE, MEDIAN, MIN, MAX, COUNT, DISTINCTCOUNT, STDEV.P/S, PERCENTILE.INC/EXC</code> and the X iterator versions.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/dax/dax-overview">DAX overview</a>.</span> <code>AVERAGE</code> ignores blanks and <code>MEDIAN</code> is the middle value.</p>
+<p><strong>Quick measures</strong> (right-click a table or field, New quick measure) generate DAX for common patterns: rolling average, year-to-date, year-over-year change, running total, star rating. For a rolling average of 7 days <em>including today</em> enter <strong>6</strong> periods before and <strong>0</strong> after.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-quick-measures">Quick measures</a>.</span> Time-based quick measures need the date column of the marked date table or an auto date/time hierarchy; a bare many-side date column is rejected.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>Business context: a warehouse loads daily inventory snapshots. A monthly matrix must show month-end stock, but the current measure (SUM of Units) shows about thirty times too much.</p></div>
+<pre data-lang="DAX"><code>Stock on Hand =
+CALCULATE (
+    SUM ( Inventory[Units] ),
+    LASTNONBLANK ( 'Date'[Date], CALCULATE ( SUM ( Inventory[Units] ) ) )
+)</code></pre>
+<p>Why it works: in each month, LASTNONBLANK finds the latest date that actually has a snapshot, and CALCULATE sums units for that single date only. Across products it still adds up, which is what semi-additive means. At the grand total the last date of the whole range is used, so the total is the latest stock, not a sum of months.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief:</strong> SUM across days is fine for inventory.<br><strong>Correct rule:</strong> It overstates stock. Take the last (or first) date in the period.</p></div><div class="callout trap"><p><strong>Wrong belief:</strong> COUNTROWS of headcount snapshots across months gives headcount.<br><strong>Correct rule:</strong> It counts snapshot rows. Count distinct employees on the last date.</p></div><div class="callout trap"><p><strong>Wrong belief:</strong> A 7-day average including today needs 7 periods before.<br><strong>Correct rule:</strong> Today counts as one of the 7, so use 6 before and 0 after.</p></div>
+<p><a href="../reference/common-mistakes.html">See all common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0020" data-bank="lesson" data-lesson="0020"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" id="done-btn" onclick="if(window.Progress){Progress.markLesson('0020');this.textContent='Marked done';}else{this.textContent='Progress not available';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-quick-measures">Microsoft Learn: Quick measures</a> (about 8 min). Extras: <a href="https://learn.microsoft.com/en-us/dax/lastdate-function-dax">LASTDATE</a>, <a href="https://dax.guide/">DAX Guide</a>.</p><p class="muted">Read it for the list of quick-measure types and the date requirements; then try one in Desktop.</p></div>
+
+<div class="ask"><p>Ask your teacher agent a follow-up. Try: &ldquo;When should I use LASTNONBLANK instead of LASTDATE?&rdquo; or &ldquo;Can a quick measure be edited after it is created?&rdquo;</p></div>
+
+<h2>Related</h2>
+<p><a href="../reference/dax-patterns.html">DAX patterns</a> &middot; <a href="../reference/glossary.html">Glossary</a> &middot; <a href="../reference/common-mistakes.html">Common mistakes</a>. Builds on <a href="0019-time-intelligence.html">0019 time intelligence</a>.</p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0019-time-intelligence.html"><small>Previous</small>Time intelligence measures</a>
+  <a href="../index.html"><small>Home</small>Course home</a>
+  <a class="next" href="0021-calculation-groups-visual-calculations.html"><small>Next</small>Calculation groups and visual calculations</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "skills": {
+    "pdf-to-html": {
+      "source": "daymade/claude-code-skills",
+      "sourceType": "github",
+      "skillPath": "daymade-docs/pdf-to-html/SKILL.md",
+      "computedHash": "5278e3285f59b77e37cac762c7e4c1ca90154ff926ccce1da5eda7c881c74202"
+    }
+  }
+}

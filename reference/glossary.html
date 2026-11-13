@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PL-300 glossary</title>
+<link rel="stylesheet" href="../assets/course.css">
+<style>
+main.sheet { max-width: 1100px; padding: 1.2rem 16px 3rem; }
+main.sheet h1 { font-size: 1.9rem; margin: .2em 0 .2em; }
+main.sheet h2 { font-size: 1.2rem; margin-top: 1.6em; }
+.sheet-top { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; justify-content: space-between; align-items: baseline; font: .85rem var(--sans); color: var(--muted); border-bottom: 1px solid var(--rule); padding-bottom: .5rem; }
+.sheet-top a { font-weight: 600; }
+.lede { font: 1rem/1.5 var(--serif); color: var(--muted); max-width: 75ch; margin: .6rem 0 1rem; }
+.tools { display: flex; flex-wrap: wrap; gap: .6rem 1rem; align-items: center; margin: .8rem 0 1rem; font-family: var(--sans); }
+.tools input[type=search] { font: 1rem var(--sans); padding: .5rem .7rem; min-width: min(22rem, 100%); border: 1px solid var(--fg); border-radius: 6px; background: var(--card-bg); color: var(--fg); }
+.tools .count { font-size: .85rem; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; font: .8rem var(--sans); }
+.chips .lbl { color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; font-size: .7rem; margin-right: .2rem; }
+.chip { font: 600 .82rem var(--sans); padding: .35rem .75rem; min-height: 2.2rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--card-bg); color: var(--fg); cursor: pointer; }
+.chip[aria-pressed=true] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.hidden-nojs { display: none; }
+.js .hidden-nojs { display: flex; }
+.hide { display: none !important; }
+.sources { font: .85rem/1.5 var(--sans); color: var(--muted); border-top: 1px solid var(--rule); margin-top: 2rem; padding-top: .8rem; }
+.sources a { margin-right: .6rem; }
+.dense, .dense td, .dense th { font-size: .88rem; }
+.dense td, .dense th { padding: .3em .6em; }
+.dense code { font-size: .86em; }
+.dense tr { break-inside: avoid; }
+@media print {
+  @page { margin: 12mm; }
+  body { font-size: 9.5pt; line-height: 1.35; }
+  main.sheet { padding: 0; }
+  main.sheet h1 { font-size: 16pt; }
+  main.sheet h2 { font-size: 11pt; margin-top: 1em; }
+  .tools, .hidden-nojs, .sheet-top a.noprint { display: none !important; }
+  .dense, .dense td, .dense th { font-size: 8.5pt; }
+  a[href^="http"]::after { content: ""; }
+  .sources a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 7pt; }
+  .sources a { display: block; }
+}
+
+.az { display: flex; flex-wrap: wrap; gap: .25rem; font: 700 .95rem var(--sans); margin: 0 0 .5rem; }
+.az a { min-width: 2rem; text-align: center; padding: .2rem .4rem; border: 1px solid var(--rule); border-radius: 4px; text-decoration: none; background: var(--card-bg); }
+.az a:hover { border-color: var(--link); }
+.gl-sec h2 { margin-top: 1.2em; color: var(--accent); font-family: var(--sans); }
+.gl-sec dl { margin: 0; column-count: 2; column-gap: 2.5rem; column-rule: 1px solid var(--rule); }
+.term { break-inside: avoid; padding: .35rem 0; border-bottom: 1px dotted var(--rule); font-family: var(--sans); }
+.term dt { font-weight: 700; font-size: .95rem; }
+.term dd { margin: 0; font-size: .9rem; line-height: 1.45; }
+.term dd a { font: 600 .75rem var(--sans); white-space: nowrap; margin-left: .2rem; padding: .05rem .35rem; border: 1px solid var(--rule); border-radius: 4px; text-decoration: none; }
+.term mark { background: var(--warn-bg); color: inherit; }
+.empty { display: none; font-family: var(--sans); color: var(--muted); }
+@media (max-width: 760px) { .gl-sec dl { column-count: 1; } }
+@media print { .az { display: none; } .gl-sec dl { column-count: 2; column-gap: 1.2rem; } .gl-sec { break-inside: auto; } .gl-sec h2 { margin: .6em 0 .2em; } .term dd a { border: 0; padding: 0; } }
+</style>
+<script>document.documentElement.className+=' js';</script>
+</head>
+<body data-page="reference" data-sheet="glossary">
+<main class="sheet">
+<div class="sheet-top"><a class="noprint" href="../index.html">&larr; Back to home</a><span>PL-300 reference sheet &middot; 2026-11-11</span></div>
+<h1>Glossary</h1>
+<p class="lede">The canonical words used in every lesson: 126 terms, one line each. The L-number opens the lesson that teaches the term. &ldquo;Semantic model&rdquo; replaces the old word &ldquo;dataset&rdquo;.</p>
+
+<div class="tools hidden-nojs"><label for="q" class="muted">Filter</label>
+<input id="q" type="search" placeholder="Type a term or part of a definition" autocomplete="off"><span class="count" id="cnt" aria-live="polite"></span></div>
+<p class="az" aria-label="Letter index"><a href="#L-A">A</a> <a href="#L-B">B</a> <a href="#L-C">C</a> <a href="#L-D">D</a> <a href="#L-E">E</a> <a href="#L-F">F</a> <a href="#L-G">G</a> <a href="#L-H">H</a> <a href="#L-I">I</a> <a href="#L-K">K</a> <a href="#L-L">L</a> <a href="#L-M">M</a> <a href="#L-O">O</a> <a href="#L-P">P</a> <a href="#L-Q">Q</a> <a href="#L-R">R</a> <a href="#L-S">S</a> <a href="#L-T">T</a> <a href="#L-U">U</a> <a href="#L-V">V</a> <a href="#L-W">W</a></p>
+<p class="empty" id="none">No term matches. Try fewer letters.</p>
+<section class="gl-sec" id="L-A"><h2>A</h2><dl>
+<div class="term" id="t-admin-workspace"><dt>Admin (workspace)</dt><dd>Role with full control, including deleting the workspace and managing all roles. <a href="../lessons/0032-workspace-roles-item-access.html" title="Workspace roles, sharing and Build permission">L0032</a></dd></div>
+<div class="term" id="t-aggregation-table"><dt>Aggregation table</dt><dd>A pre-summarised table that answers high-level queries instead of a large detail table. <a href="../lessons/0022-model-performance.html" title="Optimise model performance">L0022</a></dd></div>
+<div class="term" id="t-all"><dt>ALL</dt><dd>DAX function that removes filters from a table or columns, ignoring slicers. <a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">L0017</a></dd></div>
+<div class="term" id="t-allselected"><dt>ALLSELECTED</dt><dd>Removes filters inside the visual but keeps outer slicer, page and report filters. <a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">L0017</a></dd></div>
+<div class="term" id="t-alt-text"><dt>Alt text</dt><dd>Text description of a visual read by screen readers; can be driven by a measure. <a href="../lessons/0028-mobile-and-accessibility.html" title="Design for accessibility and mobile">L0028</a></dd></div>
+<div class="term" id="t-analytics-pane"><dt>Analytics pane</dt><dd>Pane that adds reference lines, forecast, error bars and trend lines to visuals. <a href="../lessons/0030-analytics-pane-anomalies-grouping.html" title="Analytics pane, anomalies, grouping and clustering">L0030</a></dd></div>
+<div class="term" id="t-analyze-in-excel"><dt>Analyze in Excel</dt><dd>Explore a semantic model in Excel PivotTables; needs Build permission. <a href="../lessons/0032-workspace-roles-item-access.html" title="Workspace roles, sharing and Build permission">L0032</a></dd></div>
+<div class="term" id="t-anomaly-detection"><dt>Anomaly detection</dt><dd>Line-chart feature that flags unexpected values on a date axis. <a href="../lessons/0030-analytics-pane-anomalies-grouping.html" title="Analytics pane, anomalies, grouping and clustering">L0030</a></dd></div>
+<div class="term" id="t-app"><dt>App</dt><dd>Read-only package of selected workspace items published to audiences. <a href="../lessons/0033-apps-endorsement-labels.html" title="Distribute and govern content: apps, endorsement, sensitivity labels">L0033</a></dd></div>
+<div class="term" id="t-append"><dt>Append</dt><dd>Power Query operation that stacks rows of tables with the same columns. <a href="../lessons/0008-merge-and-append.html" title="Merge vs append, and choosing the join kind">L0008</a></dd></div>
+<div class="term" id="t-apply-security-filter-in-both-directions"><dt>Apply security filter in both directions</dt><dd>Relationship option letting RLS filters flow both ways. <a href="../lessons/0036-rls-ols.html" title="Row-level and object-level security">L0036</a></dd></div>
+<div class="term" id="t-assume-referential-integrity"><dt>Assume referential integrity</dt><dd>DirectQuery relationship option that allows inner joins. <a href="../lessons/0013-relationships-cardinality-direction.html" title="Relationships: cardinality, cross-filter direction, active paths">L0013</a></dd></div>
+<div class="term" id="t-audience-app"><dt>Audience (app)</dt><dd>A group of app users who see a chosen subset of app content. <a href="../lessons/0033-apps-endorsement-labels.html" title="Distribute and govern content: apps, endorsement, sensitivity labels">L0033</a></dd></div>
+<div class="term" id="t-auto-date-time"><dt>Auto date/time</dt><dd>Setting that creates a hidden date table per date column. <a href="../lessons/0014-date-table-role-playing.html" title="Build a date table and handle role-playing dates">L0014</a></dd></div>
+<div class="term" id="t-automatic-page-refresh"><dt>Automatic page refresh</dt><dd>Report-page refresh on a fixed interval or change detection for DirectQuery. <a href="../lessons/0029-personalize-export-page-refresh.html" title="Personalisation, export settings and automatic page refresh">L0029</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-B"><h2>B</h2><dl>
+<div class="term" id="t-bidirectional-filter-both"><dt>Bidirectional filter (Both)</dt><dd>Cross-filter direction where both related tables filter each other. <a href="../lessons/0013-relationships-cardinality-direction.html" title="Relationships: cardinality, cross-filter direction, active paths">L0013</a></dd></div>
+<div class="term" id="t-bin"><dt>Bin</dt><dd>Grouping of numbers or dates into equal-sized ranges. <a href="../lessons/0030-analytics-pane-anomalies-grouping.html" title="Analytics pane, anomalies, grouping and clustering">L0030</a></dd></div>
+<div class="term" id="t-bookmark"><dt>Bookmark</dt><dd>Saved page state: filters (Data), visibility (Display), current page. <a href="../lessons/0027-bookmarks-navigation-selection.html" title="Bookmarks, buttons, navigation and the Selection pane">L0027</a></dd></div>
+<div class="term" id="t-build-permission"><dt>Build permission</dt><dd>Item permission to create content on a semantic model, use Analyze in Excel and XMLA. <a href="../lessons/0032-workspace-roles-item-access.html" title="Workspace roles, sharing and Build permission">L0032</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-C"><h2>C</h2><dl>
+<div class="term" id="t-calculate"><dt>CALCULATE</dt><dd>DAX function that evaluates an expression in a modified filter context. <a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">L0017</a></dd></div>
+<div class="term" id="t-calculated-column"><dt>Calculated column</dt><dd>DAX column computed row by row at refresh and stored. <a href="../lessons/0016-calculated-columns-vs-measures.html" title="Calculated column, measure or calculated table?">L0016</a></dd></div>
+<div class="term" id="t-calculated-table"><dt>Calculated table</dt><dd>Table created with a DAX expression at refresh. <a href="../lessons/0016-calculated-columns-vs-measures.html" title="Calculated column, measure or calculated table?">L0016</a></dd></div>
+<div class="term" id="t-calculation-group"><dt>Calculation group</dt><dd>Set of calculation items that rewrite any measure using SELECTEDMEASURE(). <a href="../lessons/0021-calculation-groups-visual-calculations.html" title="Calculation groups and visual calculations">L0021</a></dd></div>
+<div class="term" id="t-card"><dt>Card</dt><dd>Visual showing a single value. <a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">L0023</a></dd></div>
+<div class="term" id="t-cardinality-column"><dt>Cardinality (column)</dt><dd>Number of distinct values in a column; high cardinality compresses poorly. <a href="../lessons/0022-model-performance.html" title="Optimise model performance">L0022</a></dd></div>
+<div class="term" id="t-cardinality-relationship"><dt>Cardinality (relationship)</dt><dd>One-to-one, one-to-many or many-to-many matching of keys. <a href="../lessons/0013-relationships-cardinality-direction.html" title="Relationships: cardinality, cross-filter direction, active paths">L0013</a></dd></div>
+<div class="term" id="t-certified"><dt>Certified</dt><dd>Highest endorsement, granted by admin-authorised reviewers. <a href="../lessons/0033-apps-endorsement-labels.html" title="Distribute and govern content: apps, endorsement, sensitivity labels">L0033</a></dd></div>
+<div class="term" id="t-column-distribution"><dt>Column distribution</dt><dd>Profiling view showing distinct and unique counts with a histogram. <a href="../lessons/0005-data-profiling.html" title="Profile data before you transform it">L0005</a></dd></div>
+<div class="term" id="t-column-from-examples"><dt>Column From Examples</dt><dd>Power Query feature that creates a column from sample outputs. <a href="../lessons/0007-split-and-parse-columns.html" title="Split, extract and parse columns">L0007</a></dd></div>
+<div class="term" id="t-column-profile"><dt>Column profile</dt><dd>Profiling view with full column statistics and value distribution. <a href="../lessons/0005-data-profiling.html" title="Profile data before you transform it">L0005</a></dd></div>
+<div class="term" id="t-column-quality"><dt>Column quality</dt><dd>Profiling view showing % valid, error and empty. <a href="../lessons/0005-data-profiling.html" title="Profile data before you transform it">L0005</a></dd></div>
+<div class="term" id="t-composite-model"><dt>Composite model</dt><dd>Model mixing storage modes or sources. <a href="../lessons/0003-storage-modes.html" title="Choose a storage mode: Import, DirectQuery, Dual, Direct Lake">L0003</a></dd></div>
+<div class="term" id="t-conditional-formatting"><dt>Conditional formatting</dt><dd>Formatting driven by values via rules, gradient, field value, data bars or icons. <a href="../lessons/0024-format-themes-conditional-formatting.html" title="Themes, conditional formatting and number formats">L0024</a></dd></div>
+<div class="term" id="t-context-transition"><dt>Context transition</dt><dd>Conversion of row context into filter context by CALCULATE or a measure reference. <a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">L0018</a></dd></div>
+<div class="term" id="t-contributor"><dt>Contributor</dt><dd>Workspace role that creates and edits content but cannot manage users or publish apps. <a href="../lessons/0032-workspace-roles-item-access.html" title="Workspace roles, sharing and Build permission">L0032</a></dd></div>
+<div class="term" id="t-copilot"><dt>Copilot</dt><dd>Generative AI assistant for report pages, narratives and model summaries; needs paid capacity. <a href="../lessons/0031-ai-visuals-copilot.html" title="AI visuals and Copilot: key influencers, decomposition tree, Q&amp;A, narratives">L0031</a></dd></div>
+<div class="term" id="t-cross-filter-direction"><dt>Cross-filter direction</dt><dd>Direction in which a relationship propagates filters (Single or Both). <a href="../lessons/0013-relationships-cardinality-direction.html" title="Relationships: cardinality, cross-filter direction, active paths">L0013</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-D"><h2>D</h2><dl>
+<div class="term" id="t-dashboard"><dt>Dashboard</dt><dd>Single-page canvas of pinned tiles, created in the service. <a href="../lessons/0034-dashboards-alerts-subscriptions.html" title="Dashboards, data alerts and subscriptions">L0034</a></dd></div>
+<div class="term" id="t-data-alert"><dt>Data alert</dt><dd>Notification when a card, KPI or gauge tile crosses a threshold. <a href="../lessons/0034-dashboards-alerts-subscriptions.html" title="Dashboards, data alerts and subscriptions">L0034</a></dd></div>
+<div class="term" id="t-data-category"><dt>Data category</dt><dd>Column property such as City, Country or Image URL that changes how values are used. <a href="../lessons/0015-table-column-properties.html" title="Configure table and column properties">L0015</a></dd></div>
+<div class="term" id="t-data-source-settings"><dt>Data source settings</dt><dd>Dialog to change source paths, credentials and privacy levels. <a href="../lessons/0004-data-source-settings-parameters.html" title="Data source settings, privacy levels and parameters">L0004</a></dd></div>
+<div class="term" id="t-dataflow"><dt>Dataflow</dt><dd>Power Query in the service that produces reusable tables for many models. <a href="../lessons/0011-query-folding-load-reuse.html" title="Query folding, load settings and query reuse">L0011</a></dd></div>
+<div class="term" id="t-dax"><dt>DAX</dt><dd>Data Analysis Expressions, the formula language for measures, columns and tables. <a href="../lessons/0016-calculated-columns-vs-measures.html" title="Calculated column, measure or calculated table?">L0016</a></dd></div>
+<div class="term" id="t-dax-query-view"><dt>DAX query view</dt><dd>Desktop view for running and tuning DAX EVALUATE queries. <a href="../lessons/0022-model-performance.html" title="Optimise model performance">L0022</a></dd></div>
+<div class="term" id="t-decomposition-tree"><dt>Decomposition tree</dt><dd>AI visual for ad hoc drill-down of a measure across dimensions. <a href="../lessons/0031-ai-visuals-copilot.html" title="AI visuals and Copilot: key influencers, decomposition tree, Q&amp;A, narratives">L0031</a></dd></div>
+<div class="term" id="t-deployment-pipeline"><dt>Deployment pipeline</dt><dd>Tool that moves content across development, test and production stages. <a href="../lessons/0033-apps-endorsement-labels.html" title="Distribute and govern content: apps, endorsement, sensitivity labels">L0033</a></dd></div>
+<div class="term" id="t-dimension-table"><dt>Dimension table</dt><dd>Table of descriptive attributes with a unique key used to filter facts. <a href="../lessons/0012-star-schema-design.html" title="Design a star schema: facts, dimensions and keys">L0012</a></dd></div>
+<div class="term" id="t-direct-lake"><dt>Direct Lake</dt><dd>Fabric storage mode reading Delta tables in OneLake into memory without import refresh. <a href="../lessons/0003-storage-modes.html" title="Choose a storage mode: Import, DirectQuery, Dual, Direct Lake">L0003</a></dd></div>
+<div class="term" id="t-directquery"><dt>DirectQuery</dt><dd>Storage mode that queries the source at view time without storing data. <a href="../lessons/0003-storage-modes.html" title="Choose a storage mode: Import, DirectQuery, Dual, Direct Lake">L0003</a></dd></div>
+<div class="term" id="t-distinctcount"><dt>DISTINCTCOUNT</dt><dd>Counts distinct values in a column. <a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">L0018</a></dd></div>
+<div class="term" id="t-divide"><dt>DIVIDE</dt><dd>Safe division that returns BLANK or an alternate result on divide-by-zero. <a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">L0017</a></dd></div>
+<div class="term" id="t-drill-down"><dt>Drill down</dt><dd>Moving to a lower hierarchy level within the same visual. <a href="../lessons/0026-interactions-drill-tooltips.html" title="Interactions, drill down vs drillthrough, tooltips">L0026</a></dd></div>
+<div class="term" id="t-drillthrough"><dt>Drillthrough</dt><dd>Navigating to a target page filtered by the selected value. <a href="../lessons/0026-interactions-drill-tooltips.html" title="Interactions, drill down vs drillthrough, tooltips">L0026</a></dd></div>
+<div class="term" id="t-dual"><dt>Dual</dt><dd>Storage mode where a table acts as Import or DirectQuery per query. <a href="../lessons/0003-storage-modes.html" title="Choose a storage mode: Import, DirectQuery, Dual, Direct Lake">L0003</a></dd></div>
+<div class="term" id="t-dynamic-rls"><dt>Dynamic RLS</dt><dd>RLS whose filter depends on the signed-in user, e.g. USERPRINCIPALNAME(). <a href="../lessons/0036-rls-ols.html" title="Row-level and object-level security">L0036</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-E"><h2>E</h2><dl>
+<div class="term" id="t-enable-load"><dt>Enable load</dt><dd>Query option that controls whether a query loads into the model. <a href="../lessons/0011-query-folding-load-reuse.html" title="Query folding, load settings and query reuse">L0011</a></dd></div>
+<div class="term" id="t-endorsement"><dt>Endorsement</dt><dd>Promoted or Certified label signalling trusted content. <a href="../lessons/0033-apps-endorsement-labels.html" title="Distribute and govern content: apps, endorsement, sensitivity labels">L0033</a></dd></div>
+<div class="term" id="t-error-bars"><dt>Error bars</dt><dd>Analytics feature showing upper and lower bounds around values. <a href="../lessons/0030-analytics-pane-anomalies-grouping.html" title="Analytics pane, anomalies, grouping and clustering">L0030</a></dd></div>
+<div class="term" id="t-explain-by-expand-by"><dt>Explain by / Expand by</dt><dd>Key influencers wells for candidate factors / analysis grain. <a href="../lessons/0031-ai-visuals-copilot.html" title="AI visuals and Copilot: key influencers, decomposition tree, Q&amp;A, narratives">L0031</a></dd></div>
+<div class="term" id="t-explicit-measure"><dt>Explicit measure</dt><dd>Measure written in DAX, as opposed to an implicit one. <a href="../lessons/0016-calculated-columns-vs-measures.html" title="Calculated column, measure or calculated table?">L0016</a></dd></div>
+<div class="term" id="t-export-data-setting"><dt>Export data setting</dt><dd>Report/tenant setting: none, summarized, or summarized and underlying. <a href="../lessons/0029-personalize-export-page-refresh.html" title="Personalisation, export settings and automatic page refresh">L0029</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-F"><h2>F</h2><dl>
+<div class="term" id="t-fact-table"><dt>Fact table</dt><dd>Table of events with numeric values and foreign keys. <a href="../lessons/0012-star-schema-design.html" title="Design a star schema: facts, dimensions and keys">L0012</a></dd></div>
+<div class="term" id="t-featured-table"><dt>Featured table</dt><dd>Table exposed as an Excel organisational data type. <a href="../lessons/0015-table-column-properties.html" title="Configure table and column properties">L0015</a></dd></div>
+<div class="term" id="t-filter-context"><dt>Filter context</dt><dd>The set of filters active when a measure is evaluated. <a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">L0017</a></dd></div>
+<div class="term" id="t-forecast"><dt>Forecast</dt><dd>Analytics feature projecting a line chart's future values. <a href="../lessons/0030-analytics-pane-anomalies-grouping.html" title="Analytics pane, anomalies, grouping and clustering">L0030</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-G"><h2>G</h2><dl>
+<div class="term" id="t-gateway-on-premises-data-gateway"><dt>Gateway (on-premises data gateway)</dt><dd>Bridge letting the service reach on-premises or private data. <a href="../lessons/0035-gateways-and-refresh.html" title="Gateways, scheduled refresh and incremental refresh">L0035</a></dd></div>
+<div class="term" id="t-gauge"><dt>Gauge</dt><dd>Visual showing a value against minimum, maximum and target. <a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">L0023</a></dd></div>
+<div class="term" id="t-group-by"><dt>Group By</dt><dd>Power Query operation that aggregates rows by one or more columns. <a href="../lessons/0010-group-and-aggregate-rows.html" title="Group and aggregate rows">L0010</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-H"><h2>H</h2><dl>
+<div class="term" id="t-hierarchy"><dt>Hierarchy</dt><dd>Ordered set of columns enabling drill down. <a href="../lessons/0015-table-column-properties.html" title="Configure table and column properties">L0015</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-I"><h2>I</h2><dl>
+<div class="term" id="t-implicit-measure"><dt>Implicit measure</dt><dd>Aggregation created by dragging a numeric column into a visual. <a href="../lessons/0016-calculated-columns-vs-measures.html" title="Calculated column, measure or calculated table?">L0016</a></dd></div>
+<div class="term" id="t-import"><dt>Import</dt><dd>Storage mode that copies data into the in-memory engine. <a href="../lessons/0003-storage-modes.html" title="Choose a storage mode: Import, DirectQuery, Dual, Direct Lake">L0003</a></dd></div>
+<div class="term" id="t-inactive-relationship"><dt>Inactive relationship</dt><dd>Relationship not used by default; activated with USERELATIONSHIP. <a href="../lessons/0014-date-table-role-playing.html" title="Build a date table and handle role-playing dates">L0014</a></dd></div>
+<div class="term" id="t-incremental-refresh"><dt>Incremental refresh</dt><dd>Policy that refreshes only recent partitions using RangeStart/RangeEnd. <a href="../lessons/0035-gateways-and-refresh.html" title="Gateways, scheduled refresh and incremental refresh">L0035</a></dd></div>
+<div class="term" id="t-iterator"><dt>Iterator</dt><dd>X function (SUMX, AVERAGEX…) evaluating an expression per row. <a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">L0018</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-K"><h2>K</h2><dl>
+<div class="term" id="t-keepfilters"><dt>KEEPFILTERS</dt><dd>Makes a CALCULATE filter intersect with existing filters instead of replacing them. <a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">L0017</a></dd></div>
+<div class="term" id="t-key-influencers"><dt>Key influencers</dt><dd>AI visual ranking factors that drive a metric. <a href="../lessons/0031-ai-visuals-copilot.html" title="AI visuals and Copilot: key influencers, decomposition tree, Q&amp;A, narratives">L0031</a></dd></div>
+<div class="term" id="t-kpi-visual"><dt>KPI visual</dt><dd>Visual comparing an indicator to a target over a trend axis. <a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">L0023</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-L"><h2>L</h2><dl>
+<div class="term" id="t-left-anti-join"><dt>Left anti join</dt><dd>Merge returning left rows with no match on the right. <a href="../lessons/0008-merge-and-append.html" title="Merge vs append, and choosing the join kind">L0008</a></dd></div>
+<div class="term" id="t-lineage-view"><dt>Lineage view</dt><dd>Diagram of dependencies between sources, models, reports and dashboards. <a href="../lessons/0033-apps-endorsement-labels.html" title="Distribute and govern content: apps, endorsement, sensitivity labels">L0033</a></dd></div>
+<div class="term" id="t-live-connection"><dt>Live connection</dt><dd>Connection to an Analysis Services or published model without local modelling. <a href="../lessons/0003-storage-modes.html" title="Choose a storage mode: Import, DirectQuery, Dual, Direct Lake">L0003</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-M"><h2>M</h2><dl>
+<div class="term" id="t-mark-as-date-table"><dt>Mark as date table</dt><dd>Setting that designates the model's date table and date column. <a href="../lessons/0014-date-table-role-playing.html" title="Build a date table and handle role-playing dates">L0014</a></dd></div>
+<div class="term" id="t-measure"><dt>Measure</dt><dd>DAX calculation evaluated at query time in filter context. <a href="../lessons/0016-calculated-columns-vs-measures.html" title="Calculated column, measure or calculated table?">L0016</a></dd></div>
+<div class="term" id="t-member-workspace"><dt>Member (workspace)</dt><dd>Role that can add users, publish apps and edit content. <a href="../lessons/0032-workspace-roles-item-access.html" title="Workspace roles, sharing and Build permission">L0032</a></dd></div>
+<div class="term" id="t-merge"><dt>Merge</dt><dd>Power Query join adding columns from a related query. <a href="../lessons/0008-merge-and-append.html" title="Merge vs append, and choosing the join kind">L0008</a></dd></div>
+<div class="term" id="t-mobile-layout"><dt>Mobile layout</dt><dd>Portrait layout of a report page or dashboard for phones. <a href="../lessons/0028-mobile-and-accessibility.html" title="Design for accessibility and mobile">L0028</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-O"><h2>O</h2><dl>
+<div class="term" id="t-object-level-security-ols"><dt>Object-level security (OLS)</dt><dd>Hides tables or columns from specified roles. <a href="../lessons/0036-rls-ols.html" title="Row-level and object-level security">L0036</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-P"><h2>P</h2><dl>
+<div class="term" id="t-paginated-report"><dt>Paginated report</dt><dd>Pixel-perfect, printable report (.rdl) built with Report Builder. <a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">L0023</a></dd></div>
+<div class="term" id="t-parameter-power-query"><dt>Parameter (Power Query)</dt><dd>Named value referenced by queries, e.g. server name. <a href="../lessons/0004-data-source-settings-parameters.html" title="Data source settings, privacy levels and parameters">L0004</a></dd></div>
+<div class="term" id="t-performance-analyzer"><dt>Performance Analyzer</dt><dd>Tool that times each visual's DAX query, display and other work. <a href="../lessons/0022-model-performance.html" title="Optimise model performance">L0022</a></dd></div>
+<div class="term" id="t-personalize-visuals"><dt>Personalize visuals</dt><dd>Setting letting consumers change visuals for themselves. <a href="../lessons/0029-personalize-export-page-refresh.html" title="Personalisation, export settings and automatic page refresh">L0029</a></dd></div>
+<div class="term" id="t-pin-live-page"><dt>Pin live page</dt><dd>Pins a whole report page as one interactive dashboard tile. <a href="../lessons/0034-dashboards-alerts-subscriptions.html" title="Dashboards, data alerts and subscriptions">L0034</a></dd></div>
+<div class="term" id="t-privacy-level"><dt>Privacy level</dt><dd>Private, Organizational or Public setting governing data combination. <a href="../lessons/0004-data-source-settings-parameters.html" title="Data source settings, privacy levels and parameters">L0004</a></dd></div>
+<div class="term" id="t-promoted"><dt>Promoted</dt><dd>Endorsement any contributor can apply to signal useful content. <a href="../lessons/0033-apps-endorsement-labels.html" title="Distribute and govern content: apps, endorsement, sensitivity labels">L0033</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-Q"><h2>Q</h2><dl>
+<div class="term" id="t-q-a"><dt>Q&amp;A</dt><dd>Natural-language question feature producing visuals. <a href="../lessons/0031-ai-visuals-copilot.html" title="AI visuals and Copilot: key influencers, decomposition tree, Q&amp;A, narratives">L0031</a></dd></div>
+<div class="term" id="t-query-folding"><dt>Query folding</dt><dd>Translating Power Query steps into a native source query. <a href="../lessons/0011-query-folding-load-reuse.html" title="Query folding, load settings and query reuse">L0011</a></dd></div>
+<div class="term" id="t-quick-measure"><dt>Quick measure</dt><dd>Wizard that generates DAX for common calculations. <a href="../lessons/0020-semi-additive-statistics-quick-measures.html" title="Semi-additive measures, statistics and quick measures">L0020</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-R"><h2>R</h2><dl>
+<div class="term" id="t-rangestart-rangeend"><dt>RangeStart / RangeEnd</dt><dd>Reserved DateTime parameters for incremental refresh. <a href="../lessons/0035-gateways-and-refresh.html" title="Gateways, scheduled refresh and incremental refresh">L0035</a></dd></div>
+<div class="term" id="t-reference-query"><dt>Reference query</dt><dd>Query that starts from another query's output. <a href="../lessons/0011-query-folding-load-reuse.html" title="Query folding, load settings and query reuse">L0011</a></dd></div>
+<div class="term" id="t-report"><dt>Report</dt><dd>Multi-page interactive set of visuals on one semantic model. <a href="../lessons/0001-power-bi-landscape.html" title="The Power BI landscape and the PL-300 exam">L0001</a></dd></div>
+<div class="term" id="t-report-page-tooltip"><dt>Report page tooltip</dt><dd>Page shown on hover, enabled by "Allow use as tooltip". <a href="../lessons/0026-interactions-drill-tooltips.html" title="Interactions, drill down vs drillthrough, tooltips">L0026</a></dd></div>
+<div class="term" id="t-role-playing-dimension"><dt>Role-playing dimension</dt><dd>One dimension used in several roles, e.g. order and ship date. <a href="../lessons/0014-date-table-role-playing.html" title="Build a date table and handle role-playing dates">L0014</a></dd></div>
+<div class="term" id="t-row-context"><dt>Row context</dt><dd>The current row during column calculation or iteration. <a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">L0018</a></dd></div>
+<div class="term" id="t-row-level-security-rls"><dt>Row-level security (RLS)</dt><dd>Role-based DAX filters limiting which rows users see. <a href="../lessons/0036-rls-ols.html" title="Row-level and object-level security">L0036</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-S"><h2>S</h2><dl>
+<div class="term" id="t-scheduled-refresh"><dt>Scheduled refresh</dt><dd>Timed Import refresh in the service (8/day Pro, 48/day capacity). <a href="../lessons/0035-gateways-and-refresh.html" title="Gateways, scheduled refresh and incremental refresh">L0035</a></dd></div>
+<div class="term" id="t-selection-pane"><dt>Selection pane</dt><dd>Pane controlling layer order, visibility, grouping and tab order. <a href="../lessons/0027-bookmarks-navigation-selection.html" title="Bookmarks, buttons, navigation and the Selection pane">L0027</a></dd></div>
+<div class="term" id="t-semantic-model"><dt>Semantic model</dt><dd>The published model (formerly dataset): data, relationships, measures. <a href="../lessons/0001-power-bi-landscape.html" title="The Power BI landscape and the PL-300 exam">L0001</a></dd></div>
+<div class="term" id="t-semi-additive-measure"><dt>Semi-additive measure</dt><dd>Measure that cannot be summed over time, e.g. balance. <a href="../lessons/0020-semi-additive-statistics-quick-measures.html" title="Semi-additive measures, statistics and quick measures">L0020</a></dd></div>
+<div class="term" id="t-sensitivity-label"><dt>Sensitivity label</dt><dd>Purview label classifying and protecting content, including exports. <a href="../lessons/0033-apps-endorsement-labels.html" title="Distribute and govern content: apps, endorsement, sensitivity labels">L0033</a></dd></div>
+<div class="term" id="t-slicer"><dt>Slicer</dt><dd>On-canvas visual filter. <a href="../lessons/0025-filters-slicers-sync.html" title="Filters, slicers and sync slicers">L0025</a></dd></div>
+<div class="term" id="t-small-multiples"><dt>Small multiples</dt><dd>Grid of identical charts split by a category. <a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">L0023</a></dd></div>
+<div class="term" id="t-smart-narrative"><dt>Smart narrative</dt><dd>Visual generating dynamic text summaries. <a href="../lessons/0031-ai-visuals-copilot.html" title="AI visuals and Copilot: key influencers, decomposition tree, Q&amp;A, narratives">L0031</a></dd></div>
+<div class="term" id="t-sort-by-column"><dt>Sort by column</dt><dd>Property sorting one column by another, e.g. month name by number. <a href="../lessons/0015-table-column-properties.html" title="Configure table and column properties">L0015</a></dd></div>
+<div class="term" id="t-star-schema"><dt>Star schema</dt><dd>Facts surrounded by dimension tables. <a href="../lessons/0012-star-schema-design.html" title="Design a star schema: facts, dimensions and keys">L0012</a></dd></div>
+<div class="term" id="t-storage-mode"><dt>Storage mode</dt><dd>How a table's data is held: Import, DirectQuery, Dual, Direct Lake. <a href="../lessons/0003-storage-modes.html" title="Choose a storage mode: Import, DirectQuery, Dual, Direct Lake">L0003</a></dd></div>
+<div class="term" id="t-subscription"><dt>Subscription</dt><dd>Scheduled email snapshot of a report page or dashboard. <a href="../lessons/0034-dashboards-alerts-subscriptions.html" title="Dashboards, data alerts and subscriptions">L0034</a></dd></div>
+<div class="term" id="t-surrogate-key"><dt>Surrogate key</dt><dd>System-generated integer key for a dimension. <a href="../lessons/0012-star-schema-design.html" title="Design a star schema: facts, dimensions and keys">L0012</a></dd></div>
+<div class="term" id="t-sync-slicers"><dt>Sync slicers</dt><dd>Sharing a slicer selection and visibility across pages. <a href="../lessons/0025-filters-slicers-sync.html" title="Filters, slicers and sync slicers">L0025</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-T"><h2>T</h2><dl>
+<div class="term" id="t-tab-order"><dt>Tab order</dt><dd>Keyboard and screen-reader navigation order of visuals. <a href="../lessons/0028-mobile-and-accessibility.html" title="Design for accessibility and mobile">L0028</a></dd></div>
+<div class="term" id="t-theme"><dt>Theme</dt><dd>JSON definition of report colours and styles; dashboards have their own themes. <a href="../lessons/0024-format-themes-conditional-formatting.html" title="Themes, conditional formatting and number formats">L0024</a></dd></div>
+<div class="term" id="t-time-intelligence"><dt>Time intelligence</dt><dd>DAX functions that shift or accumulate over dates. <a href="../lessons/0019-time-intelligence.html" title="Time intelligence measures">L0019</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-U"><h2>U</h2><dl>
+<div class="term" id="t-unpivot"><dt>Unpivot</dt><dd>Turning columns into attribute-value rows. <a href="../lessons/0009-reshape-unpivot-json.html" title="Reshape tables: unpivot, pivot, transpose, JSON">L0009</a></dd></div>
+<div class="term" id="t-userelationship"><dt>USERELATIONSHIP</dt><dd>Activates an inactive relationship within CALCULATE. <a href="../lessons/0014-date-table-role-playing.html" title="Build a date table and handle role-playing dates">L0014</a></dd></div>
+<div class="term" id="t-userprincipalname"><dt>USERPRINCIPALNAME</dt><dd>Returns the signed-in user's UPN. <a href="../lessons/0036-rls-ols.html" title="Row-level and object-level security">L0036</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-V"><h2>V</h2><dl>
+<div class="term" id="t-viewer"><dt>Viewer</dt><dd>Read-only workspace role; RLS applies. <a href="../lessons/0032-workspace-roles-item-access.html" title="Workspace roles, sharing and Build permission">L0032</a></dd></div>
+<div class="term" id="t-visual-calculation"><dt>Visual calculation</dt><dd>DAX calculation defined on and stored in a single visual. <a href="../lessons/0021-calculation-groups-visual-calculations.html" title="Calculation groups and visual calculations">L0021</a></dd></div>
+</dl></section>
+<section class="gl-sec" id="L-W"><h2>W</h2><dl>
+<div class="term" id="t-workspace"><dt>Workspace</dt><dd>Container in the service for collaboration on items. <a href="../lessons/0001-power-bi-landscape.html" title="The Power BI landscape and the PL-300 exam">L0001</a></dd></div>
+</dl></section>
+
+<p class="muted">Related sheets: <a href="concept-map.html">Concept map</a> &middot; <a href="dax-patterns.html">DAX patterns</a> &middot; <a href="power-query-m.html">Power Query M</a> &middot; <a href="visuals-chooser.html">Visuals chooser</a></p>
+<footer class="sources"><strong>Sources.</strong> <a href="https://learn.microsoft.com/en-us/power-bi/fundamentals/service-basic-concepts">Power BI basic concepts</a> <a href="https://learn.microsoft.com/en-us/dax/dax-overview">DAX overview</a> <a href="https://learn.microsoft.com/en-us/powerquery-m/">Power Query M reference</a></footer>
+</main>
+<script>
+(function(){
+  var q=document.getElementById('q'); if(!q) return;
+  var terms=[].slice.call(document.querySelectorAll('.term')), secs=[].slice.call(document.querySelectorAll('.gl-sec')),
+      cnt=document.getElementById('cnt'), none=document.getElementById('none'), az=document.querySelectorAll('.az a');
+  terms.forEach(function(t){t._txt=t.textContent.toLowerCase();});
+  function run(){
+    var v=q.value.trim().toLowerCase(), n=0;
+    terms.forEach(function(t){var ok=!v||t._txt.indexOf(v)>-1; t.classList.toggle('hide',!ok); if(ok)n++;});
+    secs.forEach(function(s){var any=s.querySelector('.term:not(.hide)'); s.classList.toggle('hide',!any);
+      var a=document.querySelector('.az a[href="#'+s.id+'"]'); if(a) a.style.opacity=any?1:.3;});
+    cnt.textContent=n+' of '+terms.length+' terms';
+    none.style.display=n?'none':'block';
+  }
+  q.addEventListener('input',run); run();
+})();
+</script>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

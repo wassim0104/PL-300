@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Gestion des accès · PL-300 Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap">
+<link rel="stylesheet" href="/assets/course.css">
+<link rel="stylesheet" href="/auth/auth.css">
+</head>
+<body data-page="admin">
+<main class="ad-main" id="main">
+  <div class="ad-head">
+    <div>
+      <h1>Gestion des accès</h1>
+      <p class="ad-lead">Autorise les nouveaux comptes, retire un accès ou supprime un compte. Un accès retiré prend effet au prochain chargement de page.</p>
+    </div>
+    <div class="ad-pending-note" id="pendingNote" hidden></div>
+  </div>
+
+  <section class="ad-panel" aria-label="Utilisateurs">
+    <div class="ad-toolbar">
+      <div class="ad-tabs" role="tablist" aria-label="Filtrer par statut" id="tabs">
+        <button role="tab" type="button" data-f="pending" aria-selected="true">En attente <span class="ad-count" id="cPending">0</span></button>
+        <button role="tab" type="button" data-f="approved" aria-selected="false">Autorisés <span class="ad-count" id="cApproved">0</span></button>
+        <button role="tab" type="button" data-f="revoked" aria-selected="false">Retirés <span class="ad-count" id="cRevoked">0</span></button>
+        <button role="tab" type="button" data-f="all" aria-selected="false">Tous <span class="ad-count" id="cAll">0</span></button>
+      </div>
+      <label class="ad-search"><span class="au-sr">Rechercher un utilisateur</span>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" id="q" placeholder="Rechercher par nom ou e-mail" autocomplete="off"></label>
+    </div>
+    <ul class="ad-list" id="rows" role="tabpanel" aria-live="polite"><li class="ad-empty">Chargement…</li></ul>
+  </section>
+</main>
+
+<dialog id="delDlg" class="ad-dlg" aria-labelledby="delTitle">
+  <form method="dialog">
+    <h2 id="delTitle">Supprimer ce compte ?</h2>
+    <p><strong id="delWho"></strong> sera supprimé définitivement. Cette action est irréversible.</p>
+    <div class="ad-dlg-actions">
+      <button class="au-btn au-btn-ghost" value="cancel" autofocus>Annuler</button>
+      <button class="au-btn au-btn-danger" value="ok">Supprimer</button>
+    </div>
+  </form>
+</dialog>
+<div class="ad-toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  var rows = document.getElementById('rows'), toasts = document.getElementById('toasts'), dlg = document.getElementById('delDlg');
+  var LABEL = { pending: 'En attente', approved: 'Autorisé', revoked: 'Retiré' };
+  var users = [], filter = 'pending', query = '', loaded = false, tabChosen = false;
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); }
+  function initials(u) { var s = (u.name || u.email).trim(); var p = s.split(/[\s@.]+/).filter(Boolean); return ((p[0] || '?')[0] + (p[1] ? p[1][0] : '')).toUpperCase(); }
+  function fmt(d) { if (!d) return ''; var x = new Date(d); return isNaN(x) ? String(d).slice(0, 10) : x.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }); }
+  function count(st) { return users.filter(function (u) { return !u.admin && u.status === st; }).length; }
+
+  function toast(text, bad) {
+    var t = document.createElement('div'); t.className = 'ad-toast' + (bad ? ' bad' : ''); t.textContent = text; toasts.appendChild(t);
+    setTimeout(function () { t.classList.add('out'); setTimeout(function () { t.remove(); }, 300); }, 3600);
+  }
+
+  function render() {
+    var pend = count('pending');
+    document.getElementById('cPending').textContent = pend;
+    document.getElementById('cApproved').textContent = count('approved');
+    document.getElementById('cRevoked').textContent = count('revoked');
+    document.getElementById('cAll').textContent = users.length;
+    document.getElementById('cPending').parentNode.classList.toggle('has-pending', pend > 0);
+    var note = document.getElementById('pendingNote');
+    note.hidden = !pend;
+    note.innerHTML = pend ? '<strong>' + pend + '</strong> ' + (pend > 1 ? 'demandes attendent' : 'demande attend') + ' ta validation' : '';
+    var q = query.trim().toLowerCase();
+    var list = users.filter(function (u) {
+      if (filter !== 'all' && (u.admin || u.status !== filter)) return false;
+      return !q || (u.email || '').toLowerCase().indexOf(q) > -1 || (u.name || '').toLowerCase().indexOf(q) > -1;
+    });
+    if (!list.length) {
+      rows.innerHTML = '<li class="ad-empty">' + (q ? 'Aucun résultat pour « ' + esc(query.trim()) + ' ».' :
+        filter === 'pending' ? 'Aucune demande en attente.' : 'Aucun compte dans cette vue.') + '</li>';
+      return;
+    }
+    rows.innerHTML = list.map(function (u) {
+      var st = u.admin ? 'admin' : u.status;
+      var acts = u.admin ? '<span class="ad-muted">Compte administrateur</span>' :
+        (u.status !== 'approved' ? '<button type="button" class="au-btn au-btn-sm" data-a="approve">' + (u.status === 'revoked' ? 'Rétablir' : 'Autoriser') + '</button>' :
+          '<button type="button" class="au-btn au-btn-sm au-btn-ghost" data-a="revoke">Retirer l’accès</button>') +
+        '<button type="button" class="au-btn au-btn-sm au-btn-ghost au-btn-del" data-a="delete">Supprimer</button>';
+      return '<li class="ad-row" data-email="' + esc(u.email) + '" data-name="' + esc(u.name || '') + '">' +
+        '<span class="ad-avatar" aria-hidden="true">' + esc(initials(u)) + '</span>' +
+        '<div class="ad-who"><strong>' + esc(u.name || 'Sans nom') + '</strong><span>' + esc(u.email) + '</span></div>' +
+        '<span class="ad-pill ' + esc(st) + '">' + esc(u.admin ? 'Administrateur' : (LABEL[u.status] || u.status)) + '</span>' +
+        '<span class="ad-date">' + esc(fmt(u.created)) + '</span>' +
+        '<div class="ad-acts">' + acts + '</div></li>';
+    }).join('');
+  }
+
+  function load() {
+    return fetch('/api/admin', { credentials: 'same-origin' }).then(function (r) { return r.json().then(function (j) { j._s = r.status; return j; }); }).then(function (j) {
+      if (!j.users) { rows.innerHTML = '<li class="ad-empty">' + esc(j.error || 'Accès refusé.') + '</li>'; return; }
+      users = j.users; loaded = true;
+      if (!tabChosen && !count('pending')) { filter = 'all'; syncTabs(); }
+      render();
+    }).catch(function () { rows.innerHTML = '<li class="ad-empty">Chargement impossible. Recharge la page.</li>'; });
+  }
+  function syncTabs() {
+    Array.prototype.forEach.call(document.querySelectorAll('#tabs [role=tab]'), function (t) {
+      var on = t.getAttribute('data-f') === filter; t.setAttribute('aria-selected', on ? 'true' : 'false'); t.tabIndex = on ? 0 : -1;
+    });
+  }
+  document.getElementById('tabs').addEventListener('click', function (e) {
+    var t = e.target.closest('[role=tab]'); if (!t) return;
+    filter = t.getAttribute('data-f'); tabChosen = true; syncTabs(); render();
+  });
+  document.getElementById('tabs').addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    var tabs = Array.prototype.slice.call(this.querySelectorAll('[role=tab]')), i = tabs.findIndex(function (t) { return t.getAttribute('data-f') === filter; });
+    var n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]; n.click(); n.focus();
+  });
+  document.getElementById('q').addEventListener('input', function () { query = this.value; render(); });
+
+  function act(email, name, action) {
+    var who = name || email;
+    return fetch('/api/admin', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email: email, action: action }) })
+      .then(function (r) { return r.json(); }).then(function (j) {
+        if (j.ok) toast({ approve: 'Accès autorisé pour ', revoke: 'Accès retiré pour ', delete: 'Compte supprimé : ' }[action] + who);
+        else toast(j.error || 'L’action a échoué.', true);
+        return load();
+      }).catch(function () { toast('Connexion au serveur impossible.', true); });
+  }
+  rows.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-a]'); if (!b) return;
+    var tr = b.closest('li'), email = tr.getAttribute('data-email'), name = tr.getAttribute('data-name'), action = b.getAttribute('data-a');
+    if (action === 'delete') {
+      document.getElementById('delWho').textContent = (name ? name + ' · ' : '') + email;
+      dlg.returnValue = ''; dlg.setAttribute('data-email', email); dlg.setAttribute('data-name', name);
+      if (dlg.showModal) dlg.showModal(); else if (confirm('Supprimer définitivement ' + email + ' ?')) act(email, name, 'delete');
+      return;
+    }
+    b.disabled = true; act(email, name, action);
+  });
+  dlg.addEventListener('close', function () { if (dlg.returnValue === 'ok') act(dlg.getAttribute('data-email'), dlg.getAttribute('data-name'), 'delete'); });
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close('cancel'); });
+  load();
+})();
+</script>
+<script src="/assets/manifest.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

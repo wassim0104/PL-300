@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ma progression</title>
+<link rel="stylesheet" href="assets/course.css">
+<script src="assets/progress.js" defer></script>
+<script src="assets/bank.js"></script>
+<style>
+.rp{max-width:1100px;margin:0 auto;padding:1.5rem 16px 3rem}
+.rp-head h1{margin:0 0 .4rem}
+.rp-head p{margin:0;color:var(--muted);max-width:64ch}
+.rp-grid{align-items:start;display:grid;grid-template-columns:repeat(12,1fr);gap:1rem;margin-top:1.5rem}
+.rp-grid>.panel{margin:0;grid-column:span 12;min-width:0}
+@media(min-width:900px){.s5{grid-column:span 5!important}.s6{grid-column:span 6!important}.s7{grid-column:span 7!important}.s4{grid-column:span 4!important}.s8{grid-column:span 8!important}}
+.rp .panel-title{padding:.65rem 1rem;border-bottom:1px solid var(--rule);font-weight:700;font-size:.95rem;display:flex;justify-content:space-between;gap:.5rem;align-items:baseline}
+.rp .panel-title small{font-weight:500;color:var(--muted);font-size:.8rem}
+.pb{padding:1rem}
+.big{font-size:2.25rem;font-weight:700;letter-spacing:-.02em;line-height:1}
+.big small{font-size:1rem;color:var(--muted);font-weight:500}
+.empty{margin:0;color:var(--muted)}
+.empty a{font-weight:600}
+.dom-row{display:grid;grid-template-columns:minmax(0,11rem) 1fr 3.2rem;gap:.75rem;align-items:center;margin:0 0 .9rem}
+.dom-row:last-child{margin-bottom:0}
+.dom-row .nm{display:flex;gap:.5rem;align-items:center;font-weight:600;font-size:.92rem}
+.dom-row .pc{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.dom-row .sub{grid-column:2/4;margin-top:-.55rem;font-size:.78rem;color:var(--muted)}
+.bar{height:10px;background:var(--surface-2);border:1px solid var(--rule);border-radius:2px;overflow:hidden;position:relative}
+.bar>span{display:block;height:100%;background:var(--c,var(--ink))}
+.bar::after{content:"";position:absolute;left:70%;top:0;bottom:0;border-left:1px dashed var(--muted)}
+.prep{--c:var(--prep)}.model{--c:var(--model)}.viz{--c:var(--viz)}.manage{--c:var(--manage)}
+@media(max-width:520px){.dom-row{grid-template-columns:1fr 3rem}.dom-row .bar{grid-column:1/3;grid-row:2}.dom-row .sub{grid-column:1/3;margin-top:-.4rem}}
+.legend{margin:.9rem 0 0;font-size:.78rem;color:var(--muted)}
+.lst{list-style:none;margin:0;padding:0}
+.lst li{display:grid;grid-template-columns:1fr auto;gap:.2rem .75rem;padding:.6rem 1rem;border-top:1px solid var(--rule);align-items:center}
+.lst li:first-child{border-top:0}
+.lst .t{font-weight:600;min-width:0;overflow-wrap:anywhere}
+.lst .v{font-variant-numeric:tabular-nums;font-weight:700;text-align:right}
+.lst .m{grid-column:1/3;font-size:.8rem;color:var(--muted)}
+.lst .bad{color:var(--bad)}
+table.rt{min-width:480px;width:100%;border-collapse:collapse;font-size:.9rem}
+table.rt th,table.rt td{padding:.55rem 1rem;text-align:left;border-top:1px solid var(--rule);font-variant-numeric:tabular-nums}
+table.rt thead th{border-top:0;color:var(--muted);font-size:.8rem;font-weight:600;background:var(--surface-2)}
+table.rt .ok{color:var(--good);font-weight:700}table.rt .ko{color:var(--bad);font-weight:700}
+.tw{overflow-x:auto}
+.gate{display:flex;gap:.75rem;align-items:flex-start}
+.gate .ico{flex:none;width:2rem;height:2rem;border-radius:50%;display:grid;place-items:center;font-weight:700;color:var(--surface);background:var(--muted)}
+.gate.ready .ico{background:var(--good)}
+.gate h3{margin:0 0 .25rem;font-size:1.05rem}
+.gate p{margin:0;color:var(--muted)}
+.steps{display:flex;gap:.5rem;margin:1rem 0 0}
+.steps span{flex:1;height:8px;border-radius:2px;background:var(--surface-2);border:1px solid var(--rule)}
+.steps span.on{background:var(--good);border-color:var(--good)}
+.danger{display:flex;flex-wrap:wrap;gap:.75rem 1.5rem;align-items:center;justify-content:space-between;padding:1rem}
+.danger p{margin:0;color:var(--muted);max-width:60ch}
+.btn.warn{border-color:var(--bad);color:var(--bad);background:transparent}
+.btn.warn:hover{background:var(--bad);color:var(--surface)}
+</style>
+</head>
+<body data-page="progress">
+<main class="rp">
+<header class="rp-head">
+  <h1>Ma progression</h1>
+  <p>Ce rapport se construit à partir de tes réponses aux quiz, de tes leçons terminées et de tes examens blancs. Tout reste sur cet appareil.</p>
+</header>
+
+<div class="rp-grid">
+  <section class="panel s5" aria-labelledby="h-lessons">
+    <div class="panel-title"><span id="h-lessons">Leçons terminées</span></div>
+    <div class="pb" id="p-lessons"></div>
+  </section>
+
+  <section class="panel s7" aria-labelledby="h-gate">
+    <div class="panel-title"><span id="h-gate">Prêt pour l’examen ?</span><small>Critère : deux examens blancs d’affilée à 80 % ou plus</small></div>
+    <div class="pb" id="p-gate"></div>
+  </section>
+
+  <section class="panel s7" aria-labelledby="h-dom">
+    <div class="panel-title"><span id="h-dom">Précision par domaine</span><small>Ligne pointillée : 70 %</small></div>
+    <div class="pb" id="p-dom"></div>
+  </section>
+
+  <section class="panel s5" aria-labelledby="h-weak">
+    <div class="panel-title"><span id="h-weak">Sujets à renforcer</span><small>8 plus faibles</small></div>
+    <div id="p-weak"></div>
+  </section>
+
+  <section class="panel s7" aria-labelledby="h-mock">
+    <div class="panel-title"><span id="h-mock">Examens blancs</span></div>
+    <div id="p-mock"></div>
+  </section>
+
+  <section class="panel s5" aria-labelledby="h-due">
+    <div class="panel-title"><span id="h-due">Révision espacée</span><small id="due-count"></small></div>
+    <div id="p-due"></div>
+  </section>
+
+  <section class="panel" aria-labelledby="h-reset">
+    <div class="panel-title"><span id="h-reset">Données</span></div>
+    <div class="danger">
+      <p>Efface les leçons terminées, les réponses aux quiz, la file de révision et l’historique des examens blancs de cet appareil. Cette action est définitive.</p>
+      <button type="button" class="btn secondary warn" id="reset">Réinitialiser ma progression</button>
+    </div>
+  </section>
+</div>
+</main>
+<script>
+(function(){
+  var DOMS=['PREP','MODEL','VIZ','MANAGE'];
+  var M={lessons:[]};
+  var LAB={PREP:'Préparer les données',MODEL:'Modéliser',VIZ:'Visualiser & analyser',MANAGE:'Gérer & sécuriser'};
+  var bank=Array.isArray(window.PL300_BANK)?window.PL300_BANK:[];
+  var $=function(i){return document.getElementById(i)};
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function human(s){return s.replace(/[-_]+/g,' ');}
+  function fdate(s){try{var d=new Date(s);if(isNaN(d))return String(s);return d.toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});}catch(e){return String(s);}}
+  var lessonFile={};
+  var topicDom={},topicLesson={};
+  function build(){
+  M=window.PL300_MANIFEST||M;(M.lessons||[]).forEach(function(l){lessonFile[l.n]=l;});
+  bank.forEach(function(q){
+    if(!q.topic) return;
+    if(!topicDom[q.topic]) topicDom[q.topic]=String(q.domain).toUpperCase();
+    if(!topicLesson[q.topic]&&q.lesson&&lessonFile[q.lesson]) topicLesson[q.topic]=lessonFile[q.lesson];
+  });
+  }
+  function link(topic){
+    var l=topicLesson[topic];
+    return l?'<a href="'+esc(l.file)+'">'+esc(human(topic))+'</a>':esc(human(topic));
+  }
+  function render(){
+    var P=window.Progress;
+    var topics=P?P.getTopics():{};
+    var tk=Object.keys(topics);
+    var done=P?P.lessonsDone().length:0, total=(M.lessons&&M.lessons.length)||36;
+    if(done>total) done=total;
+
+    // lessons
+    var pct=Math.round(100*done/total);
+    var nextL=(M.lessons||[]).filter(function(l){return !(P&&P.lessonsDone().indexOf(l.n)>-1);})[0];
+    $('p-lessons').innerHTML='<div class="big">'+done+'<small> / '+total+'</small></div>'+
+      '<div class="progress-bar" style="margin:.8rem 0" role="progressbar" aria-valuemin="0" aria-valuemax="'+total+'" aria-valuenow="'+done+'" aria-label="Leçons terminées"><span style="width:'+pct+'%"></span></div>'+
+      (done===0?'<p class="empty">Aucune leçon terminée. <a href="'+(nextL?esc(nextL.file):'index.html#parcours')+'">Commence la leçon 1</a>.</p>'
+        :nextL?'<p class="empty">Prochaine leçon : <a href="'+esc(nextL.file)+'">'+esc(nextL.n+' '+nextL.title)+'</a></p>'
+        :'<p class="empty">Toutes les leçons sont terminées.</p>');
+
+    // per-domain accuracy
+    var agg={};DOMS.forEach(function(d){agg[d]={seen:0,ok:0};});
+    tk.forEach(function(k){var d=topicDom[k];if(agg[d]){agg[d].seen+=topics[k].seen;agg[d].ok+=topics[k].correct;}});
+    var any=DOMS.some(function(d){return agg[d].seen>0;});
+    var h='';
+    DOMS.forEach(function(d){
+      var a=agg[d],p=a.seen?Math.round(100*a.ok/a.seen):0;
+      h+='<div class="dom-row"><span class="nm"><i class="domain-dot '+d.toLowerCase()+'"></i>'+LAB[d]+'</span>'+
+        '<div class="bar '+d.toLowerCase()+'" role="img" aria-label="'+LAB[d]+' : '+(a.seen?p+' %':'pas de données')+'"><span style="width:'+p+'%"></span></div>'+
+        '<span class="pc">'+(a.seen?p+' %':'–')+'</span>'+
+        '<span class="sub">'+(a.seen?a.ok+(a.ok>1?' bonnes réponses':' bonne réponse')+' sur '+a.seen:'Pas encore de réponses')+'</span></div>';
+    });
+    if(!any) h+='<p class="legend">Réponds à quelques questions pour remplir ce graphique. <a href="practice/mixed.html">Lancer une série mixte</a>.</p>';
+    $('p-dom').innerHTML=h;
+
+    // weakest 8
+    var ent=tk.filter(function(k){return topics[k].seen>0;}).map(function(k){var t=topics[k];return {topic:k,seen:t.seen,ok:t.correct,acc:t.correct/t.seen};})
+      .sort(function(a,b){return a.acc-b.acc||b.seen-a.seen;}).slice(0,8);
+    $('p-weak').innerHTML=ent.length?'<ul class="lst">'+ent.map(function(e){
+      var d=topicDom[e.topic];
+      return '<li><span class="t">'+link(e.topic)+'</span><span class="v'+(e.acc<.7?' bad':'')+'">'+Math.round(e.acc*100)+' %</span>'+
+        '<span class="m">'+(d?'<i class="domain-dot '+d.toLowerCase()+'"></i> '+LAB[d]+' · ':'')+e.ok+'/'+e.seen+' correctes</span></li>';
+    }).join('')+'</ul>':'<div class="pb"><p class="empty">Aucun sujet évalué pour l’instant. Termine le quiz d’une leçon ou <a href="practice/mixed.html">lance une série mixte</a>.</p></div>';
+
+    // mocks
+    var hist=[];try{hist=JSON.parse(localStorage.getItem('pl300-mock-history')||'[]');if(!Array.isArray(hist))hist=[];}catch(e){}
+    hist.sort(function(a,b){return String(a.date)<String(b.date)?-1:1;});
+    if(!hist.length){
+      $('p-mock').innerHTML='<div class="pb"><p class="empty">Aucun examen blanc passé. <a href="practice/mock-exam-1.html">Commencer l’examen blanc 1</a> quand tu as vu la plupart des leçons.</p></div>';
+    }else{
+      $('p-mock').innerHTML='<div class="tw"><table class="rt"><thead><tr><th>Date</th><th>Examen</th><th>Score</th>'+DOMS.map(function(d){return '<th title="'+LAB[d]+'"><i class="domain-dot '+d.toLowerCase()+'"></i> '+({PREP:'Prép.',MODEL:'Mod.',VIZ:'Viz.',MANAGE:'Gér.'})[d]+'</th>';}).join('')+'</tr></thead><tbody>'+
+        hist.slice().reverse().map(function(r){
+          var pd=r.perDomain||{};
+          return '<tr><td>'+esc(fdate(r.date))+'</td><td>Examen '+esc(r.mock)+'</td><td class="'+(r.score>=80?'ok':'ko')+'">'+esc(r.score)+' %</td>'+
+            DOMS.map(function(d){return '<td>'+(pd[d]!=null?esc(pd[d])+' %':'–')+'</td>';}).join('')+'</tr>';
+        }).join('')+'</tbody></table></div>';
+    }
+
+    // gate
+    var last2=hist.slice(-2),streak=0;
+    for(var i=hist.length-1;i>=0&&hist[i].score>=80;i--)streak++;
+    var ready=last2.length===2&&last2[0].score>=80&&last2[1].score>=80;
+    var g;
+    if(ready){
+      g='<div class="gate ready"><span class="ico" aria-hidden="true">✓</span><div><h3>Prêt à réserver l’examen</h3><p>Tes deux derniers examens blancs sont à '+last2[0].score+' % et '+last2[1].score+' %. Tu peux réserver l’examen PL-300.</p></div></div>';
+    }else if(!hist.length){
+      g='<div class="gate"><span class="ico" aria-hidden="true">1</span><div><h3>Pas encore prêt</h3><p>Il manque deux examens blancs d’affilée à 80 % ou plus. <a href="practice/mock-exam-1.html">Passe l’examen blanc 1</a>.</p></div></div>';
+    }else{
+      var lastS=hist[hist.length-1].score;
+      var msg=streak===1?'Ton dernier examen est à '+lastS+' %. Il manque un second examen à 80 % ou plus, juste après.'
+        :'Ton dernier examen est à '+lastS+' % ; il faut 80 %. Il manque encore '+(2-Math.min(streak,1))+' examens consécutifs à 80 % ou plus.';
+      if(streak===0) msg='Ton dernier examen est à '+lastS+' % ; il faut 80 %. Corrige les sujets faibles, puis passe deux examens d’affilée à 80 % ou plus.';
+      g='<div class="gate"><span class="ico" aria-hidden="true">'+streak+'</span><div><h3>Pas encore prêt</h3><p>'+msg+' <a href="practice/mock-exam-'+(hist[hist.length-1].mock===1?2:1)+'.html">Examen blanc suivant</a>.</p></div></div>';
+    }
+    g+='<div class="steps" aria-hidden="true"><span class="'+(streak>=1||ready?'on':'')+'"></span><span class="'+(streak>=2||ready?'on':'')+'"></span></div>';
+    $('p-gate').innerHTML=g;
+
+    // due
+    var due=P?P.dueTopics():[];
+    $('due-count').textContent=due.length?due.length+' à revoir':'';
+    $('p-due').innerHTML=due.length?'<ul class="lst">'+due.slice(0,12).map(function(e){
+      return '<li><span class="t">'+link(e.topic)+'</span><span class="v">'+Math.round(e.accuracy*100)+' %</span><span class="m">Boîte '+e.box+'/5 · prévu le '+esc(fdate(e.nextReview))+'</span></li>';
+    }).join('')+'</ul>'+(due.length>12?'<div class="pb"><p class="empty">Et '+(due.length-12)+' autres.</p></div>':''):
+      '<div class="pb"><p class="empty">'+(tk.length?'Rien à réviser aujourd’hui. Reviens demain ou <a href="practice/mixed.html">continue à t’entraîner</a>.':'Rien à réviser. Les sujets apparaissent ici après tes premières réponses aux quiz.')+'</p></div>';
+  }
+  function init(){
+    build();render();
+    $('reset').addEventListener('click',function(){
+      if(!confirm('Réinitialiser toute ta progression ? Leçons, réponses, révisions et examens blancs seront effacés de cet appareil.')) return;
+      try{window.Progress&&window.Progress.reset();localStorage.removeItem('pl300-mock-history');localStorage.removeItem('pl300.mock1.ids');}catch(e){}
+      render();
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
+</script>
+<script src="assets/manifest.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

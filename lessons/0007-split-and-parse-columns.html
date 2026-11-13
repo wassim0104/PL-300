@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Split, extract and parse columns</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0007">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0007</p>
+  <h1>Split, extract and parse columns</h1>
+  <p class="meta"><span class="badge prep">Prepare the data</span><span>About 15 min</span><span>Skill: split text into typed columns or rows</span></p>
+  <p><strong>After this lesson you can</strong> turn messy text (combined fields, delimited lists, text timestamps) into typed columns or rows using the fewest steps.</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Prepare the data is a whole exam domain, and text clean-up questions turn up repeatedly in the practice sets: a combined timestamp, a comma-separated list, a column that must become a year. Each has one efficient answer, and the wrong options are usually plausible-looking type changes. Passing PL-300 means picking that one step quickly.</p>
+
+<h2>Recall first</h2>
+<p><strong>Name one difference between Replace Errors and Remove Errors.</strong></p><details><summary>Show answer</summary><p>Replace Errors keeps the row and substitutes a value; Remove Errors deletes the row. Pick by whether the requirement says to keep all rows.</p></details>
+
+<h2>Core idea</h2>
+<p>Split Column offers several modes. <strong>By delimiter</strong> is the default and produces new columns; under Advanced options you can choose <strong>into rows</strong> instead, which is the answer to &ldquo;one product per row&rdquo; when a cell holds &ldquo;Pen, Ink, Pad&rdquo;. <a href="https://learn.microsoft.com/en-us/power-query/split-columns-delimiter">Split columns by delimiter</a>.<span class="sidenote">Other modes: by number of characters, by positions, and by transition (lowercase to uppercase, digit to non-digit), which is the one for camelCase names and codes.</span></p>
+<div class="table-wrap"><table>
+<thead><tr><th>Requirement says</th><th>Use</th></tr></thead>
+<tbody>
+<tr><td>One value per row from &ldquo;A, B, C&rdquo;</td><td>Split by delimiter, <em>into rows</em></td></tr>
+<tr><td>Break &ldquo;orderDate&rdquo; into words</td><td>Split by lowercase-to-uppercase transition</td></tr>
+<tr><td>Text &ldquo;2018-12-31 at 08:59&rdquo; to Date and Time</td><td>Split by &ldquo; at &rdquo;, then set types</td></tr>
+<tr><td>Build a date from a sample you type</td><td><a href="https://learn.microsoft.com/en-us/power-query/column-from-example">Column from examples</a></td></tr>
+<tr><td>Only the year of a Date column</td><td>Transform, Date, Year (replaces the column)</td></tr>
+<tr><td>One part of a string</td><td>Extract, Text before/after delimiter</td></tr>
+</tbody></table></div>
+<p>A text timestamp cannot be converted straight to Date because of the extra token. Split first, then type each part. Splitting a DateTime into separate Date and Time columns also lowers cardinality, which shrinks the model (see lesson 0022); changing DateTime to Date alone throws the time away.<span class="sidenote">Do the work in Power Query, not in DAX with SUBSTITUTE or LEFT: upstream transformations compress better.</span> Glossary: <a href="../reference/glossary.html#t-column-from-examples">Column From Examples</a>.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>A call log has <code>Logged = "2018-12-31 at 08:59"</code> as text. Reports need a date hierarchy and a time-of-day analysis.</p></div>
+<ol><li>Select <code>Logged</code>, Home, Split Column, By Delimiter, custom delimiter <code> at </code>, each occurrence.</li><li>Set <code>Logged.1</code> to Date and <code>Logged.2</code> to Time.</li><li>Rename the columns.</li></ol>
+<pre data-lang="M"><code>let
+    Split = Table.SplitColumn(Source, "Logged",
+        Splitter.SplitTextByDelimiter(" at ", QuoteStyle.Csv), {"Logged.1", "Logged.2"}),
+    Typed = Table.TransformColumnTypes(Split,
+        {{"Logged.1", type date}, {"Logged.2", type time}})
+in Typed</code></pre>
+<p>It works because each part is now a clean value of one type, so the date hierarchy and a separate time column both exist and the two low-cardinality columns compress well.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief: &ldquo;change the type to Date and it will parse.&rdquo;</strong> Correct rule: the &ldquo;at&rdquo; token causes an error; split first, then type the parts.</p></div><div class="callout trap"><p><strong>Wrong belief: &ldquo;splitting always means more columns.&rdquo;</strong> Correct rule: when the requirement says one value per row, choose the <em>into rows</em> option.</p></div><div class="callout trap"><p><strong>Wrong belief: &ldquo;the year as a whole number is enough.&rdquo;</strong> Correct rule: when a date hierarchy is needed, keep a real Date column.</p></div>
+<p>More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0007" data-bank="lesson" data-lesson="0007"></div>
+<script src="../assets/progress.js" defer></script>
+<script src="../assets/bank.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+<p><button class="btn" type="button" onclick="if(window.Progress){Progress.markLesson('0007');this.textContent='Marked done';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-query/split-columns-delimiter">Split columns by delimiter</a> (about 8 minutes). It shows every split mode with screenshots.</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-query/column-from-example">Column from examples</a> for building a column from sample values.</li></ul>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up, for example: &ldquo;When would Column From Examples beat a split?&rdquo; and &ldquo;What happens to a DateTime if I only change its type to Date?&rdquo;</div>
+
+<h2>Related</h2>
+<p><a href="../reference/power-query-m.html">Power Query M cheat sheet</a> · <a href="../reference/glossary.html">Glossary</a> · <a href="../reference/concept-map.html">Concept map</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0006-clean-errors-and-types.html"><small>Previous</small>Fix data types, errors and nulls</a>
+  <a href="../index.html"><small>Home</small>Course home</a>
+  <a class="next" href="0008-merge-and-append.html"><small>Next</small>Merge vs append, and choosing the join kind</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculated column, measure or calculated table?</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0016">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0016</p>
+  <h1>Calculated column, measure or calculated table?</h1>
+  <p class="meta"><span class="badge model">Model the data</span><span>About 18 min</span><span>Skill: choose the right calculation type</span></p>
+  <p><strong>After this lesson you can</strong> choose between a calculated column, a measure and a calculated table for a requirement, and explain why from row context versus filter context.</p>
+</header>
+
+
+<h2>Why this matters for the exam</h2>
+<p>"Which should you create: a calculated column, a measure or a calculated table?" is one of the most repeated DAX questions in practice tests, and it hides the two ideas that the next two lessons build on: <strong>row context</strong> and <strong>filter context</strong>. Get the choice right and you also get the vocabulary right.</p>
+
+<h2>Recall first</h2>
+<p>From lesson 0015: which property stops a Year column from being summed in a visual?</p>
+<details><summary>Show answer</summary><p>Set the column's default summarization to <strong>Don't summarize</strong>.</p></details>
+
+<h2>Core idea</h2>
+<p>Two evaluation contexts decide what a DAX expression sees. Keep them apart now; lessons 0017 and 0018 show how they interact.</p>
+<div class="table-wrap"><table>
+<tr><th></th><th>Row context</th><th>Filter context</th></tr>
+<tr><td>What it is</td><td>"The current row" of one table. Lets you read that row's columns.</td><td>The set of filters on columns that decides which rows an aggregation can see.</td></tr>
+<tr><td>Where it comes from</td><td>Calculated columns; iterators such as SUMX.</td><td>Visual rows and columns, slicers, filter pane, and CALCULATE.</td></tr>
+<tr><td>Does it filter tables?</td><td>No. It does not filter anything and does not follow relationships (except through RELATED).</td><td>Yes, and it follows relationships (lesson 0013).</td></tr>
+</table></div>
+<p>That gives the decision rule.<span class="sidenote">See <a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-calculated-columns">Calculated columns</a> and the <a href="https://learn.microsoft.com/en-us/dax/dax-overview">DAX overview</a>.</span></p>
+<div class="table-wrap"><table>
+<tr><th>Object</th><th>Evaluated</th><th>Context</th><th>Stored?</th><th>Use for</th></tr>
+<tr><td><strong>Calculated column</strong></td><td>At refresh</td><td>Row</td><td>Yes (memory)</td><td>Something to slice or filter by: size band, "Inactive - " &amp; name</td></tr>
+<tr><td><strong>Measure</strong></td><td>At query time, per cell</td><td>Filter</td><td>No</td><td>Aggregates, ratios, KPIs, % of total</td></tr>
+<tr><td><strong>Calculated table</strong></td><td>At refresh</td><td>Whole table expression</td><td>Yes</td><td>Calendars, number ranges, role-playing copies</td></tr>
+</table></div>
+<ul>
+<li><strong>Ratios must be measures.</strong> <code>DIVIDE ( SUM ( T[EBITDA] ), SUM ( T[Revenue] ) )</code> sums first, then divides. A ratio <em>column</em> averaged in a visual gives the wrong answer.</li>
+<li><strong>Implicit measure</strong>: made when you drag a numeric column into Values (default summarization). <strong>Explicit measure</strong>: written in DAX; reusable, and required by calculation groups.</li>
+<li><strong>Calculated tables</strong> (<a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-calculated-tables">docs</a>): <code>CALENDAR</code>; <code>GENERATESERIES ( -100, 100, 1 )</code> for numbers or what-if (<a href="https://learn.microsoft.com/en-us/dax/generateseries-function-dax">GENERATESERIES</a>); <code>SUMMARIZE ( 'Date', 'Date'[Year], 'Date'[Quarter] )</code> for distinct combinations (<a href="https://learn.microsoft.com/en-us/dax/summarize-function-dax">SUMMARIZE</a>); <code>Ship Date = 'Date'</code> for a role-playing copy.</li>
+<li><strong>If Power Query or the source can do it, do it there.</strong> Upstream columns compress better than DAX columns.</li>
+</ul>
+
+<h2>Practical example</h2>
+<div class="callout example"><p><strong>Context.</strong> Finance wants an EBITDA margin on a card that reacts to slicers, and a Size band slicer on each order line.</p></div>
+<pre data-lang="DAX"><code>-- Measure: filter context, query time
+EBITDA Margin = DIVIDE ( SUM ( T[EBITDA] ), SUM ( T[Revenue] ) )
+
+-- Calculated column on Orders: row context, refresh time
+Size band =
+SWITCH (
+    TRUE (),
+    Orders[Amount] &lt; 100,  "Small",
+    Orders[Amount] &lt; 1000, "Medium",
+    "Large"
+)</code></pre>
+<p><strong>Why it works.</strong> The margin has no meaning for a single row; it must be computed for whatever rows the card's filter context selects. The band is a property of each row, you need it to slice by, and it must exist as a column before any slicer is touched. In <code>SWITCH ( TRUE (), ... )</code> the first true condition wins, so order them so each boundary falls in exactly one band. A band is also a good Power Query conditional column.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> "Put margin % in a calculated column." <strong>Right:</strong> Ratios are measures (sum, then divide).</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> "Calculated columns respond to slicers." <strong>Right:</strong> They are fixed at refresh. Only measures react to filter context.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> "ADDCOLUMNS groups rows." <strong>Right:</strong> It adds columns to every row. Use <code>SUMMARIZE</code> or <code>VALUES</code> for distinct combinations.</p></div>
+<p>More: <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0016" data-bank="lesson" data-lesson="0016"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0016');this.textContent='Marked done';}else{this.textContent='Progress not available';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-calculated-columns">Microsoft Learn: Calculated columns</a> (about 8 minutes). It contrasts columns with measures and notes where each is computed.</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-calculated-tables">Calculated tables</a></li><li><a href="https://learn.microsoft.com/en-us/dax/dax-overview">DAX overview</a></li></ul>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up. Try: "Give me three requirements and make me choose column, measure or table." or "Why does an averaged ratio column give a different number than a ratio measure?"</div>
+
+<h2>Related</h2>
+<p><a href="../reference/glossary.html#t-calculated-column">Calculated column</a>, <a href="../reference/glossary.html#t-measure">Measure</a>, <a href="../reference/glossary.html#t-calculated-table">Calculated table</a>, <a href="../reference/glossary.html#t-row-context">Row context</a>, <a href="../reference/glossary.html#t-filter-context">Filter context</a>, <a href="../reference/dax-patterns.html">DAX patterns</a>.</p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0015-table-column-properties.html"><small>Previous</small>Table and column properties</a>
+  <a href="../index.html">Home</a>
+  <a class="next" href="0017-calculate-filter-context.html"><small>Next</small>CALCULATE and filter modifiers</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

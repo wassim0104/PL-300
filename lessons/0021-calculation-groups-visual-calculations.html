@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculation groups and visual calculations</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0021">
+<main class="page">
+<p class="muted"><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0021</p>
+  <h1>Calculation groups and visual calculations</h1>
+  <p class="meta"><span class="badge model">Model</span><span>About 18 min</span><span>After this lesson you can replace repetitive time-intelligence measures with one calculation group and know when a visual calculation is simpler.</span></p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>When a question describes ten measures that each need YTD, prior year and YoY, the exam wants a calculation group, not thirty measures. Visual calculations are newer, so the questions test where they live and when to prefer them. Together they are quick wins in the Model the data domain (visual calculations are also a Visualize objective).</p>
+
+<h2>Recall first</h2>
+<details><summary>A matrix needs month-end stock from daily snapshots. Which filter goes in CALCULATE?</summary><p>LASTDATE('Date'[Date]), or LASTNONBLANK when the last day may have no snapshot.</p></details>
+
+<h2>Core idea</h2>
+<p>A <strong>calculation group</strong> is a table of <strong>calculation items</strong>. Each item rewrites whichever measure is in the visual, using <code>SELECTEDMEASURE()</code>.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/calculation-groups">Calculation groups</a>.</span> Create one in Desktop Model view (Calculation group). Doing so turns on <strong>Discourage implicit measures</strong>, so only explicit measures work with it. Put the group's column on matrix columns or in a slicer.</p>
+<p>A <strong>format string expression</strong> lets an item such as YoY % display as a percentage. <strong>Precedence</strong> decides the order when you have several groups.</p>
+<p><strong>Visual calculations</strong> are DAX evaluated on the visual's own data grid, created with New calculation on a visual. Functions include <code>RUNNINGSUM, MOVINGAVERAGE, PREVIOUS, NEXT, FIRST, LAST, COLLAPSE, EXPAND</code>. They are stored <em>in the visual</em>, not the model.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-visual-calculations-overview">Visual calculations overview</a>.</span></p>
+<div class="table-wrap"><table>
+<thead><tr><th></th><th>Calculation group</th><th>Visual calculation</th></tr></thead>
+<tbody>
+<tr><td>Lives in</td><td>The semantic model</td><td>One visual</td></tr>
+<tr><td>Reused by</td><td>Every visual and every measure</td><td>Nothing else</td></tr>
+<tr><td>Best for</td><td>Many measures times many time variants</td><td>One-off running total or versus previous row</td></tr>
+</tbody></table></div>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>Business context: Sales, Cost and Margin each need Current, YTD and PY columns in a matrix. Without a calculation group that is nine measures.</p></div>
+<pre data-lang="DAX"><code>-- Calculation group "Time Calc", column "Period"
+Current = SELECTEDMEASURE()
+YTD     = CALCULATE(SELECTEDMEASURE(), DATESYTD('Date'[Date]))
+PY      = CALCULATE(SELECTEDMEASURE(), SAMEPERIODLASTYEAR('Date'[Date]))
+
+-- Visual calculation on one monthly column chart
+Running Sales = RUNNINGSUM([Sales])</code></pre>
+<p>Why it works: put Period on matrix columns and the three base measures on values. For each cell, the item wraps whichever measure sits there. The running total is needed on one chart only, so a visual calculation avoids touching the model at all.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief:</strong> Dragged columns (implicit measures) work with a calculation group.<br><strong>Correct rule:</strong> Only explicit measures do, which is why Discourage implicit measures is switched on.</p></div><div class="callout trap"><p><strong>Wrong belief:</strong> Each base measure needs its own YTD and PY measure.<br><strong>Correct rule:</strong> One calculation group applies to all of them.</p></div><div class="callout trap"><p><strong>Wrong belief:</strong> A visual calculation can be reused in other visuals.<br><strong>Correct rule:</strong> It lives in one visual. Use a measure or calculation group when many visuals need it.</p></div>
+<p><a href="../reference/common-mistakes.html">See all common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0021" data-bank="lesson" data-lesson="0021"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" id="done-btn" onclick="if(window.Progress){Progress.markLesson('0021');this.textContent='Marked done';}else{this.textContent='Progress not available';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/calculation-groups">Microsoft Learn: Calculation groups</a> (about 10 min). Extra: <a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-visual-calculations-overview">Visual calculations overview</a>.</p><p class="muted">Read it for the step-by-step creation flow and the precedence section.</p></div>
+
+<div class="ask"><p>Ask your teacher agent a follow-up. Try: &ldquo;What does precedence do when two calculation groups apply to one measure?&rdquo; or &ldquo;Why does my YoY % item show a number instead of a percentage?&rdquo;</p></div>
+
+<h2>Related</h2>
+<p><a href="../reference/dax-patterns.html">DAX patterns</a> &middot; <a href="../reference/glossary.html">Glossary</a> &middot; <a href="../reference/common-mistakes.html">Common mistakes</a>. Builds on <a href="0019-time-intelligence.html">0019 time intelligence</a>.</p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0020-semi-additive-statistics-quick-measures.html"><small>Previous</small>Semi-additive, statistics, quick measures</a>
+  <a href="../index.html"><small>Home</small>Course home</a>
+  <a class="next" href="0022-model-performance.html"><small>Next</small>Optimise model performance</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

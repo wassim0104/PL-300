@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PL-300 Power Query and M</title>
+<link rel="stylesheet" href="../assets/course.css">
+<style>
+main.sheet { max-width: 1100px; padding: 1.2rem 16px 3rem; }
+main.sheet h1 { font-size: 1.9rem; margin: .2em 0 .2em; }
+main.sheet h2 { font-size: 1.2rem; margin-top: 1.6em; }
+.sheet-top { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; justify-content: space-between; align-items: baseline; font: .85rem var(--sans); color: var(--muted); border-bottom: 1px solid var(--rule); padding-bottom: .5rem; }
+.sheet-top a { font-weight: 600; }
+.lede { font: 1rem/1.5 var(--serif); color: var(--muted); max-width: 75ch; margin: .6rem 0 1rem; }
+.tools { display: flex; flex-wrap: wrap; gap: .6rem 1rem; align-items: center; margin: .8rem 0 1rem; font-family: var(--sans); }
+.tools input[type=search] { font: 1rem var(--sans); padding: .5rem .7rem; min-width: min(22rem, 100%); border: 1px solid var(--fg); border-radius: 6px; background: var(--card-bg); color: var(--fg); }
+.tools .count { font-size: .85rem; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; font: .8rem var(--sans); }
+.chips .lbl { color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; font-size: .7rem; margin-right: .2rem; }
+.chip { font: 600 .82rem var(--sans); padding: .35rem .75rem; min-height: 2.2rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--card-bg); color: var(--fg); cursor: pointer; }
+.chip[aria-pressed=true] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.hidden-nojs { display: none; }
+.js .hidden-nojs { display: flex; }
+.hide { display: none !important; }
+.sources { font: .85rem/1.5 var(--sans); color: var(--muted); border-top: 1px solid var(--rule); margin-top: 2rem; padding-top: .8rem; }
+.sources a { margin-right: .6rem; }
+.dense, .dense td, .dense th { font-size: .88rem; }
+.dense td, .dense th { padding: .3em .6em; }
+.dense code { font-size: .86em; }
+.dense tr { break-inside: avoid; }
+@media print {
+  @page { margin: 12mm; }
+  body { font-size: 9.5pt; line-height: 1.35; }
+  main.sheet { padding: 0; }
+  main.sheet h1 { font-size: 16pt; }
+  main.sheet h2 { font-size: 11pt; margin-top: 1em; }
+  .tools, .hidden-nojs, .sheet-top a.noprint { display: none !important; }
+  .dense, .dense td, .dense th { font-size: 8.5pt; }
+  a[href^="http"]::after { content: ""; }
+  .sources a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 7pt; }
+  .sources a { display: block; }
+}
+
+.joins { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(15rem,100%),1fr)); gap: .8rem; margin: .8rem 0; }
+.jk { margin: 0; border: 1px solid var(--rule); border-radius: 8px; padding: .5rem .7rem .7rem; background: var(--card-bg); text-align: center; font-family: var(--sans); }
+.jk .vn svg { margin: 0 auto; }
+.jk figcaption { color: var(--fg); font-size: .85rem; margin-top: .2rem; }
+.jk figcaption strong { display: block; font-size: .95rem; }
+.jk figcaption code { display: block; margin: .15rem auto .3rem; width: fit-content; }
+.jk .hl { fill: var(--link); fill-opacity: .55; }
+.jk .mask { fill: var(--card-bg); }
+.jk .ol { fill: none; stroke: var(--fg); stroke-width: 1.5; }
+.jk .vt { font: 700 12px var(--sans); fill: var(--fg); }
+.snips { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(30rem,100%),1fr)); gap: .4rem 1.2rem; }
+.snip { min-width: 0; }
+.snip h3 { margin: .8em 0 .2em; font: 700 .95rem var(--sans); font-style: normal; }
+.snip p { font: .85rem/1.4 var(--sans); color: var(--muted); margin: 0 0 .4em; }
+.snip pre { font-size: .78rem; margin: 0; }
+.snip pre[data-lang]::before { display: none; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(22rem,100%),1fr)); gap: 0 2rem; font-family: var(--sans); font-size: .92rem; }
+.two h3 { font: 700 .95rem var(--sans); font-style: normal; margin: .8em 0 .3em; }
+.tight { margin: 0 0 .6em; padding-left: 1.2rem; line-height: 1.45; } .tight li { margin: .2em 0; }
+td code { word-break: break-word; }
+@media print { .jk, .snip, .two > div { break-inside: avoid; } .joins { grid-template-columns: repeat(3, 1fr); } .snips { display: block; column-count: 2; } .snip { break-inside: avoid; } .jk .hl { fill: var(--muted); fill-opacity: .55; } .jk svg { width: 110px; } .jk .hl, .jk .mask { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .two { display: block; column-count: 2; } }
+</style>
+<script>document.documentElement.className+=' js';</script>
+</head>
+<body data-page="reference" data-sheet="power-query-m">
+<main class="sheet">
+<div class="sheet-top"><a class="noprint" href="../index.html">&larr; Back to home</a><span>PL-300 reference sheet &middot; 2026-11-11</span></div>
+<h1>Power Query and M</h1>
+<p class="lede">The UI action you click and the M function it writes, the six join kinds, and tested snippets for the situations the exam describes.</p>
+
+<h2>1. Transform chooser</h2>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th>Need</th><th>UI action</th><th>M function</th><th>Example step (<code>Source</code> is the previous step)</th><th>Lesson</th></tr></thead>
+<tbody><tr><td>Split a column by delimiter or position</td><td>Split Column</td><td><code>Table.SplitColumn</code></td><td><code>Table.SplitColumn(Source, "Name", Splitter.SplitTextByDelimiter(" ", QuoteStyle.Csv), {"First", "Last"})</code></td><td><a href="../lessons/0007-split-and-parse-columns.html" title="Split, extract and parse columns">0007</a></td></tr><tr><td>Turn columns into attribute-value rows</td><td>Unpivot Other Columns</td><td><code>Table.UnpivotOtherColumns</code></td><td><code>Table.UnpivotOtherColumns(Source, {"Product"}, "Month", "Sales")</code></td><td><a href="../lessons/0009-reshape-unpivot-json.html" title="Reshape tables: unpivot, pivot, transpose, JSON">0009</a></td></tr><tr><td>Add columns from a related query</td><td>Merge Queries</td><td><code>Table.NestedJoin (+ JoinKind.*)</code></td><td><code>Table.NestedJoin(Orders, {"CustomerID"}, Customers, {"CustomerID"}, "Customer", JoinKind.LeftOuter)</code></td><td><a href="../lessons/0008-merge-and-append.html" title="Merge vs append, and choosing the join kind">0008</a></td></tr><tr><td>Stack tables with the same columns</td><td>Append Queries</td><td><code>Table.Combine</code></td><td><code>Table.Combine({Sales2024, Sales2025})</code></td><td><a href="../lessons/0008-merge-and-append.html" title="Merge vs append, and choosing the join kind">0008</a></td></tr><tr><td>Aggregate rows by key</td><td>Group By</td><td><code>Table.Group</code></td><td><code>Table.Group(Source, {"Region"}, {{"Total", each List.Sum([Amount]), type nullable number}})</code></td><td><a href="../lessons/0010-group-and-aggregate-rows.html" title="Group and aggregate rows">0010</a></td></tr><tr><td>Replace a value</td><td>Replace Values</td><td><code>Table.ReplaceValue</code></td><td><code>Table.ReplaceValue(Source, "N/A", "Unknown", Replacer.ReplaceText, {"Status"})</code></td><td><a href="../lessons/0006-clean-errors-and-types.html" title="Fix data types, errors and nulls">0006</a></td></tr><tr><td>Replace error cells</td><td>Replace Errors</td><td><code>Table.ReplaceErrorValues</code></td><td><code>Table.ReplaceErrorValues(Source, {{"Amount", 0}})</code></td><td><a href="../lessons/0006-clean-errors-and-types.html" title="Fix data types, errors and nulls">0006</a></td></tr><tr><td>Drop columns</td><td>Remove Columns</td><td><code>Table.RemoveColumns</code></td><td><code>Table.RemoveColumns(Source, {"Notes", "Temp"})</code></td><td><a href="../lessons/0006-clean-errors-and-types.html" title="Fix data types, errors and nulls">0006</a></td></tr><tr><td>Use the first row as headers</td><td>Use First Row as Headers</td><td><code>Table.PromoteHeaders</code></td><td><code>Table.PromoteHeaders(Source, [PromoteAllScalars = true])</code></td><td><a href="../lessons/0005-data-profiling.html" title="Profile data before you transform it">0005</a></td></tr><tr><td>Set data types (with locale)</td><td>Data Type</td><td><code>Table.TransformColumnTypes</code></td><td><code>Table.TransformColumnTypes(Source, {{"Date", type date}, {"Amount", type number}}, "en-US")</code></td><td><a href="../lessons/0006-clean-errors-and-types.html" title="Fix data types, errors and nulls">0006</a></td></tr><tr><td>Profile every column</td><td>View &gt; Column profile</td><td><code>Table.Profile</code></td><td><code>Table.Profile(Source)</code></td><td><a href="../lessons/0005-data-profiling.html" title="Profile data before you transform it">0005</a></td></tr><tr><td>Get the row with the largest value</td><td>(custom step)</td><td><code>Table.Max</code></td><td><code>Table.Max(Source, "OrderDate")</code></td><td><a href="../lessons/0010-group-and-aggregate-rows.html" title="Group and aggregate rows">0010</a></td></tr><tr><td>Force a table into memory once</td><td>(custom step)</td><td><code>Table.Buffer</code></td><td><code>Table.Buffer(Source)</code></td><td><a href="../lessons/0011-query-folding-load-reuse.html" title="Query folding, load settings and query reuse">0011</a></td></tr></tbody></table></div>
+
+<h2>2. Join kinds</h2>
+<p class="muted" style="font:.9rem var(--sans)">A is the first table in the merge, B the second. Shaded means the rows kept. The M name is the last argument of <code>Table.NestedJoin</code> or <code>Table.Join</code>. Lesson <a href="../lessons/0008-merge-and-append.html" title="Merge vs append, and choosing the join kind">0008</a>.</p>
+<div class="joins"><figure class="jk"><div class="vn"><svg viewBox="0 0 120 76" role="img" aria-label="Venn diagram: left" width="150"><defs><clipPath id="ca0"><circle cx="45" cy="38" r="28"/></clipPath></defs><circle cx="45" cy="38" r="28" class="hl"/><circle cx="45" cy="38" r="28" class="ol"/><circle cx="75" cy="38" r="28" class="ol"/><text x="28" y="42" text-anchor="middle" class="vt">A</text><text x="92" y="42" text-anchor="middle" class="vt">B</text></svg></div><figcaption><strong>Left Outer</strong><code>JoinKind.LeftOuter</code>All rows from the first table, matching rows from the second. The default.</figcaption></figure><figure class="jk"><div class="vn"><svg viewBox="0 0 120 76" role="img" aria-label="Venn diagram: right" width="150"><defs><clipPath id="ca1"><circle cx="45" cy="38" r="28"/></clipPath></defs><circle cx="75" cy="38" r="28" class="hl"/><circle cx="45" cy="38" r="28" class="ol"/><circle cx="75" cy="38" r="28" class="ol"/><text x="28" y="42" text-anchor="middle" class="vt">A</text><text x="92" y="42" text-anchor="middle" class="vt">B</text></svg></div><figcaption><strong>Right Outer</strong><code>JoinKind.RightOuter</code>All rows from the second table, matching rows from the first.</figcaption></figure><figure class="jk"><div class="vn"><svg viewBox="0 0 120 76" role="img" aria-label="Venn diagram: full" width="150"><defs><clipPath id="ca2"><circle cx="45" cy="38" r="28"/></clipPath></defs><circle cx="45" cy="38" r="28" class="hl"/><circle cx="75" cy="38" r="28" class="hl"/><circle cx="45" cy="38" r="28" class="ol"/><circle cx="75" cy="38" r="28" class="ol"/><text x="28" y="42" text-anchor="middle" class="vt">A</text><text x="92" y="42" text-anchor="middle" class="vt">B</text></svg></div><figcaption><strong>Full Outer</strong><code>JoinKind.FullOuter</code>All rows from both tables.</figcaption></figure><figure class="jk"><div class="vn"><svg viewBox="0 0 120 76" role="img" aria-label="Venn diagram: inner" width="150"><defs><clipPath id="ca3"><circle cx="45" cy="38" r="28"/></clipPath></defs><circle cx="75" cy="38" r="28" class="hl" clip-path="url(#ca3)"/><circle cx="45" cy="38" r="28" class="ol"/><circle cx="75" cy="38" r="28" class="ol"/><text x="28" y="42" text-anchor="middle" class="vt">A</text><text x="92" y="42" text-anchor="middle" class="vt">B</text></svg></div><figcaption><strong>Inner</strong><code>JoinKind.Inner</code>Only rows that match in both tables.</figcaption></figure><figure class="jk"><div class="vn"><svg viewBox="0 0 120 76" role="img" aria-label="Venn diagram: lanti" width="150"><defs><clipPath id="ca4"><circle cx="45" cy="38" r="28"/></clipPath></defs><circle cx="45" cy="38" r="28" class="hl"/><circle cx="75" cy="38" r="28" class="mask"/><circle cx="45" cy="38" r="28" class="ol"/><circle cx="75" cy="38" r="28" class="ol"/><text x="28" y="42" text-anchor="middle" class="vt">A</text><text x="92" y="42" text-anchor="middle" class="vt">B</text></svg></div><figcaption><strong>Left Anti</strong><code>JoinKind.LeftAnti</code>Rows in the first table with no match in the second.</figcaption></figure><figure class="jk"><div class="vn"><svg viewBox="0 0 120 76" role="img" aria-label="Venn diagram: ranti" width="150"><defs><clipPath id="ca5"><circle cx="45" cy="38" r="28"/></clipPath></defs><circle cx="75" cy="38" r="28" class="hl"/><circle cx="45" cy="38" r="28" class="mask"/><circle cx="45" cy="38" r="28" class="ol"/><circle cx="75" cy="38" r="28" class="ol"/><text x="28" y="42" text-anchor="middle" class="vt">A</text><text x="92" y="42" text-anchor="middle" class="vt">B</text></svg></div><figcaption><strong>Right Anti</strong><code>JoinKind.RightAnti</code>Rows in the second table with no match in the first.</figcaption></figure></div>
+<div class="callout tip" data-title="Exam shortcut"><p>&ldquo;Customers with no orders&rdquo; or &ldquo;items missing from the other list&rdquo; means an anti join. &ldquo;Everything from both&rdquo; means full outer. A merge adds columns; an append adds rows.</p></div>
+
+<h2>3. Snippets</h2>
+<div class="snips"><section class="snip"><h3>Parameterised source</h3><p>Server and database come from Power Query parameters, so dev and prod differ by a parameter value only (lesson 0004). <a href="../lessons/0004-data-source-settings-parameters.html" title="Data source settings, privacy levels and parameters">Lesson 0004</a></p><pre data-lang="M"><code>let
+    Source = Sql.Database(ServerName, DatabaseName),
+    FactSales = Source{[Schema = "dbo", Item = "FactSales"]}[Data]
+in
+    FactSales</code></pre></section><section class="snip"><h3>Remove columns by prefix</h3><p>Drops every column whose name starts with a prefix, even when new ones appear later. <a href="../lessons/0006-clean-errors-and-types.html" title="Fix data types, errors and nulls">Lesson 0006</a></p><pre data-lang="M"><code>let
+    Source = Orders,
+    ToDrop = List.Select(Table.ColumnNames(Source), each Text.StartsWith(_, "tmp_")),
+    Result = Table.RemoveColumns(Source, ToDrop, MissingField.Ignore)
+in
+    Result</code></pre></section><section class="snip"><h3>Replace nulls</h3><p>Replace null with 0 in chosen columns (use Replacer.ReplaceText for empty strings). <a href="../lessons/0006-clean-errors-and-types.html" title="Fix data types, errors and nulls">Lesson 0006</a></p><pre data-lang="M"><code>Table.ReplaceValue(Source, null, 0, Replacer.ReplaceValue, {"Discount", "Freight"})</code></pre></section><section class="snip"><h3>Latest row per group</h3><p>Group with All Rows, then take the newest record with Table.Max. Table.Max returns a record. <a href="../lessons/0010-group-and-aggregate-rows.html" title="Group and aggregate rows">Lesson 0010</a></p><pre data-lang="M"><code>let
+    Source = Sales,
+    Grouped = Table.Group(Source, {"CustomerID"}, {{"AllRows", each _, type table}}),
+    Latest = Table.AddColumn(Grouped, "Latest", each Table.Max([AllRows], "OrderDate"), type record),
+    Expanded = Table.ExpandRecordColumn(Latest, "Latest", {"OrderID", "OrderDate", "Amount"}),
+    Result = Table.RemoveColumns(Expanded, {"AllRows"})
+in
+    Result</code></pre></section><section class="snip"><h3>Parse JSON and expand</h3><p>A JSON array of records becomes a list; convert to a table, then expand records and nested lists. <a href="../lessons/0009-reshape-unpivot-json.html" title="Reshape tables: unpivot, pivot, transpose, JSON">Lesson 0009</a></p><pre data-lang="M"><code>let
+    Source = Json.Document(File.Contents("C:\Data\orders.json")),
+    ToTable = Table.FromList(Source, Splitter.SplitByNothing(), {"Order"}),
+    Orders = Table.ExpandRecordColumn(ToTable, "Order", {"id", "customer", "lines"}),
+    Lines = Table.ExpandListColumn(Orders, "lines"),
+    Result = Table.ExpandRecordColumn(Lines, "lines", {"sku", "qty"})
+in
+    Result</code></pre></section><section class="snip"><h3>Anti join: rows with no match</h3><p>Customers who never ordered. Merge, keep the left-anti result, then drop the helper column. <a href="../lessons/0008-merge-and-append.html" title="Merge vs append, and choosing the join kind">Lesson 0008</a></p><pre data-lang="M"><code>let
+    Joined = Table.NestedJoin(Customers, {"CustomerID"}, Orders, {"CustomerID"}, "Orders", JoinKind.LeftAnti),
+    Result = Table.RemoveColumns(Joined, {"Orders"})
+in
+    Result</code></pre></section></div>
+
+<h2>4. Load and reuse</h2>
+<div class="two">
+<div><h3>Load settings</h3><ul class="tight">
+<li><strong>Enable load</strong> off: the query is a staging step and is not loaded into the model (its name shows in italics).</li>
+<li><strong>Include in report refresh</strong> off: the query is loaded but skipped by Refresh all and by scheduled refresh.</li>
+<li>Disable load for lookup and helper queries to keep the model small.</li>
+</ul><a href="../lessons/0011-query-folding-load-reuse.html" title="Query folding, load settings and query reuse">Lesson 0011</a></div>
+<div><h3>Reference vs duplicate</h3><ul class="tight">
+<li><strong>Reference</strong>: new query that starts from another query's output. Upstream changes flow through; one source read can be reused.</li>
+<li><strong>Duplicate</strong>: independent copy of all steps. Later edits to the original are not picked up.</li>
+<li>Reuse across several models: a <strong>dataflow</strong>.</li>
+</ul><a href="../lessons/0011-query-folding-load-reuse.html" title="Query folding, load settings and query reuse">Lesson 0011</a></div>
+</div>
+
+<h2>5. Query folding checklist</h2>
+<div class="two">
+<div><h3>Usually folds</h3><ul class="tight">
+<li>Filter rows, remove or choose columns, rename, sort</li>
+<li>Group By with standard aggregations</li>
+<li>Merge of two tables from the same source</li>
+<li>Append of tables from the same source</li>
+<li>Change type (most types)</li>
+</ul></div>
+<div><h3>Usually breaks folding</h3><ul class="tight">
+<li><code>Table.Buffer</code>, index column, custom M functions the source cannot translate</li>
+<li>Merge or append across different sources</li>
+<li>Pivot, and Group By with All Rows</li>
+<li>Any step after a hand-written native query (unless folding is enabled for it)</li>
+</ul></div>
+</div>
+<p>How to check: right-click a step and look at <strong>View Native Query</strong>. If it is greyed out, that step did not fold. Put foldable steps first. Folding needs a source that can run queries, such as a relational database; it never applies to Excel or CSV files. <a href="../lessons/0011-query-folding-load-reuse.html" title="Query folding, load settings and query reuse">Lesson 0011</a></p>
+
+<h2>6. Profiling cheat lines</h2>
+<ul class="tight">
+<li>Profiling uses the <strong>top 1,000 rows</strong> by default. Switch to <em>Column profiling based on entire data set</em> in the status bar to scan everything.</li>
+<li><strong>Column quality</strong>: % valid, error and empty. <strong>Column distribution</strong>: distinct and unique counts with a histogram. <strong>Column profile</strong>: full statistics plus value distribution.</li>
+<li><strong>Distinct</strong> counts each different value once. <strong>Unique</strong> counts only values that appear exactly once. A key column should have distinct = unique = row count.</li>
+<li>Empty string and null are different; a column can look clean and still hold blanks (trim and replace them).</li>
+</ul>
+<a href="../lessons/0005-data-profiling.html" title="Profile data before you transform it">Lesson 0005</a>
+
+<p class="muted">Related sheets: <a href="glossary.html">Glossary</a> &middot; <a href="concept-map.html">Concept map</a> &middot; <a href="storage-modes-connectivity.html">Storage modes</a> &middot; <a href="common-mistakes.html">Common mistakes</a></p>
+<footer class="sources"><strong>Sources.</strong> <a href="https://learn.microsoft.com/en-us/powerquery-m/">Power Query M reference</a> <a href="https://learn.microsoft.com/en-us/power-query/merge-queries-overview">Merge queries overview</a> <a href="https://learn.microsoft.com/en-us/power-query/merge-queries-left-anti">Left anti join</a> <a href="https://learn.microsoft.com/en-us/power-query/append-queries">Append queries</a> <a href="https://learn.microsoft.com/en-us/power-query/unpivot-column">Unpivot columns</a> <a href="https://learn.microsoft.com/en-us/power-query/group-by">Group by</a> <a href="https://learn.microsoft.com/en-us/power-query/query-folding-basics">Query folding basics</a> <a href="https://learn.microsoft.com/en-us/power-query/power-query-query-parameters">Query parameters</a> <a href="https://learn.microsoft.com/en-us/power-query/data-profiling-tools">Data profiling tools</a> <a href="https://learn.microsoft.com/en-us/power-query/dealing-with-errors">Dealing with errors</a> <a href="https://learn.microsoft.com/en-us/powerquery-m/table-buffer">Table.Buffer</a> <a href="https://learn.microsoft.com/en-us/power-query/connectors/json">JSON connector</a></footer>
+</main>
+
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

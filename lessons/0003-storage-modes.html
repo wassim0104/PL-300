@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0003: Storage modes</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0003">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0003</p>
+  <h1>Choose a storage mode: Import, DirectQuery, Dual, Direct Lake</h1>
+  <p class="meta"><span class="badge prep">Prepare</span><span>About 20 min</span><span>Skill: choose a storage mode</span></p>
+  <p><strong>After this lesson you can</strong> pick the storage mode for each table from freshness, size, source and performance needs, and justify it.</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Storage-mode choices appear in the Prepare domain and come back in Model and Manage questions (refresh, RLS, composite models). The pattern is always the same: match the requirement words to a mode.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-storage-mode">Storage mode in Power BI Desktop</a>.</span></p>
+
+<h2>Recall first</h2>
+<p>Which connector reads files in a SharePoint library, without a gateway?</p>
+<details><summary>Show answer</summary><p>SharePoint folder (or Web with the file URL).</p></details>
+
+<h2>Core idea</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Mode</th><th>How it works</th><th>Choose when</th></tr></thead>
+<tbody>
+<tr><td>Import</td><td>Copies data into in-memory VertiPaq. Fastest, all DAX and Power Query. Fresh only as of last refresh (up to 8/day Pro, 48/day Premium or Fabric).</td><td>Daily or hourly freshness is fine</td></tr>
+<tr><td>DirectQuery</td><td>Stores nothing; each visual queries the source. Near real time, slower visuals, some features limited.</td><td>Minutes-fresh or too large to import. Not for Excel or CSV.</td></tr>
+<tr><td>Dual</td><td>Acts as Import or DirectQuery per query.</td><td>Dimensions related to both DirectQuery and Import tables</td></tr>
+<tr><td>Direct Lake</td><td>Reads Delta tables in OneLake into memory. Near-Import speed, no import refresh. Some queries fall back to DirectQuery.</td><td>Data already in a Fabric lakehouse or warehouse</td></tr>
+</tbody></table></div>
+<p>A <strong>composite model</strong> mixes storage modes, or uses DirectQuery to a published semantic model plus local tables.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-composite-models">Composite models</a>.</span> A <strong>live connection</strong> to Analysis Services or a published model allows no Power Query and no model editing, only report measures; RLS lives in the source model.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/connect-data/desktop-report-lifecycle-datasets">Report lifecycle</a>.</span></p>
+<p>With DirectQuery and single sign-on, the source database's security applies to the signed-in user; with Import it does not.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/connect-data/desktop-directquery-about">About DirectQuery</a>; <a href="https://learn.microsoft.com/en-us/fabric/fundamentals/direct-lake-overview">Direct Lake</a>.</span> Automatic page refresh needs DirectQuery, Direct Lake or push sources (lesson 0029).</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>A retailer needs sales visible within 5 minutes, yet historical trend pages must stay fast.</p></div>
+<div class="table-wrap"><table><thead><tr><th>Table</th><th>Mode</th><th>Reason</th></tr></thead><tbody>
+<tr><td>Sales</td><td>DirectQuery</td><td>Five-minute freshness</td></tr>
+<tr><td>SalesAgg (monthly)</td><td>Import</td><td>Fast trend visuals in memory</td></tr>
+<tr><td>Date, Customer</td><td>Dual</td><td>Relate to both without limited relationships</td></tr></tbody></table></div>
+<p>Monthly visuals hit SalesAgg in memory; drilling to transactions queries Sales at the source.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief:</strong> Import with frequent refresh meets "visible within minutes". <strong>Correct rule:</strong> scheduled refresh cannot do that; use DirectQuery.</p></div>
+<div class="callout trap"><p><strong>Wrong belief:</strong> Shared dimensions can stay Import beside a DirectQuery fact. <strong>Correct rule:</strong> that creates limited relationships; use Dual.</p></div>
+<div class="callout trap"><p><strong>Wrong belief:</strong> An Excel workbook can be DirectQuery. <strong>Correct rule:</strong> files support Import only.</p></div>
+<p>More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0003" data-bank="lesson" data-lesson="0003"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0003');this.textContent='Marked done'}else{this.textContent='Progress unavailable'}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-storage-mode">Storage mode in Power BI Desktop</a>. Read the Dual and limited-relationship sections. About 10 minutes.</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-composite-models">Composite models</a></li><li><a href="https://learn.microsoft.com/en-us/fabric/fundamentals/direct-lake-overview">Direct Lake overview</a></li><li><a href="https://learn.microsoft.com/en-us/power-bi/connect-data/desktop-directquery-about">DirectQuery</a></li></ul>
+
+<div class="ask"><p>Stuck or curious? Ask the teacher agent a follow-up. For example:</p><ul><li>Why does Dual avoid limited relationships?</li><li>When does Direct Lake fall back to DirectQuery?</li></ul></div>
+
+<h2>Related</h2>
+<p><a href="../reference/storage-modes-connectivity.html">Storage modes and connectivity</a> · <a href="../reference/security-and-sharing.html">Security and sharing</a> · <a href="../reference/glossary.html">Glossary</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0002-get-data-connectors.html"><small>Previous</small>Connect to the right data source</a>
+  <a href="../index.html"><small>Home</small>All lessons</a>
+  <a class="next" href="0004-data-source-settings-parameters.html"><small>Next</small>Data source settings, privacy levels and parameters</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

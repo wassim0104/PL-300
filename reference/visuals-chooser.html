@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PL-300 visuals chooser</title>
+<link rel="stylesheet" href="../assets/course.css">
+<style>
+main.sheet { max-width: 1100px; padding: 1.2rem 16px 3rem; }
+main.sheet h1 { font-size: 1.9rem; margin: .2em 0 .2em; }
+main.sheet h2 { font-size: 1.2rem; margin-top: 1.6em; }
+.sheet-top { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; justify-content: space-between; align-items: baseline; font: .85rem var(--sans); color: var(--muted); border-bottom: 1px solid var(--rule); padding-bottom: .5rem; }
+.sheet-top a { font-weight: 600; }
+.lede { font: 1rem/1.5 var(--serif); color: var(--muted); max-width: 75ch; margin: .6rem 0 1rem; }
+.tools { display: flex; flex-wrap: wrap; gap: .6rem 1rem; align-items: center; margin: .8rem 0 1rem; font-family: var(--sans); }
+.tools input[type=search] { font: 1rem var(--sans); padding: .5rem .7rem; min-width: min(22rem, 100%); border: 1px solid var(--fg); border-radius: 6px; background: var(--card-bg); color: var(--fg); }
+.tools .count { font-size: .85rem; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; font: .8rem var(--sans); }
+.chips .lbl { color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; font-size: .7rem; margin-right: .2rem; }
+.chip { font: 600 .82rem var(--sans); padding: .35rem .75rem; min-height: 2.2rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--card-bg); color: var(--fg); cursor: pointer; }
+.chip[aria-pressed=true] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.hidden-nojs { display: none; }
+.js .hidden-nojs { display: flex; }
+.hide { display: none !important; }
+.sources { font: .85rem/1.5 var(--sans); color: var(--muted); border-top: 1px solid var(--rule); margin-top: 2rem; padding-top: .8rem; }
+.sources a { margin-right: .6rem; }
+.dense, .dense td, .dense th { font-size: .88rem; }
+.dense td, .dense th { padding: .3em .6em; }
+.dense code { font-size: .86em; }
+.dense tr { break-inside: avoid; }
+@media print {
+  @page { margin: 12mm; }
+  body { font-size: 9.5pt; line-height: 1.35; }
+  main.sheet { padding: 0; }
+  main.sheet h1 { font-size: 16pt; }
+  main.sheet h2 { font-size: 11pt; margin-top: 1em; }
+  .tools, .hidden-nojs, .sheet-top a.noprint { display: none !important; }
+  .dense, .dense td, .dense th { font-size: 8.5pt; }
+  a[href^="http"]::after { content: ""; }
+  .sources a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 7pt; }
+  .sources a { display: block; }
+}
+
+.vt td.yes { font-weight: 600; }
+.vt td.yes::before { content: "Use "; font: 700 .65rem var(--sans); text-transform: uppercase; letter-spacing: .06em; color: var(--tip-fg); margin-right: .3rem; }
+.vt td.no { color: var(--muted); }
+.vt td.no::before { content: "Avoid "; font: 700 .65rem var(--sans); text-transform: uppercase; letter-spacing: .06em; color: var(--trap-fg); margin-right: .3rem; }
+.vt tr.grp th { background: var(--code-bg); font: 700 .75rem var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--accent); border-bottom: 1px solid var(--rule); padding-top: .5em; }
+.vt thead th { position: sticky; top: 0; background: var(--bg); }
+.pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(17rem,100%),1fr)); gap: .8rem; margin: 1rem 0; font-family: var(--sans); }
+.pairs .callout { margin: 0; font-size: .88rem; line-height: 1.45; } .pairs .callout p { margin: 0; }
+@media print { .vt thead th { position: static; } .pairs { grid-template-columns: repeat(3, 1fr); } .pairs .callout { font-size: 8.5pt; } }
+</style>
+<script>document.documentElement.className+=' js';</script>
+</head>
+<body data-page="reference" data-sheet="visuals-chooser">
+<main class="sheet">
+<div class="sheet-top"><a class="noprint" href="../index.html">&larr; Back to home</a><span>PL-300 reference sheet &middot; 2026-11-11</span></div>
+<h1>Visuals chooser</h1>
+<p class="lede">Start from the need, find the visual or feature, and see which look-alike to avoid. Exam questions usually offer the &ldquo;avoid&rdquo; column as a distractor.</p>
+
+<div class="pairs">
+<div class="callout trap" data-title="Confusable pair"><p><strong>KPI vs gauge.</strong> Trend against a target: KPI. One value against min, max and target: gauge.</p></div>
+<div class="callout trap" data-title="Confusable pair"><p><strong>Key influencers vs decomposition tree.</strong> Which factors drive a metric: key influencers. Manual, step-by-step root cause: decomposition tree.</p></div>
+<div class="callout trap" data-title="Confusable pair"><p><strong>Drill down vs drillthrough vs tooltip.</strong> Deeper level in place; a detail page for the clicked value; a peek on hover.</p></div>
+</div>
+<div class="tools hidden-nojs"><label for="q" class="muted">Filter</label>
+<input id="q" type="search" placeholder="Type a need or a visual, e.g. target, trend, map" autocomplete="off"><span class="count" id="cnt" aria-live="polite"></span></div>
+<div class="table-wrap"><table class="dense vt">
+<thead><tr><th>Need</th><th>Visual or feature</th><th>Avoid</th><th>Lesson</th></tr></thead>
+<tbody>
+<tr class="grp"><th colspan="4" scope="colgroup">Compare and trend</th></tr>
+<tr class="vr"><td>Compare values across categories</td><td class="yes">Clustered bar or column</td><td class="no">Pie with many slices</td><td><a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023</a></td></tr>
+<tr class="vr"><td>Trend over time</td><td class="yes">Line chart</td><td class="no">Stacked area for exact comparison</td><td><a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023</a></td></tr>
+<tr class="vr"><td>Compare two series over time</td><td class="yes">Line (two series) or combo chart</td><td class="no">Donut</td><td><a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023</a></td></tr>
+<tr class="vr"><td>Same chart for each category</td><td class="yes">Small multiples</td><td class="no">Bookmarks</td><td><a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023</a></td></tr>
+<tr class="grp"><th colspan="4" scope="colgroup">Part to whole and change</th></tr>
+<tr class="vr"><td>Part-to-whole, few parts</td><td class="yes">Pie or donut, treemap</td><td class="no">Line</td><td><a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023</a></td></tr>
+<tr class="vr"><td>Part-to-whole as % over time</td><td class="yes">100% stacked area or column</td><td class="no">Plain stacked area</td><td><a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023</a></td></tr>
+<tr class="vr"><td>Running total from + and - changes</td><td class="yes">Waterfall</td><td class="no">Gantt, stacked area</td><td><a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023</a></td></tr>
+<tr class="vr"><td>Stage drop-off</td><td class="yes">Funnel</td><td class="no">Line</td><td><a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023</a></td></tr>
+<tr class="grp"><th colspan="4" scope="colgroup">Single values and targets</th></tr>
+<tr class="vr"><td>Single number</td><td class="yes">Card or multi-row card</td><td class="no">Table</td><td><a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023</a></td></tr>
+<tr class="vr"><td>Actual vs target over time</td><td class="yes">KPI visual (unique period on the trend axis)</td><td class="no">Gauge (it has no trend)</td><td><a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023</a></td></tr>
+<tr class="vr"><td>Value vs min, max and target right now</td><td class="yes">Gauge</td><td class="no">KPI</td><td><a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023</a></td></tr>
+<tr class="grp"><th colspan="4" scope="colgroup">Relationships, geography and detail</th></tr>
+<tr class="vr"><td>Correlation and outliers of two measures</td><td class="yes">Scatter (play axis for time; automatic clusters)</td><td class="no">Pie, area</td><td><a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023</a></td></tr>
+<tr class="vr"><td>Very many points (over 10k) on a scatter</td><td class="yes">Scatter with high-density sampling</td><td class="no">Filtering source rows</td><td><a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023</a></td></tr>
+<tr class="vr"><td>Geography</td><td class="yes">Map, filled map or Azure Maps (set data categories first)</td><td class="no">Table</td><td><a href="../lessons/0015-table-column-properties.html" title="Configure table and column properties">0015</a></td></tr>
+<tr class="vr"><td>Detail rows, printing all rows</td><td class="yes">Paginated report (tablix)</td><td class="no">Interactive table</td><td><a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023</a></td></tr>
+<tr class="vr"><td>Word frequency</td><td class="yes">Word cloud (AppSource visual)</td><td class="no">Custom-built visual</td><td><a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023</a></td></tr>
+<tr class="grp"><th colspan="4" scope="colgroup">Analytics pane and AI</th></tr>
+<tr class="vr"><td>Median or percentile reference</td><td class="yes">Analytics pane median or percentile line</td><td class="no">Average or constant line</td><td><a href="../lessons/0030-analytics-pane-anomalies-grouping.html" title="Analytics pane, anomalies, grouping and clustering">0030</a></td></tr>
+<tr class="vr"><td>Future projection</td><td class="yes">Line chart + forecast</td><td class="no">Trend line</td><td><a href="../lessons/0030-analytics-pane-anomalies-grouping.html" title="Analytics pane, anomalies, grouping and clustering">0030</a></td></tr>
+<tr class="vr"><td>Unexpected spikes</td><td class="yes">Line chart + anomaly detection</td><td class="no">Column chart</td><td><a href="../lessons/0030-analytics-pane-anomalies-grouping.html" title="Analytics pane, anomalies, grouping and clustering">0030</a></td></tr>
+<tr class="vr"><td>What drives an outcome</td><td class="yes">Key influencers</td><td class="no">Decomposition tree</td><td><a href="../lessons/0031-ai-visuals-copilot.html" title="AI visuals and Copilot: key influencers, decomposition tree, Q&amp;A, narratives">0031</a></td></tr>
+<tr class="vr"><td>Ad hoc root-cause drill</td><td class="yes">Decomposition tree</td><td class="no">Key influencers</td><td><a href="../lessons/0031-ai-visuals-copilot.html" title="AI visuals and Copilot: key influencers, decomposition tree, Q&amp;A, narratives">0031</a></td></tr>
+<tr class="vr"><td>Natural-language exploration</td><td class="yes">Q&amp;A visual</td><td class="no">Static visual</td><td><a href="../lessons/0031-ai-visuals-copilot.html" title="AI visuals and Copilot: key influencers, decomposition tree, Q&amp;A, narratives">0031</a></td></tr>
+<tr class="vr"><td>Automatic text summary</td><td class="yes">Narrative (Copilot) or smart narrative</td><td class="no">Text box</td><td><a href="../lessons/0031-ai-visuals-copilot.html" title="AI visuals and Copilot: key influencers, decomposition tree, Q&amp;A, narratives">0031</a></td></tr>
+<tr class="grp"><th colspan="4" scope="colgroup">Hover, drill and navigate</th></tr>
+<tr class="vr"><td>Extra information on hover</td><td class="yes">Tooltips well or report page tooltip</td><td class="no">Drillthrough</td><td><a href="../lessons/0026-interactions-drill-tooltips.html" title="Interactions, drill down vs drillthrough, tooltips">0026</a></td></tr>
+<tr class="vr"><td>Detail page for a clicked item</td><td class="yes">Drillthrough</td><td class="no">Drill down</td><td><a href="../lessons/0026-interactions-drill-tooltips.html" title="Interactions, drill down vs drillthrough, tooltips">0026</a></td></tr>
+<tr class="vr"><td>Lower hierarchy level in place</td><td class="yes">Drill down (hierarchy)</td><td class="no">Drillthrough</td><td><a href="../lessons/0026-interactions-drill-tooltips.html" title="Interactions, drill down vs drillthrough, tooltips">0026</a></td></tr>
+</tbody></table></div>
+<p class="muted" style="font:.85rem var(--sans)">Domain: Visualize and analyze the data. See also <a href="../lessons/0024-format-themes-conditional-formatting.html" title="Themes, conditional formatting and number formats">0024 formatting</a>, <a href="../lessons/0025-filters-slicers-sync.html" title="Filters, slicers and sync slicers">0025 filters and slicers</a>, <a href="../lessons/0028-mobile-and-accessibility.html" title="Design for accessibility and mobile">0028 accessibility</a>.</p>
+
+<p class="muted">Related sheets: <a href="glossary.html">Glossary</a> &middot; <a href="concept-map.html">Concept map</a> &middot; <a href="common-mistakes.html">Common mistakes</a></p>
+<footer class="sources"><strong>Sources.</strong> <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-types-for-reports-and-q-and-a">Visualization types in Power BI</a> <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-kpi">KPI visual</a> <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-radial-gauge-charts">Gauge charts</a> <a href="https://learn.microsoft.com/en-us/power-bi/guidance/report-paginated-or-power-bi">Paginated or Power BI report</a> <a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-analytics-pane">Analytics pane</a> <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-influencers">Key influencers</a> <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-decomposition-tree">Decomposition tree</a></footer>
+</main>
+<script>
+(function(){
+  var q=document.getElementById('q'); if(!q) return;
+  var rows=[].slice.call(document.querySelectorAll('.vt tr.vr')), grps=[].slice.call(document.querySelectorAll('.vt tr.grp')), cnt=document.getElementById('cnt');
+  rows.forEach(function(r){r._t=r.textContent.toLowerCase();});
+  function run(){
+    var v=q.value.trim().toLowerCase(), n=0;
+    rows.forEach(function(r){var ok=!v||r._t.indexOf(v)>-1; r.classList.toggle('hide',!ok); if(ok)n++;});
+    grps.forEach(function(g){var s=g.nextElementSibling, any=false; while(s&&!s.classList.contains('grp')){if(!s.classList.contains('hide'))any=true; s=s.nextElementSibling;} g.classList.toggle('hide',!any);});
+    cnt.textContent=n+' of '+rows.length+' needs';
+  }
+  q.addEventListener('input',run); run();
+})();
+</script>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

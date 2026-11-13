@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Security and sharing</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script src="../assets/progress.js" defer></script>
+
+<style>
+/* sheet-specific additions (small, shared by the 6 reference sheets) */
+.sheet-nav{font:.85rem/1.6 var(--sans);color:var(--muted);margin:0 0 1.2em}
+.sheet-nav a{margin-right:.7em;white-space:nowrap}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+td.y{color:var(--tip-fg);font-weight:700;text-align:center}
+td.n{color:var(--trap-fg);text-align:center}
+th.c{text-align:center}
+.filters{display:flex;flex-wrap:wrap;gap:.4em;margin:0 0 1em}
+.filters button{font:.85rem var(--sans);padding:.25em .8em;border:1px solid var(--rule);border-radius:999px;background:var(--card-bg);color:var(--fg);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.hide{display:none}
+.tag{font:.78rem var(--sans);padding:.05em .5em;border-radius:3px;border:1px solid var(--rule);white-space:nowrap}
+.tag.right{color:var(--tip-fg);background:var(--tip-bg)}
+.tag.wrong{color:var(--trap-fg);background:var(--trap-bg)}
+.tag.mixed{color:var(--warn-fg);background:var(--warn-bg)}
+.tag.skip{color:var(--muted)}
+table.dense td,table.dense th{padding:.35em .5em;vertical-align:top}
+.small{font:.85rem/1.45 var(--sans)}
+.wk{break-inside:avoid;margin:0 0 1.6em}
+.wk h3{margin-bottom:.3em}
+input.chk{width:1.15em;height:1.15em;vertical-align:middle;cursor:pointer}
+tr.done td{color:var(--muted)}
+.bar{height:.6em;background:var(--rule);border-radius:3px;overflow:hidden;margin:.4em 0 1em}
+.bar>i{display:block;height:100%;width:0;background:var(--tip-bd)}
+.flow text{font:13px var(--sans);fill:var(--fg)}
+.flow .box{fill:var(--card-bg);stroke:var(--fg);stroke-width:1.3}
+.flow .res{fill:var(--tip-bg);stroke:var(--tip-bd);stroke-width:1.6}
+.flow .res text{font-weight:700;fill:var(--tip-fg)}
+.flow .lbl{font-size:12px;fill:var(--muted)}
+.flow path{fill:none;stroke:var(--muted);stroke-width:1.4}
+.flow marker path{fill:var(--muted);stroke:none}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:0 1.5em}
+@media(max-width:640px){.cols2{grid-template-columns:1fr}}
+@media print{.filters,.sheet-nav a.nonprint{display:none}.hide{display:table-row-group!important}tr.hide{display:table-row!important}.wk{break-inside:avoid}}
+</style>
+</head>
+<body data-page="reference" data-sheet="security-and-sharing">
+<main class="page">
+<p class="sheet-nav"><a href="../index.html">&larr; Home</a> &middot; Reference: <a href="glossary.html">Glossary</a> <a href="concept-map.html">Concept map</a> <a href="dax-patterns.html">DAX patterns</a> <a href="storage-modes-connectivity.html">Storage modes</a> <a href="security-and-sharing.html" aria-current="page">Security and sharing</a> <a href="common-mistakes.html">Common mistakes</a> <a href="study-plan.html">Study plan</a> <a href="review-topics.html">Review topics</a> <a href="power-query-m.html">Power Query M</a> <a href="visuals-chooser.html">Visuals chooser</a> <a href="exam-overview.html">Exam overview</a></p>
+<header class="lesson-header">
+  <p class="lesson-no">Reference sheet</p>
+  <h1>Security and sharing</h1>
+  <p class="meta"><span class="badge manage">Manage and secure Power BI</span><span>Lessons 0029, 0032&ndash;0036</span></p>
+</header>
+<p>Roles, permissions and row-level security on one page. Lessons: <a href="../lessons/0029-personalize-export-page-refresh.html" title="Personalisation, export settings and automatic page refresh">0029</a>, <a href="../lessons/0032-workspace-roles-item-access.html" title="Workspace roles, sharing and Build permission">0032</a>, <a href="../lessons/0033-apps-endorsement-labels.html" title="Distribute and govern content: apps, endorsement, sensitivity labels">0033</a>, <a href="../lessons/0034-dashboards-alerts-subscriptions.html" title="Dashboards, data alerts and subscriptions">0034</a>, <a href="../lessons/0035-gateways-and-refresh.html" title="Gateways, scheduled refresh and incremental refresh">0035</a>, <a href="../lessons/0036-rls-ols.html" title="Row-level and object-level security">0036</a>.</p>
+<h2>1. Workspace role matrix</h2>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th>Can the role&hellip;</th><th class="c">Admin</th><th class="c">Member</th><th class="c">Contributor</th><th class="c">Viewer</th></tr></thead>
+<tbody>
+<tr><td>Update or delete the workspace, add or remove Admins</td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td></tr>
+<tr><td>Add users (members or lower roles)</td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td></tr>
+<tr><td>Publish or unpublish the app, change app permissions</td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td></tr>
+<tr><td>Update an existing app</td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes, </span>*</td><td class="n">&#10008;<span class="sr-only"> no</span></td></tr>
+<tr><td>Allow resharing of items</td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td></tr>
+<tr><td>Create, edit and delete content</td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td></tr>
+<tr><td>Publish from Desktop</td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td></tr>
+<tr><td>Schedule refresh</td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td></tr>
+<tr><td>View and interact with content</td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td></tr>
+<tr><td>RLS applies to them</td><td class="n">&#10008;<span class="sr-only"> no</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td><td class="n">&#10008;<span class="sr-only"> no</span></td><td class="y">&#10004;<span class="sr-only"> yes</span></td></tr>
+</tbody></table></div>
+<p class="small muted">* A Contributor can update the app only if Admins or Members allow it. In the last row a tick means RLS applies: only Viewers are restricted. Roles can go to users, security groups, Microsoft 365 groups and distribution lists; someone in several groups gets the highest role. The Viewer role sees <strong>all</strong> workspace content, so it is not &ldquo;access to selected items&rdquo;. Least privilege for read-only access: an app, or share to a group.</p>
+<div class="callout trap"><p>Contributor cannot publish the app or add users: that needs Member (<a href="common-mistakes.html#t07">T07</a>). RLS does not restrict Admin, Member or Contributor (<a href="common-mistakes.html#t02">T02</a>).</p></div>
+<h2>2. Item permissions</h2>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th>Permission</th><th>What it enables</th></tr></thead>
+<tbody>
+<tr><td><strong>Read</strong></td><td>See and open the item.</td></tr>
+<tr><td><strong>Reshare</strong></td><td>Pass on sharing of the item. It does <strong>not</strong> enable Analyze in Excel.</td></tr>
+<tr><td><strong>Build</strong></td><td>Create new reports on the semantic model (also in other workspaces), use Analyze in Excel, query it over XMLA. RLS still applies to the user.</td></tr>
+</tbody></table></div>
+<p class="small">Least privilege for &ldquo;build reports on model X in their own workspace&rdquo; is <strong>Build on X</strong>, not a role in X&rsquo;s workspace (<a href="common-mistakes.html#t09">T09</a>).</p>
+<h2>3. Distribution chooser</h2>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th>Need</th><th>Use</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td><strong>Colleagues who edit and collaborate</strong></td><td>Workspace roles</td><td>Admin, Member, Contributor, Viewer</td></tr>
+<tr><td><strong>A few people, one report or dashboard</strong></td><td>Share the item</td><td>Read, Reshare, Build options</td></tr>
+<tr><td><strong>Many read-only consumers, curated content</strong></td><td>App</td><td>Only chosen items. Audiences per group. <strong>Update app</strong> after changes. RLS still applies. Can be shared with security groups, mail-enabled security groups, distribution lists or Microsoft 365 groups</td></tr>
+<tr><td><strong>Email snapshot on a schedule</strong></td><td>Subscription</td><td>About time, not thresholds</td></tr>
+<tr><td><strong>Notify when a value crosses a threshold</strong></td><td>Data alert</td><td>Service only, on card, KPI or gauge dashboard tiles. Private to its creator</td></tr>
+<tr><td><strong>Show in Teams or SharePoint</strong></td><td>Embed</td><td></td></tr>
+<tr><td><strong>Self-service on an existing model</strong></td><td>Build permission, Analyze in Excel</td><td></td></tr>
+</tbody></table></div>
+<h2>4. Row-level security (RLS)</h2>
+<ol>
+<li><strong>Desktop</strong> &rsaquo; Modeling &rsaquo; Manage roles: define roles with DAX table filters.</li>
+<li><strong>Publish</strong> the model to the service.</li>
+<li><strong>Service</strong> &rsaquo; semantic model &rsaquo; Security: add members. You cannot assign members in Desktop.</li>
+<li><strong>Test as role</strong>. For dynamic RLS, test as the person.</li>
+</ol>
+<ul>
+<li><strong>Static:</strong> <code>[Region] = "West"</code>. <strong>Dynamic:</strong> <code>[Email] = USERPRINCIPALNAME()</code>, one role for everyone. In Desktop <code>USERNAME()</code> returns DOMAIN\user, so prefer <code>USERPRINCIPALNAME()</code>.</li>
+<li><strong>Several roles</strong> for one user are additive (union). Filters on several tables <strong>inside one role</strong> combine with AND. For an intersection, put both filters in one role (<a href="common-mistakes.html#t01">T01</a>).</li>
+<li><strong>Role members:</strong> users, security groups, mail-enabled security groups, distribution groups. Not Microsoft 365 groups. Manage membership in Microsoft Entra groups, so a region change is a group change, not a DAX change (<a href="common-mistakes.html#t05">T05</a>).</li>
+<li><strong>Direction:</strong> filters flow one way unless &ldquo;Apply security filter in both directions&rdquo; is ticked on the relationship (<a href="common-mistakes.html#t04">T04</a>).</li>
+<li><strong>Who:</strong> Viewers, app consumers and shared-item recipients, even with Build. Not Admin, Member or Contributor.</li>
+<li>Live connection to Analysis Services: define RLS in the AS model. DirectQuery can use the source&rsquo;s own security with SSO.</li>
+</ul>
+<h2>5. RLS vs OLS vs masking</h2>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th>Technique</th><th>Hides</th><th>Defined with</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td><strong>RLS</strong></td><td>Rows</td><td>DAX filters in Manage roles</td><td>Cannot hide columns</td></tr>
+<tr><td><strong>OLS</strong></td><td>Tables or columns (and their metadata)</td><td>External tools such as Tabular Editor</td><td>Per role</td></tr>
+<tr><td><strong>Data masking</strong></td><td>Values</td><td>Done in the data, then a measure</td><td>Use when peers&rsquo; rows must stay in totals; RLS would drop them</td></tr>
+</tbody></table></div>
+<h2>6. Sensitivity labels and endorsement</h2>
+<ul>
+<li><strong>Sensitivity labels</strong> (Microsoft Purview Information Protection) flow downstream (model, report, dashboard, new content) and persist with encryption on export to Excel, PowerPoint and PDF. RLS and OLS do not protect exported files; labels do (<a href="common-mistakes.html#t11">T11</a>).</li>
+<li><strong>Promoted:</strong> any contributor can promote. <strong>Certified:</strong> only reviewers the admin authorises; ranked first in discovery. Endorsement is a quality signal, not access control.</li>
+</ul>
+<h2>7. Export settings</h2>
+<p>Per report: <strong>None</strong>, <strong>Summarized data only</strong>, <strong>Summarized and underlying data</strong>. Underlying data also needs Build on the model. A tenant admin setting limits what report authors can choose. RLS and model permissions do not stop export of what a user can see.</p>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-roles-new-workspaces">Roles in workspaces</a> &middot; <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/service-datasets-build-permissions">Build permission</a> &middot; <a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-create-distribute-apps">Publish an app</a> &middot; <a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security">Row-level security</a> &middot; <a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-object-level-security">Object-level security</a> &middot; <a href="https://learn.microsoft.com/en-us/power-bi/enterprise/service-security-sensitivity-label-overview">Sensitivity labels</a> &middot; <a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-endorsement-overview">Endorsement</a> &middot; <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-export-data">Export data</a></p></div>
+
+<div class="ask">Stuck or curious? Ask me a follow-up question about anything on this sheet.</div>
+</main>
+
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

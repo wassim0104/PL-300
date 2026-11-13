@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RLS and OLS</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script src="../assets/progress.js" defer></script>
+<script src="../assets/bank.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+</head>
+<body data-page="lesson" data-lesson="0036">
+<main class="page">
+<p class="muted"><a href="../index.html">Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0036</p>
+  <h1>Row-level and object-level security</h1>
+  <p class="meta"><span class="badge manage">Manage and secure</span><span>About 20 min</span></p>
+  <p><strong>After this lesson you can</strong> implement static and dynamic RLS, assign members (preferably groups), test it, and predict what a user in several roles sees.</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Row-level security is the single most tested security topic: expect several questions, usually on dynamic filters, union versus intersection, or who is affected. Finishing it also completes the Manage and secure domain, so the next stop is your first mock exam.</p>
+
+<h2>Recall first</h2>
+<p><strong>Which workspace roles bypass RLS?</strong></p><details><summary>Show answer</summary><p>Admin, Member and Contributor. RLS applies to Viewers, app consumers and shared-item recipients.</p></details>
+
+<h2>Core idea</h2>
+<p>Workflow: <strong>Desktop</strong> > Modeling > <strong>Manage roles</strong> (define DAX table filters) > publish > <strong>service</strong> > model > <strong>Security</strong> (add members) > <strong>Test as role</strong>. You cannot assign members in Desktop.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security">Row-level security with Power BI</a></span> Terms: <a href="../reference/glossary.html#t-row-level-security-rls">RLS</a>, <a href="../reference/glossary.html#t-dynamic-rls">dynamic RLS</a>.</p>
+<p><strong>Static</strong>: <code>[Region] = "West"</code>, one role per value. <strong>Dynamic</strong>: <code>[Email] = USERPRINCIPALNAME()</code>, one role for everyone, driven by a user column. In Desktop <code>USERNAME()</code> returns DOMAIN\user, in the service both return the UPN, so prefer <code>USERPRINCIPALNAME()</code>.</p>
+<div class="table-wrap"><table>
+<tr><th>Situation</th><th>Result</th></tr>
+<tr><td>Filters on several tables in <strong>one</strong> role</td><td>AND (intersection)</td></tr>
+<tr><td>A user in <strong>several</strong> roles</td><td>Union: rows allowed by either</td></tr>
+</table></div>
+<p>Members can be users, security groups, mail-enabled security groups and distribution groups, <strong>not</strong> Microsoft 365 groups. Use Microsoft Entra groups so another team (for example IT security) controls access without content rights; moving a manager to another region is a group change, not a DAX change.</p>
+<p>RLS applies to Viewers, app consumers and shared-item recipients, even with Build (Analyze in Excel). Filters flow one way along relationships by default; to reach the one side through a bridge tick <strong>Apply security filter in both directions</strong> (<a href="../reference/glossary.html#t-apply-security-filter-in-both-directions">glossary</a>). <strong>Test as role</strong> / "Now viewing as" checks roles or a person; for dynamic RLS test as the <strong>person</strong>, since a role alone uses your own identity.</p>
+<p>Live connection to Analysis Services: define RLS in the AS model. DirectQuery can use source security with SSO. <a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-object-level-security">Object-level security</a> hides tables or columns (and their metadata) per role, set with external tools such as Tabular Editor. RLS cannot hide columns.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>Regional sales managers see only their own region; one role must serve all of them.</p></div>
+<pre data-lang="DAX"><code>-- Role "Sales Managers" on table Region
+[ManagerEmail] = USERPRINCIPALNAME()</code></pre>
+<p>Publish, add the managers' Entra security group to the role in the service, then use Test as role with a specific manager. And for an intersection inside one role:</p>
+<pre data-lang="DAX"><code>-- Role "Germany Management"
+DimSalesTerritory: [Region] = "Germany"
+DimCustomer:       [Occupation] = "Management"</code></pre>
+<p>Both filters sit in one role, so users see only German management customers. Two separate roles would show Germany rows plus management rows.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> Two roles give an intersection. <strong>Right:</strong> You get a union. Put both filters in one role.</p></div><div class="callout trap"><p><strong>Wrong:</strong> RLS restricts workspace Members and Contributors. <strong>Right:</strong> It applies to Viewers only.</p></div><div class="callout trap"><p><strong>Wrong:</strong> Add a Microsoft 365 group, or assign members in Desktop. <strong>Right:</strong> Use security groups, and assign in the service.</p></div>
+<p class="muted">More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0036" data-bank="lesson" data-lesson="0036"></div>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0036');this.textContent='Marked done'}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security">Microsoft Learn: Row-level security with Power BI</a></p><p class="muted">The core page for this lesson. About 15 minutes. Extras: <a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-object-level-security">Object-level security</a>, <a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-roles-new-workspaces">Workspace roles</a>.</p></div>
+
+<div class="ask">Ask your teacher agent a follow-up. For example: Why do two roles give a union and not an intersection? How do I test dynamic RLS as a specific person?</div>
+
+<h2>Related</h2>
+<p><a href="../reference/security-and-sharing.html">Security and sharing</a>, <a href="../reference/dax-patterns.html">DAX patterns</a>, <a href="../reference/glossary.html">Glossary</a> (<a href="../reference/glossary.html#t-row-level-security-rls">RLS</a>).</p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0035-gateways-and-refresh.html"><small>Previous</small>Gateways, scheduled refresh and incremental refresh</a>
+  <a class="next" href="../practice/mock-exam-1.html"><small>Next</small>Mock exam 1</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

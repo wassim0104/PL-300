@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PL-300 Studio : réussir l'examen Power BI Data Analyst</title>
+<meta name="description" content="Parcours de 36 leçons, fiches et examens blancs pour réussir la certification Microsoft PL-300.">
+<link rel="stylesheet" href="assets/course.css">
+<style>
+/* Home-specific styles. Tokens come from course.css. */
+body[data-page="home"] .home { max-width: 1160px; margin: 0 auto; padding: 0 16px 3rem; }
+.home *, .home *::before, .home *::after { box-sizing: border-box; }
+.home section { margin-top: 3.25rem; }
+.home h2 { font-size: clamp(1.35rem, 2.4vw, 1.75rem); margin: 0 0 .35rem; letter-spacing: -0.015em; }
+.home .sec-intro { color: var(--muted); margin: 0 0 1.25rem; max-width: 62ch; }
+
+/* ---------- Hero ---------- */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 2.5rem; align-items: center; padding: 2.5rem 0 0; }
+.hero h1 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 1rem; max-width: 18ch; }
+.hero .lead { color: var(--muted); font-size: 1.0625rem; line-height: 1.6; margin: 0 0 1.5rem; max-width: 46ch; }
+.hero .actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+.hero .facts { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin: 1.5rem 0 0; padding: 0; list-style: none; color: var(--muted); font-size: .9rem; }
+.hero .facts strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ---------- Exam matrix ---------- */
+.xm { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 0; overflow: hidden; }
+.xm-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: .7rem 1rem; border-bottom: 1px solid var(--rule); font-size: .8rem; font-weight: 600; color: var(--muted); }
+.xm-head b { color: var(--ink); font-weight: 700; }
+.xm-body { padding: .5rem 1rem 1rem; }
+.xm-row { padding-top: .85rem; }
+.xm-label { display: flex; align-items: center; gap: .5rem; margin-bottom: .45rem; font-size: .85rem; font-weight: 700; }
+.xm-label .w { margin-left: auto; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
+.xm-dot { width: .7rem; height: .7rem; border-radius: 2px; background: var(--dc); flex: none; }
+.xm-cells { display: grid; grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); gap: 5px; }
+.xm-cell { --pct: 0%; position: relative; display: grid; place-items: center; aspect-ratio: 1; min-height: 38px; border-radius: 4px;
+  background: color-mix(in srgb, var(--dc) var(--pct), var(--surface-2));
+  border: 1px solid color-mix(in srgb, var(--dc) calc(var(--pct) * .6 + 14%), var(--rule));
+  color: var(--ink); font-size: .74rem; font-weight: 600; font-variant-numeric: tabular-nums; text-decoration: none; overflow: hidden; }
+.xm-cell[data-level="0"] { --pct: 0%; color: var(--muted); }
+.xm-cell[data-level="1"] { --pct: 24%; }
+.xm-cell[data-level="2"] { --pct: 48%; }
+.xm-cell[data-level="3"] { --pct: 74%; color: var(--surface); }
+.xm-cell[data-level="4"] { --pct: 100%; color: var(--surface); }
+.xm-cell:hover { outline: 2px solid var(--ink); outline-offset: 1px; z-index: 1; }
+.xm-cell:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; z-index: 1; }
+.xm-cell.done::after { content: ""; position: absolute; right: 3px; top: 3px; width: 5px; height: 5px; border-radius: 50%; background: var(--surface); }
+.xm-cell.next { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--ink); }
+.xm-legend { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem; padding: .7rem 1rem; border-top: 1px solid var(--rule); background: var(--surface-2); font-size: .78rem; color: var(--muted); }
+.xm-legend .scale { display: flex; gap: 3px; }
+.xm-legend .scale i { width: 18px; height: 12px; border-radius: 2px; background: color-mix(in srgb, var(--ink) var(--p), var(--surface)); border: 1px solid var(--rule); }
+.xm-legend .ring { display: inline-flex; align-items: center; gap: .35rem; margin-left: auto; }
+.xm-legend .ring i { width: 12px; height: 12px; border-radius: 2px; box-shadow: 0 0 0 2px var(--surface-2), 0 0 0 3.5px var(--ink); background: var(--surface); }
+
+/* orchestrated fill-in: cells start empty and fill in reading order */
+@media (prefers-reduced-motion: no-preference) {
+  .xm.animate .xm-cell { animation: xm-fill .55s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--i) * 28ms + var(--r) * 120ms + 150ms); }
+  @keyframes xm-fill {
+    from { background: var(--surface-2); color: transparent; border-color: var(--rule); transform: scale(.82); }
+    60% { transform: scale(1.06); }
+    to { transform: scale(1); }
+  }
+}
+
+/* ---------- Review ---------- */
+.review-list { list-style: none; margin: 0; padding: 0; }
+.review-list li { display: flex; align-items: center; gap: .9rem; padding: .7rem 1rem; border-top: 1px solid var(--rule); }
+.review-list li:first-child { border-top: 0; }
+.review-list .t { flex: 1; min-width: 0; font-weight: 600; text-transform: capitalize; }
+.review-list .t a { color: inherit; text-decoration-color: var(--rule); text-underline-offset: 3px; }
+.review-list .t small { display: block; font-weight: 400; color: var(--muted); text-transform: none; }
+.review-list .acc { font-variant-numeric: tabular-nums; font-weight: 700; min-width: 3.2rem; text-align: right; }
+.review-list .acc.low { color: var(--bad); }
+.review-list .acc.ok { color: var(--good); }
+.review-more { padding: .7rem 1rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: .9rem; }
+.empty { padding: 1.25rem 1rem; display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; align-items: center; justify-content: space-between; }
+.empty p { margin: 0; max-width: 56ch; color: var(--muted); }
+.empty p strong { color: var(--ink); }
+
+/* ---------- Parcours ---------- */
+.phases { list-style: none; margin: 0; padding: 0; counter-reset: ph; display: grid; gap: 0; }
+.phase { position: relative; display: grid; grid-template-columns: 3rem minmax(0, 1fr); gap: 0 1rem; padding-bottom: 1.5rem; }
+.phase::before { content: ""; position: absolute; left: 1.2rem; top: 2.4rem; bottom: 0; width: 2px; background: var(--rule); }
+.phase:last-child { padding-bottom: 0; }
+.phase:last-child::before { display: none; }
+.phase .no { width: 2.4rem; height: 2.4rem; border-radius: 50%; display: grid; place-items: center; font-weight: 700; background: var(--surface); border: 2px solid var(--ink); font-variant-numeric: tabular-nums; z-index: 1; }
+.phase.complete .no { background: var(--ink); color: var(--surface); }
+.phase header { display: flex; flex-wrap: wrap; align-items: baseline; gap: .15rem .75rem; margin: .25rem 0 .55rem; }
+.phase h3 { margin: 0; font-size: 1.05rem; letter-spacing: -0.01em; }
+.phase .count { color: var(--muted); font-size: .85rem; font-variant-numeric: tabular-nums; }
+.phase ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 2px 1.25rem; }
+.phase li a { display: flex; align-items: baseline; gap: .5rem; padding: .3rem .4rem; margin: 0 -.4rem; border-radius: 4px; color: var(--ink); text-decoration: none; font-size: .92rem; line-height: 1.35; }
+.phase li a:hover { background: var(--surface-2); }
+.phase li a:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+.phase .n { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .8rem; flex: none; }
+.phase .tick { flex: none; width: 1rem; height: 1rem; align-self: center; border-radius: 50%; border: 1.5px solid var(--rule); display: grid; place-items: center; }
+.phase li.done .tick { background: var(--good); border-color: var(--good); }
+.phase li.done .tick::after { content: ""; width: .28rem; height: .5rem; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg) translate(-1px, -1px); }
+.phase li .tt { flex: 1; min-width: 0; }
+.phase li .dd { width: .5rem; height: .5rem; border-radius: 2px; background: var(--dc); flex: none; align-self: center; }
+
+/* ---------- Fiches ---------- */
+.sheets { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0 2rem; }
+.sheets li { border-top: 1px solid var(--rule); }
+.sheets a { display: block; padding: .75rem 0; color: var(--ink); text-decoration: none; }
+.sheets a strong { display: block; font-weight: 600; }
+.sheets a span { color: var(--muted); font-size: .9rem; }
+.sheets a:hover strong { text-decoration: underline; text-underline-offset: 3px; }
+.sheets a:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* ---------- Entraînement ---------- */
+.train { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.train a.opt { display: block; padding: 1rem; color: var(--ink); text-decoration: none; border-left: 1px solid var(--rule); }
+.train a.opt:first-child { border-left: 0; }
+.train a.opt:hover { background: var(--surface-2); }
+.train a.opt:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.train strong { display: block; margin-bottom: .2rem; }
+.train span { color: var(--muted); font-size: .9rem; }
+.rule80 { display: flex; gap: 1rem; align-items: center; padding: .85rem 1rem; border-top: 1px solid var(--rule); background: var(--surface-2); font-size: .92rem; }
+.rule80 b { flex: none; white-space: nowrap; font-size: 1.4rem; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.rule80 p { margin: 0; }
+.train-foot { padding: .75rem 1rem; border-top: 1px solid var(--rule); font-size: .9rem; }
+
+/* ---------- Méthode ---------- */
+.method { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin: 0; padding: 0; list-style: none; }
+.method h3 { margin: 0 0 .3rem; font-size: 1rem; }
+.method p { margin: 0; color: var(--muted); font-size: .95rem; }
+.teacher { margin-top: 1.5rem; padding: 1rem 1.1rem; border: 1px solid var(--rule); border-left: 4px solid var(--focus); border-radius: 4px 8px 8px 4px; background: var(--surface); }
+.teacher p { margin: 0; }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; padding-top: 1.5rem; }
+  .hero h1 { max-width: none; }
+  .train { grid-template-columns: minmax(0, 1fr); }
+  .train a.opt { border-left: 0; border-top: 1px solid var(--rule); }
+  .train a.opt:first-child { border-top: 0; }
+  .method { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+  .xm-legend .ring { margin-left: 0; }
+}
+@media (max-width: 480px) {
+  .home section { margin-top: 2.5rem; }
+  .xm-cells { grid-template-columns: repeat(auto-fill, minmax(32px, 1fr)); gap: 4px; }
+  .xm-cell { min-height: 32px; font-size: .68rem; }
+  .phase { grid-template-columns: 2.4rem minmax(0, 1fr); gap: 0 .7rem; }
+  .phase::before { left: 1rem; }
+  .phase .no { width: 2rem; height: 2rem; font-size: .9rem; }
+  .phase ul { grid-template-columns: minmax(0, 1fr); }
+  .hero .actions .btn { flex: 1 1 100%; text-align: center; }
+}
+</style>
+</head>
+<body data-page="home">
+<main class="home" id="main">
+
+<div class="hero">
+  <div>
+    <h1>Réussis l'examen PL&#8209;300 et décroche ta certification Power BI</h1>
+    <p class="lead">36 leçons courtes, chacune terminée par un quiz, des fiches de révision et deux examens blancs t'amènent à 700 points sur 1000 sur les quatre domaines de l'examen.</p>
+    <div class="actions">
+      <a class="btn" id="cta-continue" href="lessons/0001-power-bi-landscape.html">Commencer : Leçon 0001</a>
+      <a class="btn secondary" href="#parcours">Voir le plan d'étude</a>
+    </div>
+    <ul class="facts" id="facts" aria-live="polite"></ul>
+  </div>
+
+  <div class="xm animate" id="matrix" role="group" aria-label="Matrice de l'examen : les 36 leçons par domaine, colorées selon ta progression">
+    <div class="xm-head"><span>Matrice de l'examen</span><span id="xm-count"><b>0</b> / 36 leçons terminées</span></div>
+    <div class="xm-body" id="xm-body"></div>
+    <div class="xm-legend">
+      <span>Pas commencé</span>
+      <span class="scale" aria-hidden="true"><i style="--p:0%"></i><i style="--p:22%"></i><i style="--p:44%"></i><i style="--p:68%"></i><i style="--p:100%"></i></span>
+      <span>Maîtrisé</span>
+      <span class="ring"><i aria-hidden="true"></i>Prochaine leçon</span>
+    </div>
+  </div>
+</div>
+
+<section id="revision" aria-labelledby="h-rev">
+  <h2 id="h-rev">À réviser aujourd'hui</h2>
+  <p class="sec-intro">Les sujets dont la révision espacée arrive à échéance, les plus en retard d'abord.</p>
+  <div class="panel" id="review-panel"></div>
+</section>
+
+<section id="parcours" aria-labelledby="h-par">
+  <h2 id="h-par">Parcours</h2>
+  <p class="sec-intro">Sept étapes, à suivre dans l'ordre : chaque phase prépare la suivante. Compte six semaines à raison de 6 à 8 heures par semaine.</p>
+  <ol class="phases" id="phases"></ol>
+</section>
+
+<section id="fiches" aria-labelledby="h-fic">
+  <h2 id="h-fic">Fiches</h2>
+  <p class="sec-intro">À garder ouvertes pendant les leçons, et à relire la dernière semaine.</p>
+  <ul class="sheets" id="sheets"></ul>
+</section>
+
+<section id="entrainement" aria-labelledby="h-ent">
+  <h2 id="h-ent">Entraînement</h2>
+  <p class="sec-intro">L'examen ne regroupe pas les questions par sujet. Alterne les domaines pour t'y habituer.</p>
+  <div class="panel">
+    <div class="train">
+      <a class="opt" href="practice/mixed.html"><strong>Entraînement mixte</strong><span>Questions de toutes les leçons, mélangées, avec correction immédiate.</span></a>
+      <a class="opt" href="practice/mock-exam-1.html"><strong>Examen blanc 1</strong><span>50 questions en 100 minutes, avec la pondération réelle des domaines.</span></a>
+      <a class="opt" href="practice/mock-exam-2.html"><strong>Examen blanc 2</strong><span>Un second sujet qui évite autant que possible les questions du premier.</span></a>
+    </div>
+    <div class="rule80"><b>80 %</b><p>Tu es prêt quand tu obtiens au moins 80 % à deux examens blancs consécutifs, avec un bon score dans chacun des quatre domaines.</p></div>
+    <div class="train-foot"><a href="progress.html">Voir ma progression par sujet et par domaine</a></div>
+  </div>
+</section>
+
+<section id="methode" aria-labelledby="h-met">
+  <h2 id="h-met">Comment étudier</h2>
+  <ul class="method">
+    <li><h3>Rappeler avant de relire</h3><p>Réponds de mémoire avant de regarder la solution. Les quiz et les trois points à retenir valent mieux qu'une relecture.</p></li>
+    <li><h3>Espacer les révisions</h3><p>Reviens sur les sujets ratés après 1, 3, 7 puis 14 jours. La liste « À réviser » ci-dessus s'en charge pour toi.</p></li>
+    <li><h3>Mélanger les domaines</h3><p>Alterne les sujets en séance d'entraînement : c'est comme ça que les questions tombent à l'examen.</p></li>
+  </ul>
+  <div class="teacher"><p><strong>Ton professeur IA répond à tes questions.</strong> Demande-lui un complément sur une leçon, un terme ou une réponse de quiz, à tout moment. En cas de doute, Microsoft Learn fait foi.</p></div>
+</section>
+
+</main>
+
+<script src="assets/progress.js"></script>
+<script src="assets/bank.js"></script>
+<script src="assets/manifest.js"></script>
+<script src="assets/site.js"></script>
+<script>
+(function () {
+  var M = window.PL300_MANIFEST || { lessons: [], sheets: [], domains: {} };
+  var BANK = window.PL300_BANK || [];
+  var P = window.Progress;
+  var DOM = { PREP: 'prep', MODEL: 'model', VIZ: 'viz', MANAGE: 'manage' };
+  var ORDER = ['PREP', 'MODEL', 'VIZ', 'MANAGE'];
+  var DESC = {
+    'exam-overview': 'Format, domaines, notation et déroulement de l’épreuve.',
+    'study-plan': 'Six semaines, semaine par semaine.',
+    'concept-map': 'Comment les sujets s’enchaînent et se relient.',
+    'glossary': 'Les termes exacts à connaître, en anglais comme à l’examen.',
+    'dax-patterns': 'Les mesures à savoir écrire de mémoire.',
+    'power-query-m': 'Transformations et extraits de code M.',
+    'storage-modes-connectivity': 'Import, DirectQuery, Dual, connexion active.',
+    'security-and-sharing': 'Rôles, RLS, applications et étiquettes.',
+    'visuals-chooser': 'Quel visuel pour quelle question.',
+    'common-mistakes': 'Les pièges de l’examen réunis au même endroit.',
+    'review-topics': 'La liste de contrôle de la dernière semaine.'
+  };
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function $(id) { return document.getElementById(id); }
+
+  var lessons = M.lessons || [];
+  var done = [], topics = {};
+  try { done = P ? P.lessonsDone() : []; topics = P ? P.getTopics() : {}; } catch (e) {}
+  function isDone(n) { return done.some(function (d) { return String(d).indexOf(n) > -1; }); }
+
+  // lesson -> topics, topic -> lesson (from the question bank)
+  var lessonTopics = {}, topicLesson = {};
+  BANK.forEach(function (q) {
+    if (!q.lesson || !q.topic) return;
+    (lessonTopics[q.lesson] = lessonTopics[q.lesson] || {})[q.topic] = 1;
+    if (!topicLesson[q.topic]) topicLesson[q.topic] = q.lesson;
+  });
+  var byN = {}; lessons.forEach(function (l) { byN[l.n] = l; });
+
+  function level(l) {
+    if (isDone(l.n)) return 4;
+    var ts = Object.keys(lessonTopics[l.n] || {}).filter(function (t) { return topics[t] && topics[t].seen; });
+    if (!ts.length) return 0;
+    var a = ts.reduce(function (s, t) { return s + topics[t].correct / topics[t].seen; }, 0) / ts.length;
+    return a < 0.5 ? 1 : a < 0.7 ? 2 : a < 0.85 ? 3 : 4;
+  }
+  var LV = ['pas commencé', 'à consolider', 'en progrès', 'bien maîtrisé', 'maîtrisé'];
+
+  var next = lessons.filter(function (l) { return !isDone(l.n); })[0];
+  var nDone = lessons.filter(function (l) { return isDone(l.n); }).length;
+
+  /* hero button + facts */
+  var cta = $('cta-continue');
+  if (next) {
+    cta.href = next.file;
+    cta.textContent = (nDone ? 'Continuer' : 'Commencer') + ' : Leçon ' + next.n;
+  } else if (lessons.length) {
+    cta.href = 'practice/mock-exam-1.html';
+    cta.textContent = 'Passer un examen blanc';
+  }
+  var seen = Object.keys(topics).length;
+  $('facts').innerHTML =
+    '<li><strong>' + nDone + ' / ' + lessons.length + '</strong> leçons terminées</li>' +
+    '<li><strong>' + seen + '</strong> sujets travaillés</li>' +
+    '<li>Réussite à <strong>700 / 1000</strong></li>';
+
+  /* matrix */
+  var html = '';
+  ORDER.forEach(function (d, r) {
+    var ls = lessons.filter(function (l) { return l.domain === d; });
+    var info = (M.domains || {})[d] || { label: d, weight: '' };
+    html += '<div class="xm-row" style="--dc:var(--' + DOM[d] + ');--r:' + r + '">' +
+      '<div class="xm-label"><span class="xm-dot" aria-hidden="true"></span>' + esc(info.label) +
+      '<span class="w">' + esc(info.weight) + ' de l’examen</span></div><div class="xm-cells">';
+    ls.forEach(function (l, i) {
+      var lv = level(l), cls = 'xm-cell' + (isDone(l.n) ? ' done' : '') + (next && next.n === l.n ? ' next' : '');
+      var label = 'Leçon ' + l.n + ' : ' + l.title + ' (' + LV[lv] + ')';
+      html += '<a class="' + cls + '" data-level="' + lv + '" style="--i:' + i + '" href="' + esc(l.file) + '" title="' + esc(label) + '" aria-label="' + esc(label) + '">' + l.n.replace(/^0+/, '') + '</a>';
+    });
+    html += '</div></div>';
+  });
+  $('xm-body').innerHTML = html;
+  $('xm-count').innerHTML = '<b>' + nDone + '</b> / ' + lessons.length + ' leçons terminées';
+
+  /* review */
+  function human(t) { return t.replace(/[-_]+/g, ' '); }
+  var due = [];
+  try { due = P ? P.dueTopics() : []; } catch (e) {}
+  var rp = $('review-panel');
+  if (!due.length) {
+    var nothingYet = !seen;
+    rp.innerHTML = '<div class="empty"><p>' + (nothingYet
+      ? '<strong>Rien à réviser pour l’instant.</strong> Termine un quiz de leçon : les sujets que tu rates reviendront ici au bon moment.'
+      : '<strong>Tu es à jour.</strong> Aucun sujet n’est à revoir aujourd’hui. Profites-en pour avancer dans le parcours ou pour mélanger les domaines.') +
+      '</p><a class="btn small secondary" href="' + (nothingYet && next ? esc(next.file) : 'practice/mixed.html') + '">' +
+      (nothingYet && next ? 'Faire la leçon ' + next.n : 'Entraînement mixte') + '</a></div>';
+  } else {
+    var items = due.slice(0, 6).map(function (e) {
+      var l = byN[topicLesson[e.topic]];
+      var pct = Math.round((e.accuracy || 0) * 100);
+      var name = esc(human(e.topic));
+      return '<li><div class="t">' + (l ? '<a href="' + esc(l.file) + '">' + name + '</a>' : name) +
+        '<small>' + (l ? 'Leçon ' + l.n + ' · ' : '') + 'prévu le ' + esc(e.nextReview) + '</small></div>' +
+        '<span class="acc ' + (pct < 70 ? 'low' : 'ok') + '" title="Taux de réussite">' + pct + ' %</span></li>';
+    }).join('');
+    rp.innerHTML = '<div class="panel-title">' + due.length + ' sujet' + (due.length > 1 ? 's' : '') + ' à revoir</div><ul class="review-list">' + items + '</ul>' +
+      (due.length > 6 ? '<div class="review-more">et ' + (due.length - 6) + ' de plus dans <a href="progress.html">Ma progression</a></div>' : '') +
+      '<div class="review-more"><a class="btn small" href="practice/mixed.html">Réviser maintenant</a></div>';
+  }
+
+  /* parcours */
+  var phases = [], seenP = {};
+  lessons.forEach(function (l) { if (!seenP[l.phase]) { seenP[l.phase] = []; phases.push(l.phase); } seenP[l.phase].push(l); });
+  $('phases').innerHTML = phases.map(function (p, i) {
+    var ls = seenP[p], k = ls.filter(function (l) { return isDone(l.n); }).length;
+    return '<li class="phase' + (k === ls.length ? ' complete' : '') + '"><span class="no" aria-hidden="true">' + (i + 1) + '</span><div>' +
+      '<header><h3><span class="sr-only" style="position:absolute;left:-9999px">Étape ' + (i + 1) + ' : </span>' + esc(p) + '</h3><span class="count">' + k + ' / ' + ls.length + ' leçons</span></header><ul>' +
+      ls.map(function (l) {
+        return '<li class="' + (isDone(l.n) ? 'done' : '') + '" style="--dc:var(--' + DOM[l.domain] + ')"><a href="' + esc(l.file) + '"><span class="tick" role="img" aria-label="' + (isDone(l.n) ? 'Terminée' : 'À faire') + '"></span><span class="n">' + l.n + '</span><span class="tt">' + esc(l.title) + '</span></a></li>';
+      }).join('') + '</ul></div></li>';
+  }).join('');
+
+  /* fiches */
+  $('sheets').innerHTML = (M.sheets || []).map(function (s) {
+    return '<li><a href="' + esc(s.file) + '"><strong>' + esc(s.title) + '</strong><span>' + esc(DESC[s.slug] || '') + '</span></a></li>';
+  }).join('');
+
+  /* matrix animation: run once, skip for reduced motion (CSS also guards) */
+  var m = $('matrix');
+  setTimeout(function () { m.classList.remove('animate'); }, 2600);
+})();
+</script>
+</body>
+</html>

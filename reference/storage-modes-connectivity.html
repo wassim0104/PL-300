@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Storage modes and connectivity</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script src="../assets/progress.js" defer></script>
+
+<style>
+/* sheet-specific additions (small, shared by the 6 reference sheets) */
+.sheet-nav{font:.85rem/1.6 var(--sans);color:var(--muted);margin:0 0 1.2em}
+.sheet-nav a{margin-right:.7em;white-space:nowrap}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+td.y{color:var(--tip-fg);font-weight:700;text-align:center}
+td.n{color:var(--trap-fg);text-align:center}
+th.c{text-align:center}
+.filters{display:flex;flex-wrap:wrap;gap:.4em;margin:0 0 1em}
+.filters button{font:.85rem var(--sans);padding:.25em .8em;border:1px solid var(--rule);border-radius:999px;background:var(--card-bg);color:var(--fg);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.hide{display:none}
+.tag{font:.78rem var(--sans);padding:.05em .5em;border-radius:3px;border:1px solid var(--rule);white-space:nowrap}
+.tag.right{color:var(--tip-fg);background:var(--tip-bg)}
+.tag.wrong{color:var(--trap-fg);background:var(--trap-bg)}
+.tag.mixed{color:var(--warn-fg);background:var(--warn-bg)}
+.tag.skip{color:var(--muted)}
+table.dense td,table.dense th{padding:.35em .5em;vertical-align:top}
+.small{font:.85rem/1.45 var(--sans)}
+.wk{break-inside:avoid;margin:0 0 1.6em}
+.wk h3{margin-bottom:.3em}
+input.chk{width:1.15em;height:1.15em;vertical-align:middle;cursor:pointer}
+tr.done td{color:var(--muted)}
+.bar{height:.6em;background:var(--rule);border-radius:3px;overflow:hidden;margin:.4em 0 1em}
+.bar>i{display:block;height:100%;width:0;background:var(--tip-bd)}
+.flow text{font:13px var(--sans);fill:var(--fg)}
+.flow .box{fill:var(--card-bg);stroke:var(--fg);stroke-width:1.3}
+.flow .res{fill:var(--tip-bg);stroke:var(--tip-bd);stroke-width:1.6}
+.flow .res text{font-weight:700;fill:var(--tip-fg)}
+.flow .lbl{font-size:12px;fill:var(--muted)}
+.flow path{fill:none;stroke:var(--muted);stroke-width:1.4}
+.flow marker path{fill:var(--muted);stroke:none}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:0 1.5em}
+@media(max-width:640px){.cols2{grid-template-columns:1fr}}
+@media print{.filters,.sheet-nav a.nonprint{display:none}.hide{display:table-row-group!important}tr.hide{display:table-row!important}.wk{break-inside:avoid}}
+</style>
+</head>
+<body data-page="reference" data-sheet="storage-modes-connectivity">
+<main class="page">
+<p class="sheet-nav"><a href="../index.html">&larr; Home</a> &middot; Reference: <a href="glossary.html">Glossary</a> <a href="concept-map.html">Concept map</a> <a href="dax-patterns.html">DAX patterns</a> <a href="storage-modes-connectivity.html" aria-current="page">Storage modes</a> <a href="security-and-sharing.html">Security and sharing</a> <a href="common-mistakes.html">Common mistakes</a> <a href="study-plan.html">Study plan</a> <a href="review-topics.html">Review topics</a> <a href="power-query-m.html">Power Query M</a> <a href="visuals-chooser.html">Visuals chooser</a> <a href="exam-overview.html">Exam overview</a></p>
+<header class="lesson-header">
+  <p class="lesson-no">Reference sheet</p>
+  <h1>Storage modes and connectivity</h1>
+  <p class="meta"><span class="badge prep">Prepare the data</span><span>Lessons 0002, 0003, 0029, 0035</span></p>
+</header>
+<p>Decide the storage mode and connectivity in under a minute. Lessons: <a href="../lessons/0002-get-data-connectors.html" title="Connect to the right data source">0002</a>, <a href="../lessons/0003-storage-modes.html" title="Choose a storage mode: Import, DirectQuery, Dual, Direct Lake">0003</a>, <a href="../lessons/0029-personalize-export-page-refresh.html" title="Personalisation, export settings and automatic page refresh">0029</a>, <a href="../lessons/0035-gateways-and-refresh.html" title="Gateways, scheduled refresh and incremental refresh">0035</a>.</p>
+<h2>1. The five options compared</h2>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th>Mode</th><th>Where data lives</th><th>Freshness</th><th>Speed</th><th>Limits</th><th>Refresh</th><th>Typical use</th></tr></thead>
+<tbody>
+<tr><td><strong>Import</strong></td><td>Copied into the in-memory VertiPaq engine</td><td>As fresh as the last refresh</td><td>Fastest</td><td>None: all Power Query and DAX features</td><td>Scheduled: 8/day (shared capacity), 48/day (Premium or Fabric capacity)</td><td>Default. Files (Excel, CSV) are Import only</td></tr>
+<tr><td><strong>DirectQuery</strong></td><td>At the source. Each visual sends queries</td><td>Near real time</td><td>Slower, load moves to the source</td><td>Some Power Query and DAX features limited</td><td>No data refresh. Automatic page refresh possible</td><td>Minutes-fresh data, or data too large to import</td></tr>
+<tr><td><strong>Dual</strong></td><td>Either, chosen per query</td><td>Follows the query path</td><td>Fast slicers and joins</td><td>Composite models only</td><td>As Import</td><td>Shared dimensions next to DirectQuery facts and Import aggregates</td></tr>
+<tr><td><strong>Direct Lake</strong></td><td>Delta tables in OneLake, read straight into memory</td><td>Near real time, no import refresh</td><td>Close to Import</td><td>Fabric only. Some queries fall back to DirectQuery</td><td>No import refresh</td><td>Data already in a Fabric lakehouse or warehouse</td></tr>
+<tr><td><strong>Live connection</strong></td><td>In the source model: Analysis Services or a published semantic model</td><td>Per the source model</td><td>Per the source</td><td>No Power Query, no model edits. Report-level measures only. RLS lives in the source model</td><td>None in Power BI. On-premises SSAS needs a gateway</td><td>Reuse an existing model and its measures (least effort)</td></tr>
+</tbody></table></div>
+<p class="small muted">Excel and CSV files cannot be DirectQuery sources. A composite model mixes modes, or adds local tables to a published semantic model.</p>
+<h2>2. Decision flow</h2>
+<figure><svg class="flow" viewBox="0 0 760 560" role="img" aria-labelledby="flowt flowd" width="100%">
+<title id="flowt">Storage mode decision flow</title><desc id="flowd">Start: must data show changes within minutes? If yes and data is in Fabric, Direct Lake, otherwise DirectQuery. If no and a published model exists, live connection. Otherwise, a real-time fact plus fast history gives a composite model, else Import.</desc>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z"/></marker></defs>
+<g class=""><rect class="box" x="230" y="10" width="300" height="56" rx="6"/><text x="380" y="34" text-anchor="middle">Must reports show changes</text><text x="380" y="50" text-anchor="middle">within minutes?</text></g><path d="M330 66 L150 120" marker-end="url(#ah)"/><path d="M430 66 L560 120" marker-end="url(#ah)"/><text class="lbl" x="215" y="98">Yes</text><text class="lbl" x="505" y="98">No</text><g class=""><rect class="box" x="30" y="120" width="240" height="56" rx="6"/><text x="150" y="144" text-anchor="middle">Is the data in a Fabric lakehouse</text><text x="150" y="160" text-anchor="middle">or warehouse (Delta)?</text></g><path d="M110 176 L80 250" marker-end="url(#ah)"/><path d="M190 176 L240 250" marker-end="url(#ah)"/><text class="lbl" x="75" y="215">Yes</text><text class="lbl" x="225" y="215">No</text><g class="res"><rect class="res" x="10" y="250" width="140" height="50" rx="6"/><text x="80" y="279" text-anchor="middle">Direct Lake</text></g><g class="res"><rect class="res" x="170" y="250" width="140" height="50" rx="6"/><text x="240" y="279" text-anchor="middle">DirectQuery</text></g><g class=""><rect class="box" x="440" y="120" width="240" height="56" rx="6"/><text x="560" y="144" text-anchor="middle">A published semantic model or</text><text x="560" y="160" text-anchor="middle">SSAS already has what you need?</text></g><path d="M500 176 L440 250" marker-end="url(#ah)"/><path d="M620 176 L650 250" marker-end="url(#ah)"/><text class="lbl" x="455" y="215">Yes</text><text class="lbl" x="640" y="215">No</text><g class="res"><rect class="res" x="340" y="250" width="200" height="60" rx="6"/><text x="440" y="276" text-anchor="middle">Live connection</text><text x="440" y="292" text-anchor="middle">(add local tables: composite)</text></g><g class=""><rect class="box" x="570" y="250" width="180" height="64" rx="6"/><text x="660" y="278" text-anchor="middle">Big real-time fact AND</text><text x="660" y="294" text-anchor="middle">fast history needed?</text></g><path d="M620 314 L520 400" marker-end="url(#ah)"/><path d="M700 314 L690 400" marker-end="url(#ah)"/><text class="lbl" x="555" y="360">Yes</text><text class="lbl" x="705" y="360">No</text><g class="res"><rect class="res" x="380" y="400" width="260" height="80" rx="6"/><text x="510" y="428" text-anchor="middle">Composite model:</text><text x="510" y="444" text-anchor="middle">fact = DirectQuery, summary = Import,</text><text x="510" y="460" text-anchor="middle">shared dimensions = Dual</text></g><g class="res"><rect class="res" x="660" y="400" width="90" height="50" rx="6"/><text x="705" y="429" text-anchor="middle">Import</text></g><text class="lbl" x="30" y="530">Excel and CSV files: Import only. Real time on files is not possible.</text></svg><figcaption>Follow the first matching question from the top.</figcaption></figure>
+<ol class="small">
+<li>Must reports show changes within minutes? Yes: Fabric lakehouse or warehouse data points to <strong>Direct Lake</strong>, anything else to <strong>DirectQuery</strong>.</li>
+<li>No: does a published semantic model or SSAS model already have the measures? Use a <strong>live connection</strong> (add local tables for a composite model).</li>
+<li>Otherwise: a big real-time fact plus fast history gives a <strong>composite model</strong> with Dual dimensions. Everything else: <strong>Import</strong>.</li>
+</ol>
+<h2>3. Gateway: yes or no</h2>
+<div class="cols2">
+<div><h3>Gateway needed</h3><ul class="small">
+<li>On-premises SQL Server (Import, DirectQuery)</li><li>On-premises files and shares (Excel, CSV, Folder with a local or network path)</li><li>SSAS live connection (on-premises)</li><li>Sources inside a private network or VNet: on-premises gateway, or a VNet data gateway</li>
+</ul></div>
+<div><h3>No gateway</h3><ul class="small">
+<li>Azure SQL Database with public access</li><li>SharePoint Online and OneDrive for work (Web or SharePoint folder connector)</li><li>Web sources and other internet-reachable cloud sources</li><li>Direct Lake (Fabric) and published semantic models in the service</li>
+</ul></div>
+</div>
+<p class="small"><strong>Standard mode</strong> gateway: shared, multi-user, supports DirectQuery and live connections. <strong>Personal mode</strong>: one user, Import only. The server and database names in the PBIX must match the gateway data source. Steps: install and register, add data source with credentials, publish, map the model to the connection, schedule refresh.</p>
+<div class="callout trap"><p>A gateway for Azure SQL or SharePoint Online (T12). Scheduled refresh to &ldquo;keep SSAS or DirectQuery current&rdquo; (T13): they query the source, so they need a gateway but no refresh. See <a href="common-mistakes.html#t12">T12</a>, <a href="common-mistakes.html#t13">T13</a>, <a href="common-mistakes.html#t17">T17</a>.</p></div>
+<h2>4. Refresh facts</h2>
+<ul>
+<li><strong>Scheduled refresh:</strong> up to 8 a day on shared capacity (Pro), 48 a day on Premium or Fabric capacity.</li>
+<li><strong>Inactivity:</strong> refresh is paused after two months without anyone opening the report or dashboard. Opening it resumes it.</li>
+<li><strong>Incremental refresh:</strong> create the DateTime parameters <code>RangeStart</code> and <code>RangeEnd</code>, filter the table on them (the filter must fold), then set the policy (archive N years, refresh the last N days). It applies after publishing. It cuts refresh time and gateway transfer. Aggregations do not.</li>
+<li><strong>Automatic page refresh:</strong> DirectQuery (and some push or Direct Lake) sources only, not Import. Fixed interval: minimum 30 minutes in shared capacity; shorter intervals need Premium or Fabric and an admin setting. Change detection needs Premium or Fabric.</li>
+<li>Dashboard tiles have their own cache refresh. A dashboard has no data refresh of its own.</li>
+</ul>
+<h2>5. Connector chooser</h2>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th>Need</th><th>Connector</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td><strong>Many files in a local or network folder</strong></td><td>Folder</td><td>Metadata columns plus binary Content. Combine files, or remove Content to keep metadata only. Needs a gateway</td></tr>
+<tr><td><strong>Files in a SharePoint or OneDrive for work site</strong></td><td>SharePoint folder (or Web with the file URL)</td><td>Filter on Folder Path or Name, then combine. No gateway</td></tr>
+<tr><td><strong>Items of a SharePoint list</strong></td><td>SharePoint list</td><td>Reads list items, not files in a document library</td></tr>
+<tr><td><strong>Power Apps or Dataverse for Teams data</strong></td><td>Dataverse</td><td>Native store for Power Apps</td></tr>
+<tr><td><strong>Source with a driver but no dedicated connector</strong></td><td>ODBC</td><td>DSN or connection string</td></tr>
+<tr><td><strong>Existing published model with measures</strong></td><td>Power BI semantic models</td><td>Live connection, no Power Query. Least effort</td></tr>
+<tr><td><strong>Azure DevOps Boards in the cloud vs on-premises</strong></td><td>Azure DevOps vs Azure DevOps Server</td><td>The Server connector is the on-premises one</td></tr>
+</tbody></table></div>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-storage-mode">Storage mode in Power BI Desktop</a> &middot; <a href="https://learn.microsoft.com/en-us/fabric/fundamentals/direct-lake-overview">Direct Lake overview</a> &middot; <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/desktop-directquery-about">DirectQuery</a> &middot; <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem">On-premises data gateway</a> &middot; <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/incremental-refresh-overview">Incremental refresh</a> &middot; <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-automatic-page-refresh">Automatic page refresh</a> &middot; <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/desktop-data-sources">Data sources</a></p></div>
+
+<div class="ask">Stuck or curious? Ask me a follow-up question about anything on this sheet.</div>
+</main>
+
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

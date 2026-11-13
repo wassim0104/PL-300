@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gateways and refresh</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script src="../assets/progress.js" defer></script>
+<script src="../assets/bank.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+</head>
+<body data-page="lesson" data-lesson="0035">
+<main class="page">
+<p class="muted"><a href="../index.html">Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0035</p>
+  <h1>Gateways, scheduled refresh and incremental refresh</h1>
+  <p class="meta"><span class="badge manage">Manage and secure</span><span>About 20 min</span></p>
+  <p><strong>After this lesson you can</strong> decide whether a gateway is needed, order the steps to schedule refresh, and use incremental refresh to cut refresh volume.</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Refresh and gateway questions turn up often, typically as "which source needs a gateway" or "order these steps". The rules are few and mechanical, so this is a topic where careful study converts straight into points.</p>
+
+<h2>Recall first</h2>
+<p><strong>Which tile types support data alerts?</strong></p><details><summary>Show answer</summary><p>Card, KPI and gauge, the single-value tiles.</p></details>
+
+<h2>Core idea</h2>
+<p>An <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem">on-premises data gateway</a> is needed when the service cannot reach the data directly: on-premises SQL Server, files and shares, SSAS live connections, and sources in a private VNet (or use a VNet data gateway). It is <strong>not</strong> needed for internet-reachable cloud sources: Azure SQL with public access, SharePoint Online, OneDrive for work, web. Glossary: <a href="../reference/glossary.html#t-gateway-on-premises-data-gateway">gateway</a>.</p>
+<p><strong>Standard mode</strong>: shared, multi-user, supports DirectQuery and live connections. <strong>Personal mode</strong>: one user, Import only.</p>
+<p>Steps to schedule refresh, in order:</p>
+<ol><li>Install and register the gateway.</li><li>Add a <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-data-sources">data source</a> on the gateway with credentials.</li><li>Publish the model.</li><li>Map the model to the gateway connection.</li><li>Configure scheduled refresh.</li></ol>
+<p>Server and database names in the PBIX must <strong>match</strong> the gateway data source, otherwise the gateway cannot be selected.</p>
+<p><a href="https://learn.microsoft.com/en-us/power-bi/connect-data/refresh-scheduled-refresh">Scheduled refresh</a>: up to 8 per day on shared capacity (Pro), 48 on Premium or Fabric capacity. It is <strong>paused after two months of inactivity</strong>; opening a report on the model resumes it. DirectQuery and live models need no scheduled data refresh, and dashboard tiles have their own cache refresh.</p>
+<p><a href="https://learn.microsoft.com/en-us/power-bi/connect-data/incremental-refresh-overview">Incremental refresh</a>: create DateTime parameters named exactly <code>RangeStart</code> and <code>RangeEnd</code>, filter the table on them (the filter must fold), then set a policy in Desktop: archive N years, refresh the last N days. It takes effect after publishing and cuts refresh time and <strong>gateway transfer</strong>. Aggregations and automatic page refresh do not.<span class="sidenote">Refresh failures notify the owner; credentials are set in the model settings in the service.</span></p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>An on-premises SQL model must refresh at 7 AM.</p></div>
+<ol><li>Install a standard-mode gateway on a server.</li><li>Add the SQL data source, using the same server and database names as the PBIX.</li><li>Publish the model.</li><li>Model settings > <strong>Gateway connection</strong>: map to that data source.</li><li>Scheduled refresh: on, 07:00.</li></ol>
+<pre data-lang="M"><code>#"Filtered Rows" = Table.SelectRows(Source,
+    each [OrderDate] &gt;= RangeStart and [OrderDate] &lt; RangeEnd)</code></pre>
+<p>The filter above is the incremental refresh step. Use <code>&gt;=</code> on one parameter and <code>&lt;</code> on the other so no row loads twice. It works because the service can now fetch only the recent partitions through the gateway.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> Azure SQL or SharePoint Online needs a gateway. <strong>Right:</strong> Internet-reachable cloud sources do not.</p></div><div class="callout trap"><p><strong>Wrong:</strong> Scheduling refresh keeps a DirectQuery or live SSAS model current. <strong>Right:</strong> Those query the source live, so nothing needs refreshing.</p></div><div class="callout trap"><p><strong>Wrong:</strong> Aggregations reduce gateway transfer for Import. <strong>Right:</strong> Incremental refresh does.</p></div>
+<p class="muted">More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0035" data-bank="lesson" data-lesson="0035"></div>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0035');this.textContent='Marked done'}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem">Microsoft Learn: What is an on-premises data gateway?</a></p><p class="muted">Read for the when-needed list and the modes. About 10 minutes. Extras: <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/refresh-scheduled-refresh">Scheduled refresh</a>, <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/incremental-refresh-overview">Incremental refresh</a>, <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-data-sources">Manage gateway data sources</a>.</p></div>
+
+<div class="ask">Ask your teacher agent a follow-up. For example: Why must the incremental refresh filter fold? What happens to refresh if nobody opens the reports for two months?</div>
+
+<h2>Related</h2>
+<p><a href="../reference/storage-modes-connectivity.html">Storage modes and connectivity</a>, <a href="../reference/power-query-m.html">Power Query M</a>, <a href="../reference/glossary.html">Glossary</a> (<a href="../reference/glossary.html#t-gateway-on-premises-data-gateway">gateway</a>).</p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0034-dashboards-alerts-subscriptions.html"><small>Previous</small>Dashboards, data alerts and subscriptions</a>
+  <a class="next" href="0036-rls-ols.html"><small>Next</small>Row-level and object-level security</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

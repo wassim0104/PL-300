@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Table and column properties</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0015">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0015</p>
+  <h1>Table and column properties</h1>
+  <p class="meta"><span class="badge model">Model the data</span><span>About 15 min</span><span>Skill: pick the property that fixes a display problem</span></p>
+  <p><strong>After this lesson you can</strong> set the property that fixes a display or usability problem: sort order, map geocoding, images, summarization, drill path or Q&amp;A wording.</p>
+</header>
+
+
+<h2>Why this matters for the exam</h2>
+<p>These are cheap marks: a question describes a display problem (months in alphabetical order, a map placing Paris in Texas, pictures showing as links) and one property fixes it. Match symptom to property and you are done.</p>
+
+<h2>Recall first</h2>
+<p>From lesson 0014: why does a calendar built from the fact table's own dates cause trouble?</p>
+<details><summary>Show answer</summary><p>Days without transactions are missing, so the table has gaps and time intelligence misbehaves. A date table needs every day of full years.</p></details>
+
+<h2>Core idea</h2>
+<p>Properties change how the model <em>behaves in reports</em>, not what the data is. Memorise the symptom-to-property map.</p>
+<div class="table-wrap"><table>
+<tr><th>Symptom</th><th>Property</th><th>Detail</th></tr>
+<tr><td>Month names sort A to Z</td><td>Sort by column</td><td>Sort <code>MonthName</code> by <code>MonthNo</code>. The sort column needs exactly one value per value being sorted.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-sort-by-column">Sort by column</a>.</span></td></tr>
+<tr><td>Map misplaces a city</td><td>Data category</td><td>Country, State or Province, City, Postal code, Latitude, Longitude help geocoding.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-data-categorization">Data categorization</a>.</span></td></tr>
+<tr><td>Image links show as text</td><td>Data category: <strong>Image URL</strong></td><td>Renders pictures in tables, cards and slicers. <strong>Web URL</strong> makes a clickable link.</td></tr>
+<tr><td>Year or ID gets summed</td><td>Default summarization</td><td>Numeric columns default to Sum. Set IDs and years to <strong>Don't summarize</strong>. In a visual, "Don't summarize" shows every distinct value (blanks included).</td></tr>
+<tr><td>Users want to drill Region, Manager, Salesperson</td><td>Hierarchy</td><td>Defines drill levels. A calculated column does not.</td></tr>
+<tr><td>Q&amp;A does not know a word</td><td>Synonyms</td><td>Add "Calendar" as a synonym of the Date hierarchy. Descriptions do not affect Q&amp;A.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-q-and-a">Q&amp;A visual</a>.</span></td></tr>
+<tr><td>Excel users want the table as a data type</td><td>Featured table</td><td>Needs a Row label and a unique Key column.</td></tr>
+</table></div>
+<p>Housekeeping that improves usability: hide technical key columns instead of deleting them when a relationship needs them; set format strings; use display folders and descriptions.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p><strong>Context.</strong> Your <code>Date</code> table (lesson 0014) has <code>Month</code> as text, and every chart shows Apr, Aug, Dec, Feb...</p></div>
+<ol>
+<li>Check the pairing: each <code>Month</code> name maps to exactly one <code>MonthNo</code> (Apr is always 4).</li>
+<li>Select <code>Date[Month]</code>, then Column tools, then <strong>Sort by column</strong>, then <code>MonthNo</code>.</li>
+<li>Hide <code>MonthNo</code>, and set its summarization to Don't summarize.</li>
+</ol>
+<p><strong>Result.</strong> Every visual that uses <code>Date[Month]</code> now orders January to December, with no change to any measure.</p>
+<pre data-lang="DAX"><code>Month = FORMAT ( [Date], "MMM" )     // name column
+MonthNo = MONTH ( [Date] )              // sort column</code></pre>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> "Delete the ID column; I never show it." <strong>Right:</strong> If a relationship uses it, hide it instead.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> "Build a hierarchy so the map geocodes." <strong>Right:</strong> Maps need data categories. A hierarchy only adds drill levels.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> "Web URL displays pictures." <strong>Right:</strong> Only Image URL renders images.</p></div>
+<p>More: <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0015" data-bank="lesson" data-lesson="0015"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0015');this.textContent='Marked done';}else{this.textContent='Progress not available';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-data-categorization">Microsoft Learn: Data categorization</a> (about 8 minutes). Read it for the list of categories.</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-sort-by-column">Sort by column</a></li><li><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-q-and-a">Q&amp;A visual</a></li></ul>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up. Try: "What happens if my sort column has two values for one month name?" or "Which property do I set to stop Year being summed?"</div>
+
+<h2>Related</h2>
+<p><a href="../reference/glossary.html#t-sort-by-column">Sort by column</a>, <a href="../reference/glossary.html#t-hierarchy">Hierarchy</a>, <a href="../reference/concept-map.html">concept map</a>.</p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0014-date-table-role-playing.html"><small>Previous</small>Date tables</a>
+  <a href="../index.html">Home</a>
+  <a class="next" href="0016-calculated-columns-vs-measures.html"><small>Next</small>Columns vs measures</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

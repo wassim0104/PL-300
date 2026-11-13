@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboards, alerts, subscriptions</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script src="../assets/progress.js" defer></script>
+<script src="../assets/bank.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+</head>
+<body data-page="lesson" data-lesson="0034">
+<main class="page">
+<p class="muted"><a href="../index.html">Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0034</p>
+  <h1>Dashboards, data alerts and subscriptions</h1>
+  <p class="meta"><span class="badge manage">Manage and secure</span><span>About 18 min</span></p>
+  <p><strong>After this lesson you can</strong> build a dashboard by pinning the right way, and choose a data alert or a subscription for a notification need.</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>"Email me when..." versus "email me every Monday" is a classic exam fork, as is pin visual versus pin live page. Both appeared in practice questions and both are settled by one fact each, which this lesson gives you.</p>
+
+<h2>Recall first</h2>
+<p><strong>A new report page must reach existing app users. What do you do?</strong></p><details><summary>Show answer</summary><p>Update the app. Do not create a new one.</p></details>
+
+<h2>Core idea</h2>
+<p><strong><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboard-pin-tile-from-report">Pin visual</a></strong>: one tile per visual, clicking opens the report. The tile keeps the visual's definition from pin time, so if the visual's design changes, pin it again. Tile data follows the model refresh.</p>
+<p><strong><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboard-pin-live-tile-from-report">Pin live page</a></strong>: the whole page becomes one live, interactive tile that reflects later changes, including added visuals. Other tiles: Q&amp;A answers, video, web content, image, text box.</p>
+<div class="table-wrap"><table>
+<tr><th></th><th>Data alert</th><th>Subscription</th></tr>
+<tr><td>Trigger</td><td>A threshold is crossed</td><td>A schedule (daily, weekly, after refresh)</td></tr>
+<tr><td>Where</td><td>Service, dashboard tile of type card, KPI or gauge</td><td>Report page or dashboard</td></tr>
+<tr><td>Sends</td><td>A notification</td><td>A snapshot by email</td></tr>
+<tr><td>Scope</td><td>Private to its creator</td><td>You can subscribe others if permitted</td></tr>
+</table></div>
+<p><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-set-data-alerts">Data alerts</a> watch <em>one value against a fixed threshold</em> and fire at most about once per hour or per refresh. You cannot set one on a report visual directly, so pin it first. "Price crosses its moving average" is not a fixed threshold, unless a measure reduces it to one value. <a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/end-user-subscribe">Subscriptions</a> are about time, not conditions. Glossary: <a href="../reference/glossary.html#t-data-alert">data alert</a>, <a href="../reference/glossary.html#t-subscription">subscription</a>.<span class="sidenote">Dashboard themes are in lesson 0024 and the dashboard mobile layout in 0028.</span></p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>Facilities want an email when freezer temperature exceeds 4 degrees C.</p></div>
+<ol><li>In the report, add a card showing the latest temperature.</li><li>Pin the card to a dashboard.</li><li>On the tile choose <strong>... > Manage alerts > Add alert rule</strong>, condition <strong>Above 4</strong>.</li></ol>
+<p>Why it works: the card is a single value, the dashboard tile can carry an alert, and the threshold is fixed. A subscription would send mail whether or not the freezer is too warm.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> A subscription handles a threshold condition. <strong>Right:</strong> Subscriptions are time based. Use a data alert.</p></div><div class="callout trap"><p><strong>Wrong:</strong> Any tile can have an alert. <strong>Right:</strong> Only card, KPI and gauge tiles do.</p></div><div class="callout trap"><p><strong>Wrong:</strong> Pin visuals one by one to keep a page interactive and in sync. <strong>Right:</strong> Pin the live page.</p></div>
+<p class="muted">More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0034" data-bank="lesson" data-lesson="0034"></div>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0034');this.textContent='Marked done'}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-set-data-alerts">Microsoft Learn: Data alerts</a></p><p class="muted">Short and practical. About 8 minutes. Extras: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboard-pin-tile-from-report">Pin a tile</a>, <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboard-pin-live-tile-from-report">Pin a live page</a>, <a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/end-user-subscribe">Subscriptions</a>.</p></div>
+
+<div class="ask">Ask your teacher agent a follow-up. For example: Can I set an alert on a line chart? What happens to a pinned tile if the report visual changes?</div>
+
+<h2>Related</h2>
+<p><a href="../reference/visuals-chooser.html">Visuals chooser</a>, <a href="../reference/security-and-sharing.html">Security and sharing</a>, <a href="../reference/glossary.html">Glossary</a> (<a href="../reference/glossary.html#t-data-alert">data alert</a>, <a href="../reference/glossary.html#t-subscription">subscription</a>).</p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0033-apps-endorsement-labels.html"><small>Previous</small>Apps, endorsement, sensitivity labels</a>
+  <a class="next" href="0035-gateways-and-refresh.html"><small>Next</small>Gateways, scheduled refresh and incremental refresh</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

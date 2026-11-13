@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Examen blanc 2</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script src="../assets/progress.js" defer></script>
+<script src="../assets/bank.js"></script>
+<script>
+/* Build an exact 14/14/14/8 sample before quiz.js initialises (quiz.js is deferred). */
+(function(){
+  var MOCK=2, KEY='pl300.mock1.ids', TARGET={PREP:14,MODEL:14,VIZ:14,MANAGE:8};
+  var bank=Array.isArray(window.PL300_BANK)?window.PL300_BANK:[];
+  var seen=[];
+  if(MOCK===2){try{seen=JSON.parse(localStorage.getItem(KEY)||'[]');}catch(e){}}
+  function sh(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  var out=[],short=0,unseenCount=0;
+  Object.keys(TARGET).forEach(function(d){
+    var pool=bank.filter(function(q){return String(q.domain).toUpperCase()===d;});
+    var fresh=sh(pool.filter(function(q){return seen.indexOf(q.id)<0;}));
+    var old=sh(pool.filter(function(q){return seen.indexOf(q.id)>-1;}));
+    var pick=fresh.concat(old).slice(0,TARGET[d]);
+    unseenCount+=Math.min(fresh.length,TARGET[d]);
+    if(pick.length<TARGET[d])short+=TARGET[d]-pick.length;
+    out=out.concat(pick);
+  });
+  out=sh(out);
+  window.__mock={n:out.length,short:short,fresh:unseenCount,seen:seen.length};
+  if(MOCK===1){try{localStorage.setItem(KEY,JSON.stringify(out.map(function(q){return q.id;})));}catch(e){}}
+  window.__mockJSON=JSON.stringify(out).replace(/</g,'\\u003c');
+})();
+</script>
+<script src="../assets/quiz.js" defer></script>
+<style>
+.pr-wrap{max-width:860px;margin:0 auto;padding:1.5rem 16px 3rem}
+.pr-head h1{margin:0 0 .6rem}
+.pr-meta{display:flex;flex-wrap:wrap;gap:.4rem;margin:0;padding:0;list-style:none}
+.pr-meta li{padding:.2rem .7rem;border:1px solid var(--rule);border-radius:999px;font-size:.85rem;font-weight:600;color:var(--muted);background:var(--surface)}
+.pre{margin-top:1.5rem;background:var(--surface);border:1px solid var(--rule);border-radius:8px}
+.pre[hidden]{display:none}
+.pre-title{padding:.7rem 1.1rem;border-bottom:1px solid var(--rule);font-weight:700;font-size:.95rem}
+.pre-body{padding:1.1rem}
+.pre-body ul{margin:0 0 1.1rem;padding-left:1.2rem;display:grid;gap:.5rem}
+.split{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin:0 0 1.1rem}
+.split div{padding:.55rem .7rem;background:var(--surface-2);border-radius:4px;border-top:3px solid var(--c);font-size:.82rem;color:var(--muted)}
+.split b{display:block;font-size:1.25rem;color:var(--ink)}
+.split .prep{--c:var(--prep)}.split .model{--c:var(--model)}.split .viz{--c:var(--viz)}.split .manage{--c:var(--manage)}
+.pre-go{display:flex;flex-wrap:wrap;gap:.75rem 1rem;align-items:center}
+.btn.big{padding:.7rem 1.4rem;font-size:1rem}
+#mock-warn{margin:0;font-size:.88rem;color:var(--muted)}
+#exam-zone{margin-top:1.5rem}
+#exam-zone[hidden]{display:none}
+#exam-zone .quiz-timer{position:sticky;top:var(--header-h,56px);z-index:20;margin:0 0 1rem;padding:.6rem 1rem;background:var(--surface);border:1px solid var(--rule);border-radius:8px;font-weight:700;font-variant-numeric:tabular-nums;box-shadow:0 6px 24px rgba(16,24,40,.08)}
+#exam-zone .quiz-timer.low{color:var(--bad);border-color:var(--bad)}
+.after{margin-top:2rem}
+.after[hidden]{display:none}
+.saved{margin:0 0 1rem;padding:.7rem 1rem;border-left:3px solid var(--good);background:var(--surface-2);border-radius:0 4px 4px 0}
+.pr-sec{margin-top:2.5rem}.pr-sec h2{font-size:1.15rem;margin:0 0 .75rem}
+@media(max-width:640px){.split{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body data-page="practice">
+<main class="pr-wrap">
+<header class="pr-head">
+  <h1>Examen blanc 2</h1>
+  <ul class="pr-meta"><li>50 questions</li><li>100 minutes</li><li>Mode examen</li></ul>
+</header>
+
+<section class="pre" id="pre-exam" aria-labelledby="pre-h">
+  <div class="pre-title" id="pre-h">Avant de commencer</div>
+  <div class="pre-body">
+    <div class="split" aria-label="Répartition des questions">
+      <div class="prep"><b>14</b>Préparer les données</div>
+      <div class="model"><b>14</b>Modéliser</div>
+      <div class="viz"><b>14</b>Visualiser &amp; analyser</div>
+      <div class="manage"><b>8</b>Gérer &amp; sécuriser</div>
+    </div>
+    <ul>
+      <li>50 questions en 100 minutes. Aucun retour avant l’envoi ; le chronomètre envoie l’examen automatiquement à zéro. Les questions sont en anglais, comme à l’examen réel.</li>
+      <li>Le seuil de Microsoft est 700 sur 1000. Notre critère de préparation est plus strict : <strong>deux examens blancs d’affilée à 80 % ou plus</strong>.</li>
+      <li>Pas de notes, pas de leçons. Marque une hésitation et avance ; une question sans réponse compte comme fausse.</li>
+      <li>Le chronomètre démarre dès que tu appuies sur le bouton. Prévois 100 minutes sans interruption.</li>
+    </ul>
+    <div class="pre-go">
+      <button type="button" class="btn primary big" id="start-exam">Commencer l’examen</button>
+      <p id="mock-warn"></p>
+    </div>
+  </div>
+</section>
+
+<div id="exam-zone" hidden></div>
+
+<section class="after" id="after" hidden>
+  <p class="saved" role="status">Ton score est enregistré. <a href="../progress.html">Voir ma progression</a>.</p>
+  <p>Note les sujets faibles, puis travaille les <a href="../reference/review-topics.html">sujets de révision</a> et les <a href="../reference/common-mistakes.html">erreurs fréquentes</a>. Les sujets manqués sont planifiés en révision espacée. Refais l’<a href="mock-exam-1.html">examen blanc 1</a> si besoin ; le critère demande deux scores d’au moins 80 % d’affilée.</p>
+</section>
+
+<section class="pr-sec" aria-labelledby="due-h">
+  <h2 id="due-h">À réviser</h2>
+  <div class="review-due"></div>
+</section>
+</main>
+<script>
+(function(){
+  var MOCK=2, HKEY='pl300-mock-history';
+  var DN={'Prepare the data':'PREP','Model the data':'MODEL','Visualize and analyze':'VIZ','Manage and secure':'MANAGE'};
+  var m=window.__mock||{}, w=document.getElementById('mock-warn'), btn=document.getElementById('start-exam');
+  if(!m.n){w.textContent='La banque de questions ne s’est pas chargée : impossible de construire l’examen.';btn.disabled=true;}
+  else{var t=[];
+    if(m.short)t.push('La banque compte '+m.short+' question(s) de moins que la pondération nécessaire : cet examen en contient '+m.n+'.');
+    if(m.seen)t.push(m.fresh+' questions sur '+m.n+' sont in\u00e9dites depuis l\u2019examen blanc 1.');
+    w.textContent=t.join(' ');}
+  var saved=new WeakSet();
+  function save(sum){
+    var h=sum.querySelector('h3'); if(!h||saved.has(sum)) return;
+    var pct=parseInt(sum.getAttribute('data-pct'),10); if(isNaN(pct)) return;
+    saved.add(sum);
+    var per={};
+    sum.querySelectorAll('tbody tr').forEach(function(tr){
+      var k=tr.getAttribute('data-domain'), p=parseInt(tr.getAttribute('data-pct'),10);
+      if(k&&!isNaN(p)) per[k]=p;
+    });
+    try{
+      var arr=JSON.parse(localStorage.getItem(HKEY)||'[]'); if(!Array.isArray(arr)) arr=[];
+      arr.push({date:new Date().toISOString(),mock:MOCK,score:pct,perDomain:per});
+      localStorage.setItem(HKEY,JSON.stringify(arr.slice(-50)));
+    }catch(e){}
+    document.getElementById('after').hidden=false;
+  }
+  btn.addEventListener('click',function(){
+    var zone=document.getElementById('exam-zone');
+    var d=document.createElement('div');
+    d.className='quiz';d.setAttribute('data-quiz-id','mock-2');d.setAttribute('data-mode','exam');d.setAttribute('data-timer-minutes','100');
+    var s=document.createElement('script');s.type='application/json';s.className='quiz-data';s.textContent=window.__mockJSON||'[]';d.appendChild(s);
+    zone.appendChild(d);zone.hidden=false;
+    document.getElementById('pre-exam').hidden=true;
+    new MutationObserver(function(){
+      var sum=zone.querySelector('.quiz-summary'); if(sum) save(sum);
+    }).observe(zone,{childList:true,subtree:true,characterData:true});
+    window.PL300Quiz.init();
+    window.scrollTo(0,0);
+  });
+})();
+</script>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

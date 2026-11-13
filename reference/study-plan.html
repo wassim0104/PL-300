@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Six-week study plan</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script src="../assets/progress.js" defer></script>
+
+<style>
+/* sheet-specific additions (small, shared by the 6 reference sheets) */
+.sheet-nav{font:.85rem/1.6 var(--sans);color:var(--muted);margin:0 0 1.2em}
+.sheet-nav a{margin-right:.7em;white-space:nowrap}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+td.y{color:var(--tip-fg);font-weight:700;text-align:center}
+td.n{color:var(--trap-fg);text-align:center}
+th.c{text-align:center}
+.filters{display:flex;flex-wrap:wrap;gap:.4em;margin:0 0 1em}
+.filters button{font:.85rem var(--sans);padding:.25em .8em;border:1px solid var(--rule);border-radius:999px;background:var(--card-bg);color:var(--fg);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.hide{display:none}
+.tag{font:.78rem var(--sans);padding:.05em .5em;border-radius:3px;border:1px solid var(--rule);white-space:nowrap}
+.tag.right{color:var(--tip-fg);background:var(--tip-bg)}
+.tag.wrong{color:var(--trap-fg);background:var(--trap-bg)}
+.tag.mixed{color:var(--warn-fg);background:var(--warn-bg)}
+.tag.skip{color:var(--muted)}
+table.dense td,table.dense th{padding:.35em .5em;vertical-align:top}
+.small{font:.85rem/1.45 var(--sans)}
+.wk{break-inside:avoid;margin:0 0 1.6em}
+.wk h3{margin-bottom:.3em}
+input.chk{width:1.15em;height:1.15em;vertical-align:middle;cursor:pointer}
+tr.done td{color:var(--muted)}
+.bar{height:.6em;background:var(--rule);border-radius:3px;overflow:hidden;margin:.4em 0 1em}
+.bar>i{display:block;height:100%;width:0;background:var(--tip-bd)}
+.flow text{font:13px var(--sans);fill:var(--fg)}
+.flow .box{fill:var(--card-bg);stroke:var(--fg);stroke-width:1.3}
+.flow .res{fill:var(--tip-bg);stroke:var(--tip-bd);stroke-width:1.6}
+.flow .res text{font-weight:700;fill:var(--tip-fg)}
+.flow .lbl{font-size:12px;fill:var(--muted)}
+.flow path{fill:none;stroke:var(--muted);stroke-width:1.4}
+.flow marker path{fill:var(--muted);stroke:none}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:0 1.5em}
+@media(max-width:640px){.cols2{grid-template-columns:1fr}}
+@media print{.filters,.sheet-nav a.nonprint{display:none}.hide{display:table-row-group!important}tr.hide{display:table-row!important}.wk{break-inside:avoid}}
+</style>
+</head>
+<body data-page="reference" data-sheet="study-plan">
+<main class="page">
+<p class="sheet-nav"><a href="../index.html">&larr; Home</a> &middot; Reference: <a href="glossary.html">Glossary</a> <a href="concept-map.html">Concept map</a> <a href="dax-patterns.html">DAX patterns</a> <a href="storage-modes-connectivity.html">Storage modes</a> <a href="security-and-sharing.html">Security and sharing</a> <a href="common-mistakes.html">Common mistakes</a> <a href="study-plan.html" aria-current="page">Study plan</a> <a href="review-topics.html">Review topics</a> <a href="power-query-m.html">Power Query M</a> <a href="visuals-chooser.html">Visuals chooser</a> <a href="exam-overview.html">Exam overview</a></p>
+<header class="lesson-header">
+  <p class="lesson-no">Reference sheet</p>
+  <h1>Six-week study plan</h1>
+  <p class="meta"><span>6 weeks</span><span>6&ndash;8 h a week</span><span>Printable checklist</span></p>
+</header>
+<p>Six weeks, 6&ndash;8 hours a week. About 60&ndash;70 minutes a day, six days a week; day 7 is the checkpoint. Ticks are saved in this browser.</p>
+<div class="callout tip" data-title="The daily pattern"><p>1&ndash;2 lessons (&le; 20 minutes each) &rarr; write 3 recall bullets from memory &rarr; 10&ndash;15 minutes of spaced review (topics from 1, 3, 7 and 14 days ago) &rarr; mixed practice. The progress tracker schedules missed topics at +1, +3, +7 and +14 days: see the due box on <a href="review-topics.html">review topics</a>.</p></div>
+<p class="small"><strong>Progress:</strong> <span id="pcount">0 / 0</span> days ticked <button type="button" class="btn" id="preset">Clear ticks</button></p>
+<div class="bar" aria-hidden="true"><i id="pbar"></i></div>
+<p class="small">Practice: <a href="../practice/mixed.html">mixed practice</a> &middot; <a href="../practice/mock-exam-1.html">Mock exam 1</a> &middot; <a href="../practice/mock-exam-2.html">Mock exam 2</a> &middot; other sheets: <a href="exam-overview.html">exam overview</a>, <a href="common-mistakes.html">common mistakes</a>.</p>
+<section class="wk" id="week1">
+<h2>Week 1 <span class="muted small">6 h &middot; 0001&ndash;0007</span></h2>
+<p class="small"><strong>Focus:</strong> Landscape, connectors, storage modes, settings, profiling, cleaning, split<br><strong>Spaced review:</strong> Daily: the previous lesson&rsquo;s quiz. Day 7: storage modes, connectors.<br><strong>Practice target (PREP / MODEL / VIZ / MANAGE questions):</strong> 20 PREP / 0 MODEL / 0 VIZ / 5 MANAGE<br><strong>Gate:</strong> &ge; 80% on a 25-question PREP + storage set; you can state when to use Import, DirectQuery, Dual and Direct Lake.</p>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th><span class="sr-only">Done</span></th><th>Day</th><th>Do</th></tr></thead>
+<tbody>
+<tr><td><input class="chk" type="checkbox" data-key="w1d1" aria-label="Week 1 day 1 done"></td><td>Day 1</td><td><a href="../lessons/0001-power-bi-landscape.html" title="The Power BI landscape and the PL-300 exam">0001 The Power BI landscape and the PL-300 exam</a> + <a href="../lessons/0002-get-data-connectors.html" title="Connect to the right data source">0002 Connect to the right data source</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w1d2" aria-label="Week 1 day 2 done"></td><td>Day 2</td><td><a href="../lessons/0003-storage-modes.html" title="Choose a storage mode: Import, DirectQuery, Dual, Direct Lake">0003 Choose a storage mode: Import, DirectQuery, Dual, Direct Lake</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w1d3" aria-label="Week 1 day 3 done"></td><td>Day 3</td><td><a href="../lessons/0004-data-source-settings-parameters.html" title="Data source settings, privacy levels and parameters">0004 Data source settings, privacy levels and parameters</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w1d4" aria-label="Week 1 day 4 done"></td><td>Day 4</td><td><a href="../lessons/0005-data-profiling.html" title="Profile data before you transform it">0005 Profile data before you transform it</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w1d5" aria-label="Week 1 day 5 done"></td><td>Day 5</td><td><a href="../lessons/0006-clean-errors-and-types.html" title="Fix data types, errors and nulls">0006 Fix data types, errors and nulls</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w1d6" aria-label="Week 1 day 6 done"></td><td>Day 6</td><td><a href="../lessons/0007-split-and-parse-columns.html" title="Split, extract and parse columns">0007 Split, extract and parse columns</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w1d7" aria-label="Week 1 day 7 done"></td><td>Day 7</td><td><strong>Checkpoint.</strong> Gate: &ge; 80% on a 25-question PREP + storage set; you can state when to use Import, DirectQuery, Dual and Direct Lake.</td></tr>
+</tbody></table></div>
+</section>
+<section class="wk" id="week2">
+<h2>Week 2 <span class="muted small">7 h &middot; 0008&ndash;0014</span></h2>
+<p class="small"><strong>Focus:</strong> Merge/append, unpivot/JSON, group by, folding and load, star schema, relationships, date table<br><strong>Spaced review:</strong> Week 1 lessons at 7 days (0001&ndash;0004); 3-day and 1-day items daily.<br><strong>Practice target (PREP / MODEL / VIZ / MANAGE questions):</strong> 20 PREP / 15 MODEL / 0 VIZ / 5 MANAGE<br><strong>Gate:</strong> &ge; 80% on 40 questions; you can sketch a star schema with a role-playing date.</p>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th><span class="sr-only">Done</span></th><th>Day</th><th>Do</th></tr></thead>
+<tbody>
+<tr><td><input class="chk" type="checkbox" data-key="w2d1" aria-label="Week 2 day 1 done"></td><td>Day 1</td><td><a href="../lessons/0008-merge-and-append.html" title="Merge vs append, and choosing the join kind">0008 Merge vs append, and choosing the join kind</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w2d2" aria-label="Week 2 day 2 done"></td><td>Day 2</td><td><a href="../lessons/0009-reshape-unpivot-json.html" title="Reshape tables: unpivot, pivot, transpose, JSON">0009 Reshape tables: unpivot, pivot, transpose, JSON</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w2d3" aria-label="Week 2 day 3 done"></td><td>Day 3</td><td><a href="../lessons/0010-group-and-aggregate-rows.html" title="Group and aggregate rows">0010 Group and aggregate rows</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w2d4" aria-label="Week 2 day 4 done"></td><td>Day 4</td><td><a href="../lessons/0011-query-folding-load-reuse.html" title="Query folding, load settings and query reuse">0011 Query folding, load settings and query reuse</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w2d5" aria-label="Week 2 day 5 done"></td><td>Day 5</td><td><a href="../lessons/0012-star-schema-design.html" title="Design a star schema: facts, dimensions and keys">0012 Design a star schema: facts, dimensions and keys</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w2d6" aria-label="Week 2 day 6 done"></td><td>Day 6</td><td><a href="../lessons/0013-relationships-cardinality-direction.html" title="Relationships: cardinality, cross-filter direction, active paths">0013 Relationships: cardinality, cross-filter direction, active paths</a> + <a href="../lessons/0014-date-table-role-playing.html" title="Build a date table and handle role-playing dates">0014 Build a date table and handle role-playing dates</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w2d7" aria-label="Week 2 day 7 done"></td><td>Day 7</td><td><strong>Checkpoint.</strong> Gate: &ge; 80% on 40 questions; you can sketch a star schema with a role-playing date.</td></tr>
+</tbody></table></div>
+</section>
+<section class="wk" id="week3">
+<h2>Week 3 <span class="muted small">8 h &middot; 0015&ndash;0021</span></h2>
+<p class="small"><strong>Focus:</strong> Properties, column vs measure, CALCULATE, iterators, time intelligence, semi-additive, calculation groups<br><strong>Spaced review:</strong> 14-day: 0001&ndash;0007. 7-day: 0008&ndash;0014.<br><strong>Practice target (PREP / MODEL / VIZ / MANAGE questions):</strong> 10 PREP / 25 MODEL / 0 VIZ / 5 MANAGE<br><strong>Gate:</strong> Write 5 measures from memory (YTD, prior year, % of total, closing balance, distinct count); &ge; 75% on 40 DAX questions.</p>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th><span class="sr-only">Done</span></th><th>Day</th><th>Do</th></tr></thead>
+<tbody>
+<tr><td><input class="chk" type="checkbox" data-key="w3d1" aria-label="Week 3 day 1 done"></td><td>Day 1</td><td><a href="../lessons/0015-table-column-properties.html" title="Configure table and column properties">0015 Configure table and column properties</a> + <a href="../lessons/0016-calculated-columns-vs-measures.html" title="Calculated column, measure or calculated table?">0016 Calculated column, measure or calculated table?</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w3d2" aria-label="Week 3 day 2 done"></td><td>Day 2</td><td><a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">0017 CALCULATE and filter modifiers</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w3d3" aria-label="Week 3 day 3 done"></td><td>Day 3</td><td><a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">0018 Iterators, context transition, counting and ranking</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w3d4" aria-label="Week 3 day 4 done"></td><td>Day 4</td><td><a href="../lessons/0019-time-intelligence.html" title="Time intelligence measures">0019 Time intelligence measures</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w3d5" aria-label="Week 3 day 5 done"></td><td>Day 5</td><td><a href="../lessons/0020-semi-additive-statistics-quick-measures.html" title="Semi-additive measures, statistics and quick measures">0020 Semi-additive measures, statistics and quick measures</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w3d6" aria-label="Week 3 day 6 done"></td><td>Day 6</td><td><a href="../lessons/0021-calculation-groups-visual-calculations.html" title="Calculation groups and visual calculations">0021 Calculation groups and visual calculations</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w3d7" aria-label="Week 3 day 7 done"></td><td>Day 7</td><td><strong>Checkpoint.</strong> Gate: Write 5 measures from memory (YTD, prior year, % of total, closing balance, distinct count); &ge; 75% on 40 DAX questions.</td></tr>
+</tbody></table></div>
+</section>
+<section class="wk" id="week4">
+<h2>Week 4 <span class="muted small">8 h &middot; 0022&ndash;0029</span></h2>
+<p class="small"><strong>Focus:</strong> Performance, visuals, formatting, filters and slicers, interactions/drill, bookmarks, accessibility/mobile, report settings<br><strong>Spaced review:</strong> 14-day: 0008&ndash;0014. 7-day: 0015&ndash;0021 (DAX again).<br><strong>Practice target (PREP / MODEL / VIZ / MANAGE questions):</strong> 10 PREP / 10 MODEL / 20 VIZ / 5 MANAGE<br><strong>Gate:</strong> &ge; 80% on 45 mixed questions; fix every DAX miss by re-doing the lesson quiz.</p>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th><span class="sr-only">Done</span></th><th>Day</th><th>Do</th></tr></thead>
+<tbody>
+<tr><td><input class="chk" type="checkbox" data-key="w4d1" aria-label="Week 4 day 1 done"></td><td>Day 1</td><td><a href="../lessons/0022-model-performance.html" title="Optimise model performance">0022 Optimise model performance</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w4d2" aria-label="Week 4 day 2 done"></td><td>Day 2</td><td><a href="../lessons/0023-choose-the-right-visual.html" title="Choose the right visual (and when to go paginated)">0023 Choose the right visual (and when to go paginated)</a> + <a href="../lessons/0024-format-themes-conditional-formatting.html" title="Themes, conditional formatting and number formats">0024 Themes, conditional formatting and number formats</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w4d3" aria-label="Week 4 day 3 done"></td><td>Day 3</td><td><a href="../lessons/0025-filters-slicers-sync.html" title="Filters, slicers and sync slicers">0025 Filters, slicers and sync slicers</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w4d4" aria-label="Week 4 day 4 done"></td><td>Day 4</td><td><a href="../lessons/0026-interactions-drill-tooltips.html" title="Interactions, drill down vs drillthrough, tooltips">0026 Interactions, drill down vs drillthrough, tooltips</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w4d5" aria-label="Week 4 day 5 done"></td><td>Day 5</td><td><a href="../lessons/0027-bookmarks-navigation-selection.html" title="Bookmarks, buttons, navigation and the Selection pane">0027 Bookmarks, buttons, navigation and the Selection pane</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w4d6" aria-label="Week 4 day 6 done"></td><td>Day 6</td><td><a href="../lessons/0028-mobile-and-accessibility.html" title="Design for accessibility and mobile">0028 Design for accessibility and mobile</a> + <a href="../lessons/0029-personalize-export-page-refresh.html" title="Personalisation, export settings and automatic page refresh">0029 Personalisation, export settings and automatic page refresh</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w4d7" aria-label="Week 4 day 7 done"></td><td>Day 7</td><td><strong>Checkpoint.</strong> Gate: &ge; 80% on 45 mixed questions; fix every DAX miss by re-doing the lesson quiz.</td></tr>
+</tbody></table></div>
+</section>
+<section class="wk" id="week5">
+<h2>Week 5 <span class="muted small">8 h &middot; 0030&ndash;0036 + Mock 1</span></h2>
+<p class="small"><strong>Focus:</strong> Analytics, AI visuals, roles, apps/labels, dashboards/alerts, gateways/refresh, RLS, then Mock exam 1<br><strong>Spaced review:</strong> 14-day: 0015&ndash;0021. 7-day: 0022&ndash;0029. Day 7: remediation of mock 1 weak topics.<br><strong>Practice target (PREP / MODEL / VIZ / MANAGE questions):</strong> 10 PREP / 10 MODEL / 10 VIZ / 15 MANAGE<br><strong>Gate:</strong> Mock 1: 50 questions in 100 minutes, weighted 14/14/14/8. Target &ge; 70%. List the weak topics.</p>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th><span class="sr-only">Done</span></th><th>Day</th><th>Do</th></tr></thead>
+<tbody>
+<tr><td><input class="chk" type="checkbox" data-key="w5d1" aria-label="Week 5 day 1 done"></td><td>Day 1</td><td><a href="../lessons/0030-analytics-pane-anomalies-grouping.html" title="Analytics pane, anomalies, grouping and clustering">0030 Analytics pane, anomalies, grouping and clustering</a> + <a href="../lessons/0031-ai-visuals-copilot.html" title="AI visuals and Copilot: key influencers, decomposition tree, Q&amp;A, narratives">0031 AI visuals and Copilot: key influencers, decomposition tree, Q&A, narratives</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w5d2" aria-label="Week 5 day 2 done"></td><td>Day 2</td><td><a href="../lessons/0032-workspace-roles-item-access.html" title="Workspace roles, sharing and Build permission">0032 Workspace roles, sharing and Build permission</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w5d3" aria-label="Week 5 day 3 done"></td><td>Day 3</td><td><a href="../lessons/0033-apps-endorsement-labels.html" title="Distribute and govern content: apps, endorsement, sensitivity labels">0033 Distribute and govern content: apps, endorsement, sensitivity labels</a> + <a href="../lessons/0034-dashboards-alerts-subscriptions.html" title="Dashboards, data alerts and subscriptions">0034 Dashboards, data alerts and subscriptions</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w5d4" aria-label="Week 5 day 4 done"></td><td>Day 4</td><td><a href="../lessons/0035-gateways-and-refresh.html" title="Gateways, scheduled refresh and incremental refresh">0035 Gateways, scheduled refresh and incremental refresh</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w5d5" aria-label="Week 5 day 5 done"></td><td>Day 5</td><td><a href="../lessons/0036-rls-ols.html" title="Row-level and object-level security">0036 Row-level and object-level security</a><br><span class="muted small">3 recall bullets &middot; 10&ndash;15 min spaced review &middot; mixed practice</span></td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w5d6" aria-label="Week 5 day 6 done"></td><td>Day 6</td><td><strong>Mock exam 1</strong>: <a href="../practice/mock-exam-1.html">Mock exam 1</a> (50 questions, 100 min). Do not look up answers during it.</td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w5d7" aria-label="Week 5 day 7 done"></td><td>Day 7</td><td>Remediation: redo quizzes for every weak topic from mock 1, then 30 targeted questions. Check the gate: mock 1 &ge; 70%.</td></tr>
+</tbody></table></div>
+</section>
+<section class="wk" id="week6">
+<h2>Week 6 <span class="muted small">6&ndash;7 h &middot; Remediation + Mock 2 + final review</span></h2>
+<p class="small"><strong>Focus:</strong> Fix weak topics, Mock exam 2, final review (see review topics)<br><strong>Spaced review:</strong> 14-day: 0022&ndash;0036 by weakness. Then the final 7-day list.<br><strong>Practice target (PREP / MODEL / VIZ / MANAGE questions):</strong> 30 targeted on weak domains, then 50 interleaved<br><strong>Gate:</strong> Mock 2 &ge; 80%. Readiness = two consecutive mocks &ge; 80%. If not, run mock 1 again with reshuffled questions after 2&ndash;3 days.</p>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th><span class="sr-only">Done</span></th><th>Day</th><th>Do</th></tr></thead>
+<tbody>
+<tr><td><input class="chk" type="checkbox" data-key="w6d1" aria-label="Week 6 day 1 done"></td><td>Day 1</td><td>Remediation: redo quizzes of weak topics from mock 1; <a href="../practice/mixed.html">mixed practice</a> targeted on the weakest domain.</td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w6d2" aria-label="Week 6 day 2 done"></td><td>Day 2</td><td>Remediation: 30 targeted questions on weak domains (<a href="../practice/mixed.html">mixed practice</a>).</td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w6d3" aria-label="Week 6 day 3 done"></td><td>Day 3</td><td>Remediation: re-read the matching <a href="common-mistakes.html">common mistakes</a> and <a href="dax-patterns.html">DAX patterns</a>; fix every miss.</td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w6d4" aria-label="Week 6 day 4 done"></td><td>Day 4</td><td><strong>Mock exam 2</strong>: <a href="../practice/mock-exam-2.html">Mock exam 2</a> (50 questions, 100 min).</td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w6d5" aria-label="Week 6 day 5 done"></td><td>Day 5</td><td>Final review, day 1: <a href="review-topics.html">review topics</a> blocks 1&ndash;4 (storage modes and gateways, RLS and roles, DAX core, time intelligence).</td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w6d6" aria-label="Week 6 day 6 done"></td><td>Day 6</td><td>Final review, day 2: <a href="review-topics.html">review topics</a> blocks 5&ndash;7 (Power Query shaping, model size, visuals and analysis). Then the 24-hour sheet. No new questions in the last 12 hours.</td></tr>
+<tr><td><input class="chk" type="checkbox" data-key="w6d7" aria-label="Week 6 day 7 done"></td><td>Day 7</td><td>Checkpoint: Mock 2 &ge; 80%? Two consecutive mocks &ge; 80% means ready. Otherwise repeat mock 1 (reshuffled) in 2&ndash;3 days. Rest.</td></tr>
+</tbody></table></div>
+</section>
+<h2>Compress or extend</h2>
+<div class="callout example" data-title="Compress to 4 weeks (about 12 h a week)"><p>Week 1 = 0001&ndash;0011, week 2 = 0012&ndash;0022, week 3 = 0023&ndash;0036, week 4 = mocks 1 and 2 plus remediation. Keep the 1/3/7-day reviews; drop the 14-day ones.</p></div>
+<div class="callout example" data-title="Extend to 8 weeks (about 5 h a week)"><p>Use the 6-week lesson split over weeks 1&ndash;6 at 5&ndash;6 lessons a week, week 7 = mock 1 + remediation, week 8 = mock 2 + final review. Add a DAX-only practice block in week 4.</p></div>
+<h2>Readiness rule</h2>
+<p>You are ready when <strong>two consecutive mock exams score 80% or more</strong>. Mocks draw 14 PREP, 14 MODEL, 14 VIZ and 8 MANAGE questions out of 50. Weighted by the official outline, see <a href="exam-overview.html">exam overview</a>.</p>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/pl-300">PL-300 study guide</a> &middot; <a href="https://learn.microsoft.com/en-us/training/courses/pl-300t00">Instructor-led course PL-300T00</a></p></div>
+
+<div class="ask">Stuck or curious? Ask me a follow-up question about anything on this sheet.</div>
+</main>
+<script>
+(function(){
+  var P='pl300-plan-', mem={}, boxes=document.querySelectorAll('input.chk');
+  function get(k){try{var v=localStorage.getItem(P+k); if(v!==null) return v;}catch(e){} return mem[k]||null;}
+  function set(k,v){mem[k]=v;try{if(v) localStorage.setItem(P+k,v); else localStorage.removeItem(P+k);}catch(e){}}
+  function stat(){
+    var n=0; for(var i=0;i<boxes.length;i++) if(boxes[i].checked) n++;
+    document.getElementById('pcount').textContent=n+' / '+boxes.length;
+    document.getElementById('pbar').style.width=(boxes.length?100*n/boxes.length:0)+'%';
+  }
+  for(var i=0;i<boxes.length;i++){
+    (function(b){
+      b.checked=get(b.getAttribute('data-key'))==='1';
+      b.closest('tr').classList.toggle('done',b.checked);
+      b.addEventListener('change',function(){
+        set(b.getAttribute('data-key'),b.checked?'1':'');
+        b.closest('tr').classList.toggle('done',b.checked); stat();
+      });
+    })(boxes[i]);
+  }
+  document.getElementById('preset').addEventListener('click',function(){
+    if(!confirm('Clear all ticks on this plan?')) return;
+    for(var i=0;i<boxes.length;i++){boxes[i].checked=false;set(boxes[i].getAttribute('data-key'),'');boxes[i].closest('tr').classList.remove('done');}
+    stat();
+  });
+  stat();
+})();
+</script>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

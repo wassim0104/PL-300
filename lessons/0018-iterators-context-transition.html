@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iterators, context transition, counting, ranking</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0018">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0018</p>
+  <h1>Iterators, context transition, counting, ranking</h1>
+  <p class="meta"><span class="badge model">Model the data</span><span>About 20 min</span><span>Skill: write an iterator with context transition</span></p>
+  <p><strong>After this lesson you can</strong> write an iterator measure that evaluates per dimension member (with context transition) and choose the right counting or ranking function.</p>
+</header>
+
+
+<h2>Why this matters for the exam</h2>
+<p>This is the lesson that separates "I can write SUM" from "I can write the measure the question wants". Iterators, row context and context transition produced many of the hardest practice questions (the repeated grand total, average per day, top N, rank). Counting rows versus counting orders is a near-certain easy mark.</p>
+
+<h2>Recall first</h2>
+<p>From lesson 0017: in a table by Category, <code>CALCULATE ( [Revenue], ALL ( Product[Category] ) )</code> returns what on each row, and what would <code>ALLSELECTED</code> change?</p>
+<details><summary>Show answer</summary><p>ALL returns the grand total of all categories on every row (it also strips slicers). ALLSELECTED returns the total of the categories left by the slicers and page/report filters.</p></details>
+
+<h2>Core idea</h2>
+<p><strong>Iterators</strong> (the X functions: SUMX, AVERAGEX, MINX, MAXX, COUNTX, RANKX) walk a table one row at a time and evaluate an expression in <strong>row context</strong> for each row, then aggregate the results.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/dax/dax-overview">DAX overview</a>; every function is listed on <a href="https://dax.guide/">DAX Guide</a>.</span> Row context only lets the expression read the current row's columns. It <strong>does not filter</strong> any table, and it does not flow to related tables.</p>
+<p>So in a card visual (no filters), <code>MAXX ( Product, SUMX ( Sales, Sales[Qty] * Sales[Price] ) )</code> runs the inner SUMX once per product, but each run sees <em>all</em> Sales rows because nothing filtered Sales. Every iteration returns the grand total, and the max is the grand total.</p>
+
+<h3>Context transition</h3>
+<p><strong>Context transition</strong> is CALCULATE turning the current row context into an equivalent filter context. A <strong>measure reference</strong> carries an implicit CALCULATE, so referencing a measure inside an iterator triggers it automatically.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/dax/calculate-function-dax">CALCULATE</a>: "when called in a row context, CALCULATE transitions the row into filters".</span></p>
+<figure>
+<svg viewBox="0 0 660 150" role="img" aria-label="Row context on a Product row becomes a filter on Product Name, which filters Sales, and Total Sales is evaluated" style="max-width:100%;height:auto">
+<defs><marker id="a18" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+<g font-family="system-ui,sans-serif" font-size="12" fill="currentColor" stroke="currentColor">
+<rect x="4" y="30" width="140" height="56" rx="5" fill="var(--card-bg)"/><text x="74" y="54" text-anchor="middle" stroke="none" font-weight="600">Row context</text><text x="74" y="72" text-anchor="middle" stroke="none" font-size="11">MAXX is on Road-150</text>
+<line x1="144" y1="58" x2="190" y2="58" marker-end="url(#a18)"/>
+<rect x="192" y="30" width="150" height="56" rx="5" fill="var(--warn-bg)"/><text x="267" y="52" text-anchor="middle" stroke="none" font-weight="600">Context transition</text><text x="267" y="69" text-anchor="middle" stroke="none" font-size="11">implicit CALCULATE</text><text x="267" y="82" text-anchor="middle" stroke="none" font-size="11">around [Total Sales]</text>
+<line x1="342" y1="58" x2="388" y2="58" marker-end="url(#a18)"/>
+<rect x="390" y="30" width="130" height="56" rx="5" fill="var(--model-bg)"/><text x="455" y="52" text-anchor="middle" stroke="none" font-weight="600">Filter context</text><text x="455" y="70" text-anchor="middle" stroke="none" font-size="11">Product[Name] =</text><text x="455" y="83" text-anchor="middle" stroke="none" font-size="11">"Road-150"</text>
+<line x1="520" y1="58" x2="548" y2="58" marker-end="url(#a18)"/>
+<rect x="550" y="30" width="106" height="56" rx="5" fill="var(--card-bg)"/><text x="603" y="52" text-anchor="middle" stroke="none" font-size="11">Sales rows of</text><text x="603" y="66" text-anchor="middle" stroke="none" font-size="11">that product</text><text x="603" y="80" text-anchor="middle" stroke="none" font-weight="600">summed</text>
+<text x="4" y="120" stroke="none" font-size="11.5">Without the transition, SUMX ( Sales, ... ) inside the iterator sees every Sales row.</text>
+<text x="4" y="138" stroke="none" font-size="11.5">Calculated columns work the same: [Total Sales] gives the row's total; SUM ( Sales[Amount] ) gives the grand total.</text>
+</g></svg>
+<figcaption>Context transition turns "the current row" into a filter, so one product's rows are summed.</figcaption></figure>
+<p>Two fixes for the repeated total: write <code>MAXX ( Product, [Total Sales] )</code>, or wrap the inner expression in <code>CALCULATE ( SUMX ( ... ) )</code>. A transition filters on <em>all columns</em> of the current row, so in a table without a unique key, identical rows are counted together; iterate a dimension with a key or <code>VALUES</code> of one column.</p>
+
+<h3>Moving along relationships in row context</h3>
+<ul>
+<li><code>RELATED ( Dim[Col] )</code>: from a row on the many side, read a column on the one side (<a href="https://learn.microsoft.com/en-us/dax/related-function-dax">RELATED</a>).</li>
+<li><code>RELATEDTABLE ( Fact )</code>: from a row on the one side, return that row's many-side rows, ready for <code>COUNTROWS</code> or <code>SUMX</code>.</li>
+</ul>
+
+<h3>Grain, counting, ranking</h3>
+<ul>
+<li><strong>Grain</strong> = what one iterated row represents. Average per <em>day</em>: <code>AVERAGEX ( VALUES ( 'Date'[Date] ), [Total Income] )</code>, one value per day. <code>AVERAGEX</code> over transaction rows averages transactions, a different number.</li>
+<li><strong>Counting.</strong> <code>COUNTROWS ( Sales )</code> counts rows (order lines). <code>DISTINCTCOUNT ( Sales[OrderID] )</code> counts orders. <code>COUNTA</code> counts non-blank values in a column.</li>
+<li><strong>TOPN</strong> <code>( n, table, orderBy, [order] )</code> returns a <em>table</em>, so use it inside CALCULATE or as a calculated table. <code>TOPN ( 2, VALUES ( Supplier[Region] ), [Units], DESC )</code> ranks regions, not rows. Ties can return more than n rows (<a href="https://learn.microsoft.com/en-us/dax/topn-function-dax">TOPN</a>).</li>
+<li><strong>RANKX</strong> <code>( table, expression, [value], [order], [ties] )</code>. Order defaults to descending (highest = 1). Ties default to <strong>Skip</strong>; <strong>Dense</strong> does not skip numbers (<a href="https://learn.microsoft.com/en-us/dax/rankx-function-dax">RANKX</a>).</li>
+<li>In a measure, a bare column with no aggregation or iterator is an error. Aggregate it: <code>MIN ( 'Date'[Date] )</code>.</li>
+</ul>
+<div class="table-wrap"><table>
+<tr><th>Sales</th><th>100</th><th>90</th><th>90</th><th>80</th></tr>
+<tr><td>Skip (default)</td><td>1</td><td>2</td><td>2</td><td>4</td></tr>
+<tr><td>Dense</td><td>1</td><td>2</td><td>2</td><td>3</td></tr>
+</table></div>
+
+<h2>Practical example</h2>
+<div class="callout example"><p><strong>Context.</strong> A table lists products. You need each product's sales, the best product's sales on a card, last three transactions' total, and an order count.</p></div>
+<pre data-lang="DAX"><code>Best Product Sales = MAXX ( VALUES ( Product[Name] ), [Total Sales] )   -- transition via the measure
+Last 3 Txn Total   = CALCULATE ( [Total Sales], TOPN ( 3, Sales, Sales[OrderDateKey], DESC ) )
+Orders             = DISTINCTCOUNT ( Sales[OrderID] )
+Product Rank       = RANKX ( ALL ( Product[Name] ), [Total Sales], , DESC, Dense )</code></pre>
+<p><strong>Why it works.</strong> <code>VALUES ( Product[Name] )</code> gives one row context per product; the measure reference transitions it to a filter on that product, so each iteration returns that product's sales and <code>MAXX</code> keeps the best. <code>TOPN</code> returns a table of three Sales rows, which CALCULATE uses as a filter, so <code>[Total Sales]</code> covers only those rows. <code>DISTINCTCOUNT</code> counts each OrderID once even when an order has several lines. <code>RANKX</code> over <code>ALL ( Product[Name] )</code> ranks each product against the full list, then the measure runs per product via transition, with no gaps after ties.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> "Row context from Product filters Sales inside SUMX." <strong>Right:</strong> It does not. Use a measure reference or <code>CALCULATE</code> to transition the row to a filter.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> "<code>COUNTROWS ( Sales )</code> counts orders." <strong>Right:</strong> It counts lines. Use <code>DISTINCTCOUNT ( Sales[OrderID] )</code>.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> "Rank or top N needs DESC for highest values." <strong>Right:</strong> Both <code>TOPN</code> and <code>RANKX</code> already default to descending. Add <code>ASC</code> when you want the lowest, and choose <code>Dense</code> if ranks must not skip.</p></div>
+<p>More: <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0018" data-bank="lesson" data-lesson="0018"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0018');this.textContent='Marked done';}else{this.textContent='Progress not available';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://dax.guide/">SQLBI DAX Guide</a> (look up CALCULATE, SUMX, RANKX; about 15 minutes). Its pages show context-transition notes per function.</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/dax/related-function-dax">RELATED</a></li><li><a href="https://learn.microsoft.com/en-us/dax/topn-function-dax">TOPN</a></li><li><a href="https://learn.microsoft.com/en-us/dax/rankx-function-dax">RANKX</a></li></ul>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up. Try: "Trace MAXX over Product with and without CALCULATE row by row" or "Why does a measure in a calculated column behave differently from SUM?"</div>
+
+<h2>Related</h2>
+<p><a href="../reference/glossary.html#t-iterator">Iterator</a>, <a href="../reference/glossary.html#t-row-context">Row context</a>, <a href="../reference/glossary.html#t-context-transition">Context transition</a>, <a href="../reference/dax-patterns.html">DAX patterns</a>, <a href="../reference/concept-map.html">concept map</a>.</p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0017-calculate-filter-context.html"><small>Previous</small>CALCULATE and filter modifiers</a>
+  <a href="../index.html">Home</a>
+  <a class="next" href="0019-time-intelligence.html"><small>Next</small>Time intelligence</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

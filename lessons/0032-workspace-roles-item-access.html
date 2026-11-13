@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Workspace roles and Build permission</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script src="../assets/progress.js" defer></script>
+<script src="../assets/bank.js" defer></script>
+<script src="../assets/quiz.js" defer></script>
+</head>
+<body data-page="lesson" data-lesson="0032">
+<main class="page">
+<p class="muted"><a href="../index.html">Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0032</p>
+  <h1>Workspace roles, sharing and Build permission</h1>
+  <p class="meta"><span class="badge manage">Manage and secure</span><span>About 20 min</span></p>
+  <p><strong>After this lesson you can</strong> grant the least-privilege role or item permission for a stated need (view, edit, publish an app, add users, build on a model).</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Manage and secure Power BI is a full exam domain, and "which role or permission, with least privilege" is its most common question shape. It appeared repeatedly in practice questions, usually with Member versus Contributor or Build versus a workspace role as the deciding detail.</p>
+
+<h2>Recall first</h2>
+<p><strong>Which AI feature ranks the factors that drive a metric?</strong></p><details><summary>Show answer</summary><p>Key influencers (Analyze, Explain by, and Expand by only for a measure's grain).</p></details>
+
+<h2>Core idea</h2>
+<p>Four workspace roles, from most to least power. <a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-roles-new-workspaces">Roles in workspaces</a></p>
+<div class="table-wrap"><table>
+<tr><th>Role</th><th>Can do</th><th>Cannot</th></tr>
+<tr><td>Admin</td><td>Everything, including delete the workspace and manage Admins</td><td>-</td></tr>
+<tr><td>Member</td><td>Add members or lower roles, publish and update the app, change app permissions, allow resharing, plus all Contributor tasks</td><td>Delete the workspace, manage Admins</td></tr>
+<tr><td>Contributor</td><td>Create, edit and delete content, publish from Desktop, schedule refresh</td><td>Add users, publish a new app, change app permissions</td></tr>
+<tr><td>Viewer</td><td>View and interact</td><td>Edit anything</td></tr>
+</table></div>
+<p>Roles can go to users, security groups, Microsoft 365 groups and distribution lists. A person in several groups gets the <strong>highest</strong> role. <strong>Row-level security applies only to Viewers</strong> (and app or shared-item consumers); Admin, Member and Contributor bypass it.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security">RLS in Fabric docs</a>. More in <a href="https://learn.microsoft.com/en-us/fabric/fundamentals/roles-workspaces">Fabric workspace roles</a>.</span></p>
+<p>Item-level access is separate: when you share a report or dashboard, or manage permissions on a model, you set <strong>Read</strong>, <strong>Reshare</strong> and <strong>Build</strong>. <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/service-datasets-build-permissions">Build</a> lets a user create new reports on the model, even in other workspaces, use <a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-analyze-in-excel">Analyze in Excel</a> and query over XMLA. Reshare only passes sharing on. See <a href="../reference/glossary.html#t-build-permission">Build permission</a> in the glossary.</p>
+<p>Two rules of thumb. "Build reports on model X in their own workspace" is <strong>Build on X</strong>, never a role in X's workspace. "Read-only for many people" is an app or a group share, never Member or Contributor.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>Finance analysts must explore the HR semantic model in Excel without seeing any other HR workspace content.</p></div>
+<ol><li>Open the HR model's <strong>Manage permissions</strong>.</li><li>Grant the finance group <strong>Build</strong> on that model only.</li><li>They use Analyze in Excel. RLS on the model still filters them, because they are not Admin, Member or Contributor.</li></ol>
+<p>Why it works: Build is scoped to one item. A workspace role would expose reports, dashboards and other models.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> Contributor can publish the app or add users. <strong>Right:</strong> That needs Member.</p></div><div class="callout trap"><p><strong>Wrong:</strong> Admin is the safe choice. <strong>Right:</strong> Admin over-privileges when Member is enough.</p></div><div class="callout trap"><p><strong>Wrong:</strong> Viewer can be limited to selected items. <strong>Right:</strong> Viewer sees all workspace content. Use item sharing or an app for selected items.</p></div>
+<p class="muted">More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0032" data-bank="lesson" data-lesson="0032"></div>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0032');this.textContent='Marked done'}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-roles-new-workspaces">Microsoft Learn: Roles in workspaces</a></p><p class="muted">The permissions table is the page to know. About 10 minutes. Extras: <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/service-datasets-build-permissions">Build permission</a>, <a href="https://learn.microsoft.com/en-us/fabric/fundamentals/roles-workspaces">Fabric workspace roles</a>, <a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-analyze-in-excel">Analyze in Excel</a>.</p></div>
+
+<div class="ask">Ask your teacher agent a follow-up. For example: Why does Contributor not let me publish an app? Does Build bypass row-level security?</div>
+
+<h2>Related</h2>
+<p><a href="../reference/security-and-sharing.html">Security and sharing</a>, <a href="../reference/glossary.html">Glossary</a> (<a href="../reference/glossary.html#t-build-permission">Build permission</a>).</p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0031-ai-visuals-copilot.html"><small>Previous</small>AI visuals and Copilot</a>
+  <a class="next" href="0033-apps-endorsement-labels.html"><small>Next</small>Apps, endorsement, sensitivity labels</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

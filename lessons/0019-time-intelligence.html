@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Time intelligence measures</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0019">
+<main class="page">
+<p class="muted"><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0019</p>
+  <h1>Time intelligence measures</h1>
+  <p class="meta"><span class="badge model">Model</span><span>About 18 min</span><span>After this lesson you can pick the time-intelligence function that returns exactly the period a requirement describes.</span></p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Time intelligence is one of the most frequent DAX topics in the practice questions, and the wrong answers are always <em>almost</em> right: a function that returns a whole year when the requirement asks for the same month, or a shifted set when it asks for a rolling window. Learn the one-line difference between each function and you turn these into quick marks on the Model the data domain.</p>
+
+<h2>Recall first</h2>
+<details><summary>Why does <code>CALCULATE([Sales], 'Date'[Year] = 2022)</code> work when the visual is already filtered by another year?</summary><p>CALCULATE replaces the existing filter on the same column with its own filter argument (lesson 0017), so the new year wins.</p></details>
+
+<h2>Core idea</h2>
+<p>Every function below needs a proper date table (lesson 0014) and takes the <code>'Date'[Date]</code> column as its date argument, never a measure.<span class="sidenote">Date table rules: <a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-date-tables">Microsoft Learn</a>.</span> They all return a table of dates that you hand to <code>CALCULATE</code>, or they wrap that step for you.<span class="sidenote">Function list: <a href="https://learn.microsoft.com/en-us/dax/time-intelligence-functions-dax">Time intelligence functions</a>.</span></p>
+<div class="table-wrap"><table>
+<thead><tr><th>Requirement</th><th>Use</th><th>Returns</th></tr></thead>
+<tbody>
+<tr><td>Year, quarter or month to date</td><td><code>TOTALYTD</code>, <code>TOTALQTD</code>, <code>TOTALMTD</code> (or <code>DATESYTD</code> in CALCULATE)</td><td>1 Jan to the last selected date</td></tr>
+<tr><td>Same period last year</td><td><code>SAMEPERIODLASTYEAR</code> or <code>DATEADD(..., -1, YEAR)</code></td><td>The <strong>same</strong> selected dates, one year back</td></tr>
+<tr><td>Previous quarter, same length</td><td><code>DATEADD(..., -1, QUARTER)</code></td><td>Selected set shifted one quarter back</td></tr>
+<tr><td>The whole previous year/quarter/month</td><td><code>PREVIOUSYEAR</code>, <code>PREVIOUSQUARTER</code>, <code>PREVIOUSMONTH</code>, <code>PARALLELPERIOD</code></td><td>The <strong>entire</strong> prior period</td></tr>
+<tr><td>Rolling N days</td><td><code>DATESINPERIOD</code> or <code>DATESBETWEEN</code></td><td>A contiguous window ending at an anchor date</td></tr>
+</tbody></table></div>
+<p><code>SAMEPERIODLASTYEAR</code> is shorthand for <code>DATEADD(dates, -1, YEAR)</code>: March 2022 becomes March 2021, and it is leap-year safe.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/dax/sameperiodlastyear-function-dax">SAMEPERIODLASTYEAR</a>, <a href="https://learn.microsoft.com/en-us/dax/dateadd-function-dax">DATEADD</a>.</span> Four quarters back (<code>DATEADD(..., -4, QUARTER)</code>) is the same as one year back. By contrast, at month level <code>PREVIOUSYEAR</code> returns the full prior year, not the same month.</p>
+<p>For rolling windows, <code>DATESINPERIOD('Date'[Date], MAX('Date'[Date]), -31, DAY)</code> counts 31 days back from the anchor. The alternative <code>DATESBETWEEN</code> has <strong>inclusive</strong> bounds, so a 31-day window is <code>MAX - 30</code> to <code>MAX</code>.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/dax/datesinperiod-function-dax">DATESINPERIOD</a>, <a href="https://learn.microsoft.com/en-us/dax/datesbetween-function-dax">DATESBETWEEN</a>.</span> <code>DATEADD</code> is a shift of the selected set, not a window.</p>
+<p>Year-over-year percentage is <code>DIVIDE([Sales] - [Sales PY], [Sales PY])</code>. Quick measures (lesson 0020) can generate YTD, YoY and rolling averages for you.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>Business context: finance wants a monthly matrix with sales, the same month last year, year to date, the previous quarter, and a rolling 31-day total on a daily chart.</p></div>
+<pre data-lang="DAX"><code>Sales PY      = CALCULATE([Sales], SAMEPERIODLASTYEAR('Date'[Date]))
+Sales YTD     = TOTALYTD([Sales], 'Date'[Date])
+Sales PY YTD  = CALCULATE([Sales YTD], SAMEPERIODLASTYEAR('Date'[Date]))
+Sales Prev Q  = CALCULATE([Sales], DATEADD('Date'[Date], -1, QUARTER))
+Sales 31D     = CALCULATE([Sales], DATESINPERIOD('Date'[Date], MAX('Date'[Date]), -31, DAY))
+YoY %         = DIVIDE([Sales] - [Sales PY], [Sales PY])</code></pre>
+<p>Why it works: each measure swaps the date filter for a different set of dates drawn from the same date table, so every cell in the matrix gets its own correct period. <code>Sales PY YTD</code> reuses the YTD measure and shifts it back a year, so nothing is duplicated. <code>DIVIDE</code> returns blank instead of an error when the prior year is zero.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief:</strong> PREVIOUSYEAR or PARALLELPERIOD gives 'same month last year'.<br><strong>Correct rule:</strong> They return the whole prior period. Use SAMEPERIODLASTYEAR or DATEADD by -1 YEAR.</p></div><div class="callout trap"><p><strong>Wrong belief:</strong> <code>DATEADD(..., -30, DAY)</code> is a rolling 30-day total.<br><strong>Correct rule:</strong> That is a shifted set of the same length, not a window. Use DATESINPERIOD or DATESBETWEEN.</p></div><div class="callout trap"><p><strong>Wrong belief:</strong> Subtract 365 days for the prior year.<br><strong>Correct rule:</strong> A fixed offset breaks in leap years. Use year-based functions.</p></div><div class="callout trap"><p><strong>Wrong belief:</strong> Pass a measure or a non-date column as the date argument.<br><strong>Correct rule:</strong> Pass the date column of the marked date table.</p></div>
+<p><a href="../reference/common-mistakes.html">See all common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0019" data-bank="lesson" data-lesson="0019"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" id="done-btn" onclick="if(window.Progress){Progress.markLesson('0019');this.textContent='Marked done';}else{this.textContent='Progress not available';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/dax/time-intelligence-functions-dax">Microsoft Learn: Time intelligence functions</a> (about 10 min). Extras: <a href="https://learn.microsoft.com/en-us/dax/sameperiodlastyear-function-dax">SAMEPERIODLASTYEAR</a>, <a href="https://learn.microsoft.com/en-us/dax/datesinperiod-function-dax">DATESINPERIOD</a>, <a href="https://learn.microsoft.com/en-us/dax/datesbetween-function-dax">DATESBETWEEN</a>.</p><p class="muted">Read it for the full function list grouped by what each returns; it makes the shift versus whole-period split obvious.</p></div>
+
+<div class="ask"><p>Ask your teacher agent a follow-up. Try: &ldquo;What does TOTALYTD do with a fiscal year ending 30 June?&rdquo; or &ldquo;Why does DATEADD fail if my date table has gaps?&rdquo;</p></div>
+
+<h2>Related</h2>
+<p><a href="../reference/dax-patterns.html">DAX patterns</a> &middot; <a href="../reference/common-mistakes.html">Common mistakes</a> &middot; <a href="../reference/glossary.html">Glossary</a>. Builds on <a href="0014-date-table-role-playing.html">0014 date tables</a> and <a href="0017-calculate-filter-context.html">0017 CALCULATE</a>.</p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0018-iterators-context-transition.html"><small>Previous</small>Iterators and context transition</a>
+  <a href="../index.html"><small>Home</small>Course home</a>
+  <a class="next" href="0020-semi-additive-statistics-quick-measures.html"><small>Next</small>Semi-additive, statistics, quick measures</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

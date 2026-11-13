@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Filters, slicers and sync</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0025">
+<main class="page">
+<p class="muted"><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0025</p>
+  <h1>Filters, slicers and sync slicers</h1>
+  <p class="meta"><span class="badge viz">Visualize and analyze</span><span>About 18 min</span><span>Skill: choose the filter scope</span></p>
+</header>
+
+<p><strong>After this lesson you can</strong> pick the filter scope (visual, page, report, slicer or synced slicer) that applies a selection to exactly the visuals and pages required.</p>
+
+<h2>Why this matters for the exam</h2>
+<p>The exam loves scope puzzles: &ldquo;filter pages 2 and 3 but not page 4&rdquo;. They are quick marks once you know which tool has which reach. Slicer and filter questions appeared repeatedly across the practice tests, and they feed the Visualize domain, which is about 25&ndash;30% of PL-300.</p>
+
+<h2>Recall first</h2>
+<p>Last lesson: which conditional-formatting style gives a colour from a column or measure that returns a colour name or hex?</p><details><summary>Answer</summary><p><strong>Field value.</strong> Rules use thresholds, gradient uses a colour scale. See <a href="0024-format-themes-conditional-formatting.html">Lesson 0024</a>.</p></details>
+
+<h2>Core idea</h2>
+<p>Power BI offers five scopes. Pick by reach.<span class="sidenote">Source: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/power-bi-report-add-filter">Add filters to a report</a>.</span></p>
+<div class="table-wrap"><table>
+<thead><tr><th>Scope</th><th>Reaches</th><th>Typical use</th></tr></thead>
+<tbody>
+<tr><td>Visual-level filter</td><td>One visual</td><td><strong>Top N</strong>, for example top 20 customers</td></tr>
+<tr><td>Page-level filter</td><td>All visuals on one page</td><td>Fixed page scope</td></tr>
+<tr><td>Report-level filter</td><td>All pages</td><td>Always exclude a category</td></tr>
+<tr><td>Slicer</td><td>Its page, by default; consumers change it</td><td>Interactive choice on the canvas</td></tr>
+<tr><td>Synced slicer</td><td>The pages you tick</td><td>One choice carried across chosen pages</td></tr>
+</tbody></table></div>
+<p>Drillthrough filters are set on the target page (<a href="0026-interactions-drill-tooltips.html">Lesson 0026</a>).</p>
+<h3>Sync slicers</h3>
+<p>Open <em>View &rsaquo; Sync slicers</em>. Two checkboxes per page do different jobs: <strong>Sync</strong> shares the selection with that page, <strong>Visible</strong> shows or hides the slicer there.<span class="sidenote">Source: <a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-slicers">Slicers in Power BI</a>.</span> A slicer can filter a page without being visible on it.</p>
+<p><strong>Sync groups</strong> (Advanced options) connect slicers that use different fields or were copied: give them the same group name. <em>Sync field changes</em> propagates a field swap, <em>Sync filter changes</em> propagates selections. Copying a slicer to another page prompts you to sync; an unsynced copy filters independently.</p>
+<p>Two limits to remember. A page or report filter cannot exclude one visual: use a slicer plus <em>Edit interactions &rarr; None</em>. And neither filters nor slicers secure data; that is <a href="0036-rls-ols.html">row-level security</a>.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>The Country slicer on page 1 must also filter pages 2 and 3, appear only on page 1, and leave page 4 alone.</p></div>
+<div class="table-wrap"><table><thead><tr><th>Page</th><th>Sync</th><th>Visible</th></tr></thead><tbody>
+<tr><td>1</td><td>on</td><td>on</td></tr><tr><td>2</td><td>on</td><td>off</td></tr><tr><td>3</td><td>on</td><td>off</td></tr><tr><td>4</td><td>off</td><td>off</td></tr></tbody></table></div>
+<p>Why it works: Sync decides who is filtered, Visible only decides who sees the control. Page 4 has neither, so it keeps its own context. A report-level filter would hit page 4 too; a bookmark per country would be 50 objects to maintain.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> A page-level filter carries a selection across pages. <strong>Right:</strong> it stops at the page. Use a synced slicer or a report-level filter.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> Make one bookmark per slicer value to persist selections. <strong>Right:</strong> bookmarks do not persist selections; sync the slicer.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> A report-level filter can skip one page. <strong>Right:</strong> it hits every page. Sync only the pages you want.</p></div>
+<p>More in the <a href="../reference/common-mistakes.html">common mistakes sheet</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0025" data-bank="lesson" data-lesson="0025"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0025');this.textContent='Marked done';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-slicers">Microsoft Learn: Slicers in Power BI</a> (about 15 min; read the sync section).</p><p class="muted">Extra: <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/power-bi-report-add-filter">Add filters to a report</a></p></div>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up. For example: &ldquo;When would I choose a report-level filter over a synced slicer?&rdquo; or &ldquo;Quiz me on sync versus visible.&rdquo;</div>
+
+<h2>Related</h2>
+<p><a href="../reference/visuals-chooser.html">Visuals chooser</a> · <a href="../reference/glossary.html">Glossary</a> · <a href="../reference/security-and-sharing.html">Security and sharing</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0024-format-themes-conditional-formatting.html"><small>Previous</small>Themes, conditional formatting and number formats</a>
+  <a class="home" href="../index.html"><small>Home</small>Course</a>
+  <a class="next" href="0026-interactions-drill-tooltips.html"><small>Next</small>Interactions, drill down vs drillthrough, tooltips</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

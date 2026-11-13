@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 0001: Power BI landscape</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0001">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0001</p>
+  <h1>The Power BI landscape and the PL-300 exam</h1>
+  <p class="meta"><span class="badge manage">Manage</span><span>About 15 min</span><span>Skill: name the right item and tool</span></p>
+  <p><strong>After this lesson you can</strong> name the Power BI item that meets a business need (semantic model, report, dashboard, app, workspace) and the tool where it is built (Desktop or service).</p>
+</header>
+
+<h2>Why this matters for the exam</h2>
+<p>Every PL-300 question assumes you know which item lives where. Mix up a report and a dashboard and you lose easy points in all four domains. The exam also uses long case studies and Yes/No series, so knowing the format is worth a few marks on its own. <span class="sidenote">Domain weights and the 700/1000 pass mark: <a href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/pl-300">PL-300 study guide</a>.</span></p>
+
+
+<h2>Core idea</h2>
+<p><strong>Power BI Desktop</strong> is the free Windows authoring tool. It holds Power Query (Get/Transform), Model view, DAX and the report pages, and it saves a <code>.pbix</code> file. Publishing a .pbix to a <strong>workspace</strong> in the Power BI service creates two items: a <strong>semantic model</strong> (formerly "dataset") and a <strong>report</strong>.<span class="sidenote">Old exam text says "dataset". It now means semantic model. See <a href="https://learn.microsoft.com/en-us/power-bi/fundamentals/service-basic-concepts">service basic concepts</a>.</span></p>
+<div class="table-wrap"><table>
+<thead><tr><th>Item</th><th>What it is</th><th>Built in</th></tr></thead>
+<tbody>
+<tr><td>Semantic model</td><td>Data, relationships, measures</td><td>Desktop</td></tr>
+<tr><td>Report</td><td>One or more interactive pages on one semantic model</td><td>Desktop or service</td></tr>
+<tr><td>Dashboard</td><td>One canvas of pinned tiles, can span several reports</td><td>Service only</td></tr>
+<tr><td>App</td><td>Chosen items from one workspace, packaged for read-only consumers</td><td>Service</td></tr>
+<tr><td>Workspace</td><td>Shared place to work; roles Admin, Member, Contributor, Viewer</td><td>Service</td></tr>
+</tbody></table></div>
+<p>Licences: sharing in shared capacity needs Pro or Premium Per User. Free-licence users can view only when content sits in Premium or Fabric capacity (F64 or larger).</p>
+<p>The exam has four domains: Prepare 25&ndash;30%, Model 25&ndash;30%, Visualize and analyze 25&ndash;30%, Manage and secure 15&ndash;20%. You need 700/1000. Question types include case studies, Yes/No series, drag-and-drop and hotspot. In a <strong>Yes/No series</strong> one scenario repeats with different solutions, so judge each solution on its own.</p>
+
+<h2>Practical example</h2>
+<div class="callout example"><p>A sales director wants one screen with KPIs from the Finance and Sales reports, available on her phone.</p></div>
+<ol><li>Open each report in the service.</li><li>Pin the KPI visuals to one new <strong>dashboard</strong>.</li><li>Open the dashboard in the mobile app.</li></ol>
+<p>It works because a dashboard collects tiles from many reports, whereas a report is bound to a single semantic model.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong belief:</strong> Dashboards can be built in Desktop. <strong>Correct rule:</strong> dashboards exist only in the service.</p></div>
+<div class="callout trap"><p><strong>Wrong belief:</strong> A report and a dashboard are the same thing. <strong>Correct rule:</strong> a report has pages and one model; a dashboard is one page of pinned tiles that can span several reports.</p></div>
+<div class="callout trap"><p><strong>Wrong belief:</strong> "Dataset" in old text is a different item. <strong>Correct rule:</strong> it is the former name of the semantic model.</p></div>
+<p>More in <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0001" data-bank="lesson" data-lesson="0001"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0001');this.textContent='Marked done'}else{this.textContent='Progress unavailable'}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/pl-300">PL-300 study guide</a>. Read it to see the skills measured and the weights. About 10 minutes.</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-bi/fundamentals/power-bi-overview">Power BI overview</a></li><li><a href="https://learn.microsoft.com/en-us/power-bi/fundamentals/service-basic-concepts">Service basic concepts</a></li></ul>
+
+<div class="ask"><p>Stuck or curious? Ask the teacher agent a follow-up. For example:</p><ul><li>Why can a dashboard use tiles from several reports but a report cannot?</li><li>Which licence does a viewer need for content in an F64 capacity?</li></ul></div>
+
+<h2>Related</h2>
+<p><a href="../reference/study-plan.html">Study plan</a> · <a href="../reference/concept-map.html">Concept map</a> · <a href="../reference/glossary.html">Glossary</a></p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <span></span>
+  <a href="../index.html"><small>Home</small>All lessons</a>
+  <a class="next" href="0002-get-data-connectors.html"><small>Next</small>Connect to the right data source</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

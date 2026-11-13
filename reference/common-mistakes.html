@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Common mistakes and disputed answers</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script src="../assets/progress.js" defer></script>
+
+<style>
+/* sheet-specific additions (small, shared by the 6 reference sheets) */
+.sheet-nav{font:.85rem/1.6 var(--sans);color:var(--muted);margin:0 0 1.2em}
+.sheet-nav a{margin-right:.7em;white-space:nowrap}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+td.y{color:var(--tip-fg);font-weight:700;text-align:center}
+td.n{color:var(--trap-fg);text-align:center}
+th.c{text-align:center}
+.filters{display:flex;flex-wrap:wrap;gap:.4em;margin:0 0 1em}
+.filters button{font:.85rem var(--sans);padding:.25em .8em;border:1px solid var(--rule);border-radius:999px;background:var(--card-bg);color:var(--fg);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.hide{display:none}
+.tag{font:.78rem var(--sans);padding:.05em .5em;border-radius:3px;border:1px solid var(--rule);white-space:nowrap}
+.tag.right{color:var(--tip-fg);background:var(--tip-bg)}
+.tag.wrong{color:var(--trap-fg);background:var(--trap-bg)}
+.tag.mixed{color:var(--warn-fg);background:var(--warn-bg)}
+.tag.skip{color:var(--muted)}
+table.dense td,table.dense th{padding:.35em .5em;vertical-align:top}
+.small{font:.85rem/1.45 var(--sans)}
+.wk{break-inside:avoid;margin:0 0 1.6em}
+.wk h3{margin-bottom:.3em}
+input.chk{width:1.15em;height:1.15em;vertical-align:middle;cursor:pointer}
+tr.done td{color:var(--muted)}
+.bar{height:.6em;background:var(--rule);border-radius:3px;overflow:hidden;margin:.4em 0 1em}
+.bar>i{display:block;height:100%;width:0;background:var(--tip-bd)}
+.flow text{font:13px var(--sans);fill:var(--fg)}
+.flow .box{fill:var(--card-bg);stroke:var(--fg);stroke-width:1.3}
+.flow .res{fill:var(--tip-bg);stroke:var(--tip-bd);stroke-width:1.6}
+.flow .res text{font-weight:700;fill:var(--tip-fg)}
+.flow .lbl{font-size:12px;fill:var(--muted)}
+.flow path{fill:none;stroke:var(--muted);stroke-width:1.4}
+.flow marker path{fill:var(--muted);stroke:none}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:0 1.5em}
+@media(max-width:640px){.cols2{grid-template-columns:1fr}}
+@media print{.filters,.sheet-nav a.nonprint{display:none}.hide{display:table-row-group!important}tr.hide{display:table-row!important}.wk{break-inside:avoid}}
+</style>
+</head>
+<body data-page="reference" data-sheet="common-mistakes">
+<main class="page">
+<p class="sheet-nav"><a href="../index.html">&larr; Home</a> &middot; Reference: <a href="glossary.html">Glossary</a> <a href="concept-map.html">Concept map</a> <a href="dax-patterns.html">DAX patterns</a> <a href="storage-modes-connectivity.html">Storage modes</a> <a href="security-and-sharing.html">Security and sharing</a> <a href="common-mistakes.html" aria-current="page">Common mistakes</a> <a href="study-plan.html">Study plan</a> <a href="review-topics.html">Review topics</a> <a href="power-query-m.html">Power Query M</a> <a href="visuals-chooser.html">Visuals chooser</a> <a href="exam-overview.html">Exam overview</a></p>
+<header class="lesson-header">
+  <p class="lesson-no">Reference sheet</p>
+  <h1>Common mistakes and disputed answers</h1>
+  <p class="meta"><span>48 traps</span><span>26 disputed dump items</span><span>Print-friendly</span></p>
+</header>
+<p>Each row is a belief the exam writers lean on, set against the rule Microsoft Learn documents. &ldquo;Seen&rdquo; is roughly how many of the 428 analysed practice questions hinge on the trap.</p>
+<div class="filters" role="group" aria-label="Filter by domain"><button type="button" data-f="ALL" aria-pressed="true">All 48</button><button type="button" data-f="PREP" aria-pressed="false">Prepare the data (14)</button><button type="button" data-f="MODEL" aria-pressed="false">Model the data (11)</button><button type="button" data-f="VIZ" aria-pressed="false">Visualize and analyze the data (7)</button><button type="button" data-f="MANAGE" aria-pressed="false">Manage and secure Power BI (16)</button></div>
+<h2 id="traps">Traps by domain</h2>
+<section class="grp" data-d="PREP">
+<h3><span class="badge prep">Prepare the data</span> </h3>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th>#</th><th>Wrong belief</th><th>Right rule</th><th>Lesson</th><th>Source</th><th>Seen</th></tr></thead>
+<tbody>
+<tr id="t17"><td>T17</td><td>Import can show data within minutes</td><td>Use DirectQuery for near-real-time</td><td><a href="../lessons/0003-storage-modes.html" title="Choose a storage mode: Import, DirectQuery, Dual, Direct Lake">0003</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-storage-mode">U-SM</a></td><td>3</td></tr>
+<tr id="t18"><td>T18</td><td>Excel can be a DirectQuery source</td><td>Files are Import-only</td><td><a href="../lessons/0003-storage-modes.html" title="Choose a storage mode: Import, DirectQuery, Dual, Direct Lake">0003</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-storage-mode">U-SM</a></td><td>1</td></tr>
+<tr id="t19"><td>T19</td><td>Shared dimensions in a composite model stay Import</td><td>Set them to Dual</td><td><a href="../lessons/0003-storage-modes.html" title="Choose a storage mode: Import, DirectQuery, Dual, Direct Lake">0003</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-storage-mode">U-SM</a></td><td>1</td></tr>
+<tr id="t20"><td>T20</td><td>Include in report refresh off = smaller model</td><td>Turn off <strong>Enable load</strong></td><td><a href="../lessons/0011-query-folding-load-reuse.html" title="Query folding, load settings and query reuse">0011</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/guidance/import-modeling-data-reduction">U-RED</a></td><td>2</td></tr>
+<tr id="t21"><td>T21</td><td>Report or DAX filters reduce imported rows</td><td>Filter in Power Query (folding) or a SQL WHERE</td><td><a href="../lessons/0011-query-folding-load-reuse.html" title="Query folding, load settings and query reuse">0011</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-query/query-folding-basics">U-FOLD</a></td><td>4</td></tr>
+<tr id="t22"><td>T22</td><td>Greyed-out View Native Query = no folding</td><td>Check with Query Diagnostics or folding indicators</td><td><a href="../lessons/0011-query-folding-load-reuse.html" title="Query folding, load settings and query reuse">0011</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-query/query-folding-basics">U-FOLD</a></td><td>2</td></tr>
+<tr id="t23"><td>T23</td><td>Append adds columns</td><td>Append stacks rows. Merge adds columns</td><td><a href="../lessons/0008-merge-and-append.html" title="Merge vs append, and choosing the join kind">0008</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-query/merge-queries-overview">U-MERGE</a></td><td>6</td></tr>
+<tr id="t24"><td>T24</td><td>Inner join keeps all customers</td><td>Left outer keeps all left rows. Left anti finds the unmatched</td><td><a href="../lessons/0008-merge-and-append.html" title="Merge vs append, and choosing the join kind">0008</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-query/merge-queries-left-anti">U-ANTI</a></td><td>4</td></tr>
+<tr id="t25"><td>T25</td><td>Remove Errors keeps rows</td><td>Replace Errors keeps rows. Remove deletes them</td><td><a href="../lessons/0006-clean-errors-and-types.html" title="Fix data types, errors and nulls">0006</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-query/dealing-with-errors">U-ERR</a></td><td>2</td></tr>
+<tr id="t26"><td>T26</td><td>A text timestamp converts straight to Date</td><td>Split, extract or use Column From Examples first</td><td><a href="../lessons/0007-split-and-parse-columns.html" title="Split, extract and parse columns">0007</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-query/split-columns-delimiter">U-SPLIT</a></td><td>6</td></tr>
+<tr id="t27"><td>T27</td><td>Unpivot the key columns</td><td>Select the keys, then <strong>Unpivot Other Columns</strong></td><td><a href="../lessons/0009-reshape-unpivot-json.html" title="Reshape tables: unpivot, pivot, transpose, JSON">0009</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-query/unpivot-column">U-UNPIV</a></td><td>4</td></tr>
+<tr id="t28"><td>T28</td><td>Distinct = unique</td><td>Distinct = different values. Unique = values appearing once</td><td><a href="../lessons/0005-data-profiling.html" title="Profile data before you transform it">0005</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-query/data-profiling-tools">U-PROF</a></td><td>3</td></tr>
+<tr id="t29"><td>T29</td><td>Profiling covers all rows</td><td>The default is the top 1,000 rows</td><td><a href="../lessons/0005-data-profiling.html" title="Profile data before you transform it">0005</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-query/data-profiling-tools">U-PROF</a></td><td>2</td></tr>
+<tr id="t30"><td>T30</td><td>Basic Group By takes several columns</td><td>Advanced is needed for several grouping columns</td><td><a href="../lessons/0010-group-and-aggregate-rows.html" title="Group and aggregate rows">0010</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-query/group-by">U-GROUP</a></td><td>3</td></tr>
+</tbody></table></div>
+</section>
+<section class="grp" data-d="MODEL">
+<h3><span class="badge model">Model the data</span> </h3>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th>#</th><th>Wrong belief</th><th>Right rule</th><th>Lesson</th><th>Source</th><th>Seen</th></tr></thead>
+<tbody>
+<tr id="t31"><td>T31</td><td>Hiding a column shrinks the model</td><td>Remove it in Power Query</td><td><a href="../lessons/0022-model-performance.html" title="Optimise model performance">0022</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/guidance/import-modeling-data-reduction">U-RED</a></td><td>5</td></tr>
+<tr id="t32"><td>T32</td><td>DateTime→Date saves space with no loss</td><td>It loses the time. Split into Date + Time instead</td><td><a href="../lessons/0022-model-performance.html" title="Optimise model performance">0022</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/guidance/import-modeling-data-reduction">U-RED</a></td><td>3</td></tr>
+<tr id="t33"><td>T33</td><td>Calculated column for ratios</td><td>Use a measure: DIVIDE(SUM, SUM)</td><td><a href="../lessons/0016-calculated-columns-vs-measures.html" title="Calculated column, measure or calculated table?">0016</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-calculated-columns">U-CC</a></td><td>2</td></tr>
+<tr id="t34"><td>T34</td><td>Row context filters related tables</td><td>It doesn&#x27;t. You need context transition (CALCULATE / a measure ref) or RELATEDTABLE</td><td><a href="../lessons/0018-iterators-context-transition.html" title="Iterators, context transition, counting and ranking">0018</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/dax/calculate-function-dax">U-CALC</a></td><td>5</td></tr>
+<tr id="t35"><td>T35</td><td>CALCULATE(…, Year=2023) blanks other years</td><td>It replaces the filter, so 2023 repeats on every row. KEEPFILTERS intersects</td><td><a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">0017</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/dax/keepfilters-function-dax">U-KEEP</a></td><td>3</td></tr>
+<tr id="t36"><td>T36</td><td>ALL respects slicers</td><td>ALLSELECTED keeps outer filters. ALL removes them</td><td><a href="../lessons/0017-calculate-filter-context.html" title="CALCULATE and filter modifiers">0017</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/dax/allselected-function-dax">U-ALLSEL</a></td><td>2</td></tr>
+<tr id="t37"><td>T37</td><td>PREVIOUSYEAR = same month last year</td><td>Use SAMEPERIODLASTYEAR / DATEADD(-1, YEAR)</td><td><a href="../lessons/0019-time-intelligence.html" title="Time intelligence measures">0019</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/dax/sameperiodlastyear-function-dax">U-SPLY</a></td><td>4</td></tr>
+<tr id="t38"><td>T38</td><td>DATEADD gives a rolling window</td><td>DATEADD shifts. Use DATESINPERIOD / DATESBETWEEN</td><td><a href="../lessons/0019-time-intelligence.html" title="Time intelligence measures">0019</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/dax/datesinperiod-function-dax">U-DIP</a></td><td>3</td></tr>
+<tr id="t39"><td>T39</td><td>USERELATIONSHIP works on any relationship</td><td>Only an existing inactive one. One active path per table pair</td><td><a href="../lessons/0014-date-table-role-playing.html" title="Build a date table and handle role-playing dates">0014</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/dax/userelationship-function-dax">U-UREL</a></td><td>4</td></tr>
+<tr id="t40"><td>T40</td><td>Bidirectional is the safe default</td><td>Single is the default. Both adds ambiguity and cost</td><td><a href="../lessons/0013-relationships-cardinality-direction.html" title="Relationships: cardinality, cross-filter direction, active paths">0013</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/guidance/relationships-bidirectional-filtering">U-BIDI</a></td><td>4</td></tr>
+<tr id="t47"><td>T47</td><td>Performance &quot;Other&quot; = slow own DAX</td><td>Other = waiting on other visuals. Reduce visuals or fix neighbours</td><td><a href="../lessons/0022-model-performance.html" title="Optimise model performance">0022</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-performance-analyzer">U-PA</a></td><td>3</td></tr>
+</tbody></table></div>
+</section>
+<section class="grp" data-d="VIZ">
+<h3><span class="badge viz">Visualize and analyze the data</span> </h3>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th>#</th><th>Wrong belief</th><th>Right rule</th><th>Lesson</th><th>Source</th><th>Seen</th></tr></thead>
+<tbody>
+<tr id="t41"><td>T41</td><td>Average or constant line = median</td><td>Use a median line or a 50% percentile line</td><td><a href="../lessons/0030-analytics-pane-anomalies-grouping.html" title="Analytics pane, anomalies, grouping and clustering">0030</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-analytics-pane">U-ANALYTICS</a></td><td>7</td></tr>
+<tr id="t42"><td>T42</td><td>Decomposition tree ranks drivers</td><td>Key influencers ranks drivers. Decomposition tree is for ad hoc drill</td><td><a href="../lessons/0031-ai-visuals-copilot.html" title="AI visuals and Copilot: key influencers, decomposition tree, Q&amp;A, narratives">0031</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-influencers">U-KI</a></td><td>4</td></tr>
+<tr id="t43"><td>T43</td><td>Page or report filter can skip one visual</td><td>Use Edit interactions → None, or sync slicers</td><td><a href="../lessons/0025-filters-slicers-sync.html" title="Filters, slicers and sync slicers">0025</a> / <a href="../lessons/0026-interactions-drill-tooltips.html" title="Interactions, drill down vs drillthrough, tooltips">0026</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-reports-visual-interactions">U-INTER</a></td><td>3</td></tr>
+<tr id="t44"><td>T44</td><td>Report theme recolours dashboard tiles</td><td>Use a dashboard theme</td><td><a href="../lessons/0024-format-themes-conditional-formatting.html" title="Themes, conditional formatting and number formats">0024</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboard-themes">U-DTHEME</a></td><td>4</td></tr>
+<tr id="t45"><td>T45</td><td>Colour change fixes colour-blind issues</td><td>Add shapes, icons or labels. Never rely on colour alone</td><td><a href="../lessons/0028-mobile-and-accessibility.html" title="Design for accessibility and mobile">0028</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-accessibility-overview">U-A11Y</a></td><td>3</td></tr>
+<tr id="t46"><td>T46</td><td>Bookmark with Data ticked keeps user slicers</td><td>Untick Data to keep the current selections</td><td><a href="../lessons/0027-bookmarks-navigation-selection.html" title="Bookmarks, buttons, navigation and the Selection pane">0027</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-bookmarks">U-BOOK</a></td><td>2</td></tr>
+<tr id="t48"><td>T48</td><td>Report mobile view = dashboard phone view</td><td>They are separate layouts. The dashboard one is in service › Edit › Mobile layout</td><td><a href="../lessons/0028-mobile-and-accessibility.html" title="Design for accessibility and mobile">0028</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-create-dashboard-mobile-phone-view">U-DMOB</a></td><td>3</td></tr>
+</tbody></table></div>
+</section>
+<section class="grp" data-d="MANAGE">
+<h3><span class="badge manage">Manage and secure Power BI</span> </h3>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th>#</th><th>Wrong belief</th><th>Right rule</th><th>Lesson</th><th>Source</th><th>Seen</th></tr></thead>
+<tbody>
+<tr id="t01"><td>T01</td><td>Two RLS roles give an intersection</td><td>Roles are additive (union). Put both filters in one role for AND</td><td><a href="../lessons/0036-rls-ols.html" title="Row-level and object-level security">0036</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security">U-RLS</a></td><td>4</td></tr>
+<tr id="t02"><td>T02</td><td>RLS restricts everyone in the workspace</td><td>RLS applies only to Viewers and consumers, not Admin, Member or Contributor</td><td><a href="../lessons/0036-rls-ols.html" title="Row-level and object-level security">0036</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security">U-RLS</a></td><td>3</td></tr>
+<tr id="t03"><td>T03</td><td>USERNAME() matches email in Desktop</td><td>USERNAME() is DOMAIN\user in Desktop. Use USERPRINCIPALNAME()</td><td><a href="../lessons/0036-rls-ols.html" title="Row-level and object-level security">0036</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security">U-RLS</a></td><td>3</td></tr>
+<tr id="t04"><td>T04</td><td>RLS follows bidirectional relationships automatically</td><td>RLS filters go one way unless &quot;Apply security filter in both directions&quot; is ticked</td><td><a href="../lessons/0036-rls-ols.html" title="Row-level and object-level security">0036</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security">U-RLS</a></td><td>3</td></tr>
+<tr id="t05"><td>T05</td><td>Change the role DAX when a user changes region</td><td>Change their Entra group membership. Groups are role members</td><td><a href="../lessons/0036-rls-ols.html" title="Row-level and object-level security">0036</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security">U-RLS</a></td><td>3</td></tr>
+<tr id="t06"><td>T06</td><td>Members are assigned to roles in Desktop</td><td>Define roles in Desktop and assign members in the service</td><td><a href="../lessons/0036-rls-ols.html" title="Row-level and object-level security">0036</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security">U-RLS</a></td><td>2</td></tr>
+<tr id="t07"><td>T07</td><td>Contributor can publish the app and add users</td><td>That needs Member. Contributor edits content only</td><td><a href="../lessons/0032-workspace-roles-item-access.html" title="Workspace roles, sharing and Build permission">0032</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-roles-new-workspaces">U-ROLES</a></td><td>4</td></tr>
+<tr id="t08"><td>T08</td><td>Viewer role = access to selected items</td><td>Viewer sees all workspace content. Use an app or item sharing</td><td><a href="../lessons/0032-workspace-roles-item-access.html" title="Workspace roles, sharing and Build permission">0032</a> / <a href="../lessons/0033-apps-endorsement-labels.html" title="Distribute and govern content: apps, endorsement, sensitivity labels">0033</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-create-distribute-apps">U-APPS</a></td><td>3</td></tr>
+<tr id="t09"><td>T09</td><td>Reshare enables Analyze in Excel</td><td>Build permission does</td><td><a href="../lessons/0032-workspace-roles-item-access.html" title="Workspace roles, sharing and Build permission">0032</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/connect-data/service-datasets-build-permissions">U-BUILD</a></td><td>3</td></tr>
+<tr id="t10"><td>T10</td><td>Changed app content reaches users automatically</td><td>You must <strong>Update app</strong></td><td><a href="../lessons/0033-apps-endorsement-labels.html" title="Distribute and govern content: apps, endorsement, sensitivity labels">0033</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-create-distribute-apps">U-APPS</a></td><td>2</td></tr>
+<tr id="t11"><td>T11</td><td>RLS/OLS protect exported files</td><td>Sensitivity labels with encryption protect exports</td><td><a href="../lessons/0033-apps-endorsement-labels.html" title="Distribute and govern content: apps, endorsement, sensitivity labels">0033</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/enterprise/service-security-sensitivity-label-overview">U-LABELS</a></td><td>3</td></tr>
+<tr id="t12"><td>T12</td><td>Cloud sources need a gateway</td><td>Only on-prem or private-network sources need one</td><td><a href="../lessons/0035-gateways-and-refresh.html" title="Gateways, scheduled refresh and incremental refresh">0035</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem">U-GW</a></td><td>4</td></tr>
+<tr id="t13"><td>T13</td><td>Scheduled refresh keeps SSAS live / DirectQuery data current</td><td>Live and DQ query the source. On-prem SSAS needs a gateway, not refresh</td><td><a href="../lessons/0035-gateways-and-refresh.html" title="Gateways, scheduled refresh and incremental refresh">0035</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem">U-GW</a></td><td>3</td></tr>
+<tr id="t14"><td>T14</td><td>Aggregations cut gateway transfer</td><td>Incremental refresh does</td><td><a href="../lessons/0035-gateways-and-refresh.html" title="Gateways, scheduled refresh and incremental refresh">0035</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/connect-data/incremental-refresh-overview">U-INCR</a></td><td>3</td></tr>
+<tr id="t15"><td>T15</td><td>Subscriptions fire on thresholds</td><td>Alerts fire on thresholds (card/KPI/gauge tiles). Subscriptions run on a schedule</td><td><a href="../lessons/0034-dashboards-alerts-subscriptions.html" title="Dashboards, data alerts and subscriptions">0034</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-set-data-alerts">U-ALERT</a></td><td>4</td></tr>
+<tr id="t16"><td>T16</td><td>Pinned tiles follow visual design changes</td><td>Re-pin, or pin the live page</td><td><a href="../lessons/0034-dashboards-alerts-subscriptions.html" title="Dashboards, data alerts and subscriptions">0034</a></td><td class="small"><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboard-pin-tile-from-report">U-PIN</a></td><td>3</td></tr>
+</tbody></table></div>
+</section>
+<h2 id="disputed">Disputed answers in the practice dumps</h2>
+<p>The practice material was written before the April 2026 outline and its keyed answers are sometimes wrong, incomplete or self-contradictory. Wherever a keyed answer disagrees with Microsoft Learn, <strong>the docs win</strong>. Item labels below are the source item numbers (EX = practice test, Dump Q = numbered dump question, numbers approximate).</p>
+<p class="small"><span class="tag right">Dump right</span> keyed answer is fine &nbsp; <span class="tag wrong">Dump wrong</span> keyed answer loses to the docs &nbsp; <span class="tag mixed">Mixed</span> answer or context needs care &nbsp; <span class="tag skip">Do not reuse</span> item is too broken to study from</p>
+<div class="table-wrap"><table class="dense">
+<thead><tr><th>Item</th><th>The dump says</th><th>The docs say</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td>EX1 Q5 (RLS through Employee→Territory)</td><td>&quot;Yes&quot; without enabling the setting</td><td>RLS uses single-direction filters unless &quot;Apply security filter in both directions&quot; is ticked (<a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security">U-RLS</a>)</td><td><span class="tag wrong">Dump incomplete</span><br>Needs the setting. The keyed solution is incomplete. <strong>Disputed, docs win</strong></td></tr>
+<tr><td>EX1 Q14 (key influencers dotted line)</td><td>Option B wording</td><td>The dotted line is the average for all other values except the selected influencer (<a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-influencers">U-KI</a>)</td><td><span class="tag skip">Do not reuse</span><br>Teach the docs meaning. Don&#x27;t reuse the item</td></tr>
+<tr><td>EX3 Q26 (slicer interaction)</td><td>Label &quot;Sync both slicers (Incorrect)&quot; contradicts its explanation</td><td>Edit interactions None excludes the visual. Syncing a copied slicer adds an independent slicer (<a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-slicers">U-SLICERS</a>)</td><td><span class="tag mixed">Answer right, label wrong</span><br>Answer = Edit interactions → None on the existing synced slicer</td></tr>
+<tr><td>EX4-3 (PREVIOUSQUARTER blank guard)</td><td>Both NOT ISEMPTY and ISBLANK forms keyed</td><td>Both are valid DAX. ISBLANK([Total Sales]) returns blank when the current period is empty</td><td><span class="tag mixed">Both valid</span><br>Accept both. Don&#x27;t build a single-answer item on it</td></tr>
+<tr><td>EX4-27 (remove columns with Test_ prefix)</td><td>FindText-based list</td><td>Text.StartsWith is the precise prefix test. FindText matches anywhere (<a href="https://learn.microsoft.com/en-us/powerquery-m/">U-M</a>)</td><td><span class="tag wrong">Dump wrong</span><br>Correct answer = Table.RemoveColumns(t, List.Select(Table.ColumnNames(t), each Text.StartsWith(_, &quot;Test_&quot;)))</td></tr>
+<tr><td>Dump Q7 (flatten header into lines)</td><td>Merge Orders + Order Lines</td><td>Star schema guidance: integrate header attributes into the line-level fact (<a href="https://learn.microsoft.com/en-us/power-bi/guidance/star-schema">U-STAR</a>)</td><td><span class="tag right">Dump right</span><br><strong>Dump right</strong></td></tr>
+<tr><td>Dump Q28 (OneDrive Excel modes)</td><td>Dataset DirectQuery</td><td>Excel workbooks are not DirectQuery sources; they are Import (<a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-storage-mode">U-SM</a>)</td><td><span class="tag wrong">Dump wrong</span><br><strong>Import.</strong> Dump wrong</td></tr>
+<tr><td>Dump Q44 (HR managers, no layout edits)</td><td>Publish app</td><td>Apps are read-only for consumers; RLS still applies (<a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-create-distribute-apps">U-APPS</a>)</td><td><span class="tag right">Dump right</span><br><strong>Dump right</strong> (app + RLS)</td></tr>
+<tr><td>Dump Q71 (prior-year YTD)</td><td>DATESBETWEEN pattern; muddled text</td><td>SAMEPERIODLASTYEAR takes one date column; CALCULATE([YTD], SAMEPERIODLASTYEAR) is simplest (<a href="https://learn.microsoft.com/en-us/dax/sameperiodlastyear-function-dax">U-SPLY</a>)</td><td><span class="tag mixed">Answer right, reasoning wrong</span><br>Teach SAMEPERIODLASTYEAR over YTD. Don&#x27;t reuse the item</td></tr>
+<tr><td>Dump Q86 (size bands)</td><td>FILTER/AND/CALCULATE, incoherent</td><td>A calculated column with SWITCH(TRUE(), …) or IF is the standard band pattern (<a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-calculated-columns">U-CC</a>)</td><td><span class="tag mixed">Rationale unreliable</span><br>Use SWITCH(TRUE()). The dump rationale is unreliable</td></tr>
+<tr><td>Dump Q110 (HR vs country RLS)</td><td>Garbled</td><td>One dynamic role on the manager email; HR in a separate role; roles are additive (<a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security">U-RLS</a>)</td><td><span class="tag skip">Do not reuse</span><br>Rebuild from docs only</td></tr>
+<tr><td>Dump Q122 (one quarter before)</td><td>DATEADD -1 QUARTER, but says PARALLELPERIOD returns a month</td><td>PARALLELPERIOD returns the full parallel period; DATEADD shifts the selection (<a href="https://learn.microsoft.com/en-us/dax/dateadd-function-dax">U-DATEADD</a>)</td><td><span class="tag mixed">Answer right, reasoning wrong</span><br>DATEADD -1 QUARTER right; the explanation is wrong</td></tr>
+<tr><td>Dump Q128 (null freight average)</td><td>Replace null with 0</td><td>AVERAGE ignores blanks; zeros lower the mean (<a href="https://learn.microsoft.com/en-us/power-query/replace-values">U-REPL</a>)</td><td><span class="tag mixed">Depends on meaning</span><br>Depends on meaning: replace only if null = no freight charged. Otherwise keep nulls. <strong>Disputed</strong></td></tr>
+<tr><td>Dump Q139 (rolling 31 days)</td><td>DATEADD(-30, DAY)</td><td>DATEADD shifts dates; DATESINPERIOD/DATESBETWEEN return windows (<a href="https://learn.microsoft.com/en-us/dax/datesinperiod-function-dax">U-DIP</a>)</td><td><span class="tag wrong">Dump wrong</span><br><strong>DATESINPERIOD(…, MAX, -31, DAY).</strong> Dump wrong</td></tr>
+<tr><td>Dump Q171 / Q200 (personalize visuals)</td><td>Enable Personalize visuals</td><td>Consumers can change visual type and fields when it is on (<a href="https://learn.microsoft.com/en-us/power-bi/create-reports/power-bi-personalize-visuals">U-PERS</a>)</td><td><span class="tag right">Dump right</span><br><strong>Dump right</strong></td></tr>
+<tr><td>Dump Q172 (dark dashboard theme)</td><td>Dark dashboard theme + pin choice</td><td>Dashboard themes apply to tiles; pin choice decides theme (<a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboard-themes">U-DTHEME</a>)</td><td><span class="tag right">Dump right</span><br><strong>Dump right</strong></td></tr>
+<tr><td>Dump Q180 (two bookmarks keep slicer)</td><td>2 bookmarks, Display only</td><td>The Data property captures slicers; untick it to keep them (<a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-bookmarks">U-BOOK</a>)</td><td><span class="tag right">Dump right</span><br><strong>Dump right</strong></td></tr>
+<tr><td>Dump Q199 (reusable theme)</td><td>JSON theme import</td><td>JSON report themes are reusable across reports (<a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-report-themes">U-THEME</a>)</td><td><span class="tag right">Dump right</span><br><strong>Dump right</strong></td></tr>
+<tr><td>Dump Q216 (two decimals, red negatives)</td><td>Custom format + conditional colour</td><td>A format string handles decimals and parentheses; colour needs conditional formatting (<a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-conditional-table-formatting">U-CF</a>)</td><td><span class="tag right">Dump right</span><br><strong>Dump right</strong></td></tr>
+<tr><td>Dump Q244 (build dashboard from report visuals, least privilege)</td><td>Member</td><td>Contributor can create and edit content, including dashboards and pins (<a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-roles-new-workspaces">U-ROLES</a>)</td><td><span class="tag wrong">Dump wrong</span><br><strong>Contributor.</strong> Dump over-privileges</td></tr>
+<tr><td>Dump Q247 / Q266 (export summarized only)</td><td>Report setting; wording conflicts</td><td>Export options are None / Summarized / Summarized + underlying; underlying needs Build (<a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-export-data">U-EXPORT</a>)</td><td><span class="tag mixed">Wording conflicts</span><br>Use the report export setting &quot;Summarized data only&quot;</td></tr>
+<tr><td>Dump Q287 (Customer Details ↔ Orders)</td><td>No/Yes/No</td><td>Keys need matching types; billing address belongs to the customer dimension</td><td><span class="tag skip">Do not reuse</span><br>Not rebuildable without the exhibit. Exclude</td></tr>
+<tr><td>Dump Q297 (sales count column)</td><td>IF(ISBLANK) calculated column</td><td>Transaction counts are a COUNTROWS measure; the column keeps negatives</td><td><span class="tag wrong">Dump wrong</span><br><strong>COUNTROWS measure.</strong> Dump wrong</td></tr>
+<tr><td>Dump Q299 (app to group)</td><td>Mail-enabled security group</td><td>Apps can be shared with security groups, mail-enabled groups, distribution lists and M365 groups (<a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-create-distribute-apps">U-APPS</a>)</td><td><span class="tag mixed">Both valid</span><br>Either group type is valid. Teach &quot;use a group&quot;</td></tr>
+<tr><td>EX3 Q1 (auto page refresh)</td><td>DirectQuery + Premium</td><td>DirectQuery required. Shared capacity allows a 30-min minimum; shorter intervals need Premium/Fabric (<a href="https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-automatic-page-refresh">U-APR</a>)</td><td><span class="tag right">Dump right</span><br>Right when the interval is under 30 min</td></tr>
+<tr><td>EX1 Q22 (alert on moving average crossing)</td><td>&quot;Not possible&quot;</td><td>Alerts compare one tile value with a fixed threshold (<a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-set-data-alerts">U-ALERT</a>)</td><td><span class="tag right">Dump right</span><br>Right for the classic alerts covered by the exam</td></tr>
+</tbody></table></div>
+<p class="small muted">Tally: 26 items resolved. Dump wrong in 5 (Q28, Q139, Q244, Q297, EX4-27). Explanation wrong but keyed answer right in 3 (Q122, Q71, EX3 Q26). Answer depends on context in 2 (Q128, EX4-3). Too broken to reuse in 3 (Q110, Q287, EX1 Q14).</p>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/pl-300">PL-300 study guide (Microsoft Learn)</a>. Related sheets: <a href="review-topics.html">Review topics</a>, <a href="dax-patterns.html">DAX patterns</a>, <a href="security-and-sharing.html">Security and sharing</a>.</p></div>
+
+<div class="ask">Stuck or curious? Ask me a follow-up question about anything on this sheet.</div>
+</main>
+<script>
+(function(){
+  var btns=document.querySelectorAll('.filters button'), grps=document.querySelectorAll('.grp');
+  function apply(f){
+    for(var i=0;i<btns.length;i++) btns[i].setAttribute('aria-pressed', btns[i].getAttribute('data-f')===f?'true':'false');
+    for(var j=0;j<grps.length;j++) grps[j].classList.toggle('hide', f!=='ALL' && grps[j].getAttribute('data-d')!==f);
+  }
+  for(var i=0;i<btns.length;i++) btns[i].addEventListener('click',function(){apply(this.getAttribute('data-f'));});
+})();
+</script>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

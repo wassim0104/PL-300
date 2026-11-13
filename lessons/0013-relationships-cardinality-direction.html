@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relationships: cardinality, direction, active paths</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-page="lesson" data-lesson="0013">
+<main class="page">
+<p><a href="../index.html">&larr; Home</a></p>
+
+<header class="lesson-header">
+  <p class="lesson-no">Lesson 0013</p>
+  <h1>Relationships: cardinality, direction, active paths</h1>
+  <p class="meta"><span class="badge model">Model the data</span><span>About 20 min</span><span>Skill: configure a relationship</span></p>
+  <p><strong>After this lesson you can</strong> configure a relationship's cardinality and cross-filter direction from the data and the filtering requirement.</p>
+</header>
+
+
+<h2>Why this matters for the exam</h2>
+<p>Relationships sit under every DAX answer: a measure can only be as right as the filters that reach it. In practice questions this topic appeared as "the total repeats for every supplier", "which cardinality?" and "why doesn't this key relate?". Each is a two-minute win once you know the three settings: cardinality, direction, active or not. That moves you toward passing PL-300.</p>
+
+<h2>Recall first</h2>
+<p>From lesson 0012 (star schema): which table type holds the numbers you sum, and why must a dimension key be unique?</p>
+<details><summary>Show answer</summary><p>The fact table holds the measurable events; dimensions hold descriptive attributes. A unique key on the dimension is what makes the relationship one-to-many (see <a href="https://learn.microsoft.com/en-us/power-bi/guidance/star-schema">star schema guidance</a>).</p></details>
+
+<h2>Core idea</h2>
+<p>A relationship tells the engine how a filter on one table reaches another. Two columns, one setting for <strong>cardinality</strong>, one for <strong>cross-filter direction</strong>, and a flag for <strong>active</strong>.<span class="sidenote">Source: <a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-relationships-understand">Model relationships</a>.</span></p>
+<div class="table-wrap"><table>
+<tr><th>Cardinality</th><th>When the data looks like this</th><th>Verdict</th></tr>
+<tr><td>One-to-many (or many-to-one)</td><td>Key is unique on the dimension, repeats on the fact</td><td>The star-schema default. Use it.</td></tr>
+<tr><td>One-to-one</td><td>Key is unique on both sides</td><td>Rare. Consider merging the tables.</td></tr>
+<tr><td>Many-to-many</td><td>Values repeat on both sides (for example region in two tables)</td><td>Only when neither side can be made unique; a bridge table is usually cleaner. <a href="https://learn.microsoft.com/en-us/power-bi/guidance/relationships-many-to-many">Guidance</a></td></tr>
+</table></div>
+
+<p><strong>Direction.</strong> Filters flow from the <em>one</em> side to the <em>many</em> side. <strong>Single</strong> is the default and the recommendation. <strong>Both</strong> lets the many side filter the one side too. Reserve it for specific needs, such as a bridge table or a slicer that should show only items with data, because it can create ambiguous paths and slower queries.<span class="sidenote">See <a href="https://learn.microsoft.com/en-us/power-bi/guidance/relationships-bidirectional-filtering">Bidirectional filtering guidance</a>. For security, RLS filters follow relationships one way unless you tick "Apply security filter in both directions" (lesson 0036; <a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security">RLS docs</a>).</span></p>
+
+<p><strong>Active or inactive.</strong> Between two tables only one relationship is active (one active path). The others are inactive and drawn dashed. An inactive relationship filters nothing until a measure calls <code>USERELATIONSHIP</code>, covered in lesson 0014.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/guidance/relationships-active-inactive">Active vs inactive relationships</a>.</span></p>
+
+<p><strong>Keys must share a data type.</strong> Text "101" does not relate to whole number 101; change the type in Power Query or the column tools first.<span class="sidenote"><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-create-and-manage-relationships">Create and manage relationships</a>.</span> In DirectQuery you can also tick "Assume referential integrity" so Power BI uses faster inner joins.</p>
+
+<div class="callout tip"><p>Symptom to cause: the same total repeated on every row of a supplier table means the filter cannot reach the fact table. Fix the relationship or its direction, not the measure.</p></div>
+
+<h2>Practical example</h2>
+<div class="callout example"><p><strong>Context.</strong> Purchasing wants sales by <em>supplier</em>. A product can have several suppliers and a supplier several products, so the pairs live in <code>Supplier_Product</code> (one row per pair). Sales relates to Product.</p></div>
+<figure>
+<svg viewBox="0 0 620 120" role="img" aria-label="Filter path from Supplier through Supplier_Product and Product to Sales" style="max-width:100%;height:auto">
+<defs><marker id="a13" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+<g font-family="system-ui,sans-serif" font-size="13" fill="currentColor" stroke="currentColor">
+<rect x="4" y="40" width="100" height="40" rx="5" fill="var(--card-bg)"/><text x="54" y="65" text-anchor="middle" stroke="none">Supplier</text>
+<rect x="170" y="40" width="130" height="40" rx="5" fill="var(--card-bg)"/><text x="235" y="65" text-anchor="middle" stroke="none">Supplier_Product</text>
+<rect x="366" y="40" width="100" height="40" rx="5" fill="var(--card-bg)"/><text x="416" y="65" text-anchor="middle" stroke="none">Product</text>
+<rect x="520" y="40" width="96" height="40" rx="5" fill="var(--card-bg)"/><text x="568" y="65" text-anchor="middle" stroke="none">Sales</text>
+<line x1="104" y1="60" x2="168" y2="60" marker-end="url(#a13)"/><text x="108" y="35" stroke="none" font-size="11">1 to many, single</text>
+<line x1="366" y1="60" x2="302" y2="60" marker-end="url(#a13)"/><line x1="302" y1="68" x2="366" y2="68" marker-end="url(#a13)"/><text x="304" y="100" stroke="none" font-size="11">set to Both</text>
+<line x1="466" y1="60" x2="518" y2="60" marker-end="url(#a13)"/><text x="470" y="35" stroke="none" font-size="11">1 to many</text>
+</g></svg>
+<figcaption>A supplier filter travels Supplier, bridge, Product, Sales. The hop from bridge back to Product runs many-to-one, so it needs Both.</figcaption></figure>
+<ol>
+<li>Relate <code>Supplier[SupplierID]</code> (1) to <code>Supplier_Product[SupplierID]</code> (*), single direction.</li>
+<li>Relate <code>Product[ProductID]</code> (1) to <code>Supplier_Product[ProductID]</code> (*) and set the cross-filter direction to <strong>Both</strong>.</li>
+<li>Keep <code>Product</code> (1) to <code>Sales</code> (*) single.</li>
+</ol>
+<pre data-lang="DAX"><code>Total Sales = SUM ( Sales[Amount] )</code></pre>
+<p><strong>Result.</strong> A table of Supplier[Name] and <code>[Total Sales]</code> now shows a different value per supplier. Before step 2 the filter stopped at the bridge (one-to-many only flows downhill), so every supplier showed the grand total. Only the one relationship is bidirectional, which limits the ambiguity risk.</p>
+
+<h2>Traps</h2>
+<div class="callout trap"><p><strong>Wrong:</strong> "Set Both just in case." <strong>Right:</strong> Single is the default; Both slows queries and can create ambiguity. Use it for a stated need.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> "Many-to-one means many-to-many." <strong>Right:</strong> If the dimension key is unique the relationship is many-to-one. Many-to-many is only for repeats on both sides.</p></div>
+<div class="callout trap"><p><strong>Wrong:</strong> "The inactive relationship will filter anyway." <strong>Right:</strong> It does nothing without <code>USERELATIONSHIP</code> in the measure.</p></div>
+<p>Others: <a href="../reference/common-mistakes.html">common mistakes</a>.</p>
+
+<p class="muted">Related ideas: <a href="../reference/storage-modes-connectivity.html">storage modes</a> for referential-integrity and DirectQuery details.</p>
+
+
+<h2>Knowledge check</h2>
+<div class="quiz" data-quiz-id="lesson-0013" data-bank="lesson" data-lesson="0013"></div>
+<script src="../assets/progress.js" defer></script><script src="../assets/bank.js" defer></script><script src="../assets/quiz.js" defer></script>
+<p><button class="btn primary" type="button" onclick="if(window.Progress){Progress.markLesson('0013');this.textContent='Marked done';}else{this.textContent='Progress not available';}">Mark lesson done</button></p>
+
+<h2>Primary source</h2>
+<div class="callout source"><p><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-relationships-understand">Microsoft Learn: Model relationships</a> (about 20 minutes). Read it for the cardinality table and the filter-direction diagrams; it is the page the exam questions are paraphrased from.</p></div>
+<ul><li><a href="https://learn.microsoft.com/en-us/power-bi/guidance/relationships-bidirectional-filtering">Bidirectional filtering guidance</a></li><li><a href="https://learn.microsoft.com/en-us/power-bi/guidance/relationships-active-inactive">Active vs inactive relationships</a></li></ul>
+
+<div class="ask">Stuck or curious? Ask your teacher agent a follow-up. Try: "Why does a Both relationship on the bridge not cause ambiguity here, and when would it?" or "Show me a many-to-many without a bridge table and compare the results."</div>
+
+<h2>Related</h2>
+<p><a href="../reference/glossary.html#t-cardinality-relationship">Cardinality (relationship)</a>, <a href="../reference/glossary.html#t-cross-filter-direction">Cross-filter direction</a>, <a href="../reference/glossary.html#t-inactive-relationship">Inactive relationship</a>, <a href="../reference/glossary.html#t-bidirectional-filter-both">Bidirectional filter</a>, <a href="../reference/concept-map.html">concept map</a>.</p>
+
+<nav class="lesson-nav" aria-label="Lesson navigation">
+  <a class="prev" href="0012-star-schema-design.html"><small>Previous</small>Star schema design</a>
+  <a href="../index.html">Home</a>
+  <a class="next" href="0014-date-table-role-playing.html"><small>Next</small>Date table and role-playing dates</a>
+</nav>
+</main>
+<script src="../assets/manifest.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>
