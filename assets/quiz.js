@@ -171,9 +171,9 @@
           if (right) lab.classList.add('is-correct');
           else if (chosen) lab.classList.add('is-wrong');
           var m = null;
-          if (chosen && right) m = '✓ Your answer (correct)';
-          else if (chosen) m = '✗ Your answer';
-          else if (right) m = it.multi ? '✓ Correct, not selected' : '✓ Correct answer';
+          if (chosen && right) m = '✓ Votre réponse (juste)';
+          else if (chosen) m = '✗ Votre réponse';
+          else if (right) m = it.multi ? '✓ Bonne réponse, non cochée' : '✓ Bonne réponse';
           if (m) lab.appendChild(txt('span', 'mark', m));
         });
         var q = it.q, h = '<strong>' + (it.ok ? 'Juste.' : (sel.length ? 'Faux.' : 'Sans réponse.')) + '</strong> ';
@@ -185,7 +185,7 @@
           var p = el('p', 'cite'); var a = txt('a', '', 'Source : Microsoft Learn');
           a.href = u; a.target = '_blank'; a.rel = 'noopener noreferrer'; p.appendChild(a); fb.appendChild(p);
         }
-        if (q.disputed) fb.appendChild(txt('p', 'disputed', '⚠ Disputed in source dumps: the dumps give a different answer. This one follows the documentation.'));
+        if (q.disputed) fb.appendChild(txt('p', 'disputed', '⚠ Réponse contestée : les dumps donnent une réponse différente. Celle-ci suit la documentation Microsoft.'));
       }
 
       items.forEach(function (it, i) {
